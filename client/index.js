@@ -12,7 +12,8 @@ import './socket'
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <App />
+      {/* <App /> */}
+      <h1></h1>Hello World!</h1>
     </Router>
   </Provider>,
   document.getElementById('app')
