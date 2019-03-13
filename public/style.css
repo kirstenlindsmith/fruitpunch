@@ -40,3 +40,8 @@ form div {
     display: none;
   }
 }
+
+#video {
+  width: 600px;
+  height: 500px;
+}
