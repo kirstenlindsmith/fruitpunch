@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
-import {drawKeyPoints, drawSkeleton} from './utils'
+import {drawKeyPoints, drawSkeleton, findPoint} from './utils'
 import Object from './Object'
 
 class PoseNet extends Component {
@@ -207,7 +207,7 @@ class PoseNet extends Component {
         {/* <div>{loading}</div> */}
         <div>
           <video id="videoNoShow" playsInline ref={this.getVideo} />
-          <Object />
+          <Object x={50} y={400} />
           {/* <img src="https://i.imgur.com/LfGlPnu.png" id='test'/> */}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
