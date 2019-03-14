@@ -208,6 +208,7 @@ class PoseNet extends Component {
         <div>
           <video id="videoNoShow" playsInline ref={this.getVideo} />
           <Object />
+          {/* <img src="https://i.imgur.com/LfGlPnu.png" id='test'/> */}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>

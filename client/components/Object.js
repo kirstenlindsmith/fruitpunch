@@ -5,7 +5,7 @@ class Object extends Component {
     super(props)
     this.state = {
       imageUrl: 'https://i.gifer.com/5DYJ.gif' || props.imageUrl,
-      x: 900,
+      x: 0,
       y: 400
     }
   }
@@ -30,14 +30,23 @@ class Object extends Component {
 
   render() {
     return (
-      <div className="gameObject">
+      <div>
         <img
           src={this.state.imageUrl}
           width="100"
           style={{
             position: 'fixed',
             top: this.state.y,
-            right: this.state.x
+            left: this.state.x
+          }}
+          className="gameObject"
+        />
+        <img
+          src="https://i.imgur.com/LfGlPnu.png"
+          style={{
+            position: 'fixed',
+            top: this.state.y,
+            left: this.state.x
           }}
         />
       </div>

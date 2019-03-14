@@ -83,4 +83,12 @@ form div {
 
 .gameObject {
   z-index: 10;
+  border: 5px solid white;
 }
+
+/* #test{
+  position: fixed;
+  top: 900;
+  left: 400;
+  z-index: 11
+} */
