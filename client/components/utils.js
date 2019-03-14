@@ -22,24 +22,26 @@ export const config = {
 }
 
 export const bodyPointLocations = {
-  0: 'nose',
-  1: 'leftEye',
-  2: 'rightEye',
-  3: 'leftEar',
-  4: 'rightEar',
-  5: 'leftShoulder',
-  6: 'rightShoulder',
-  7: 'leftElbow',
-  8: 'rightElbow',
-  9: 'leftWrist',
-  10: 'rightWrist',
-  11: 'leftHip',
-  12: 'rightHip',
-  13: 'leftKnee',
-  14: 'rightKnee',
-  15: 'leftAnkle',
-  16: 'rightAnkle'
+  nose: 0,
+  leftEye: 1,
+  rightEye: 2,
+  leftEar: 3,
+  rightEar: 4,
+  leftShoulder: 5,
+  rightShoulder: 6,
+  leftElbow: 7,
+  rightElbow: 8,
+  leftWrist: 9,
+  rightWrist: 10,
+  leftHip: 11,
+  rightHip: 12,
+  leftKnee: 13,
+  rightKnee: 14,
+  leftAnkle: 15,
+  rightAnkle: 16
 }
+
+//bodyPointLocations[leftEye] = 1
 
 function toTuple({x, y}) {
   return [x, y]
@@ -105,10 +107,26 @@ export function drawSkeleton(
 }
 
 export function findPoint(bodyPart, keypoints) {
-  // keypoints.forEach(keypoint => {
-  //   if (keypoint.part === bodyPart) {
-  //     return keypoint.position.toTuple()
-  //   }
-  // })
-  //USE bodyPartLocations object to directly access the indexed keypoints array
+  const bodyPartIndex = bodyPointLocations[bodyPart]
+  const bodyPartPosition = keypoints[bodyPartIndex].position
+
+  const bodyPartXCord = Math.floor(bodyPartPosition.x)
+  const bodyPartYCord = Math.floor(bodyPartPosition.y)
+  return {x: bodyPartXCord, y: bodyPartYCord}
 }
+//OUR FUNCTIONNNN
+
+/*if (image.x === bodyPart.x && image.y === bodyPart.y){
+  console.log('HIT IT')
+}
+
+Gloobal state = {
+  images = [{objects with coordinates}, {obj2}, ...];
+  currentBodyPart = {object with string name and coordinates, score?}
+
+}
+
+
+
+
+*/

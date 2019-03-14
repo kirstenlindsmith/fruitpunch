@@ -1,6 +1,11 @@
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
-import {drawKeyPoints, drawSkeleton, findPoint} from './utils'
+import {
+  drawKeyPoints,
+  drawSkeleton,
+  findPoint,
+  bodyPointLocations
+} from './utils'
 import Object from './Object'
 
 class PoseNet extends Component {
@@ -20,7 +25,9 @@ class PoseNet extends Component {
     imageScaleFactor: 0.5,
     skeletonColor: '#ffadea',
     skeletonLineWidth: 6,
-    loadingText: 'Loading...please be patient...'
+    loadingText: 'Loading...please be patient...',
+    ObjectX: 100,
+    ObjectY: 400
   }
 
   constructor(props) {
@@ -150,15 +157,15 @@ class PoseNet extends Component {
           poses.push(pose)
           break
         }
-        default: {
-          const pose = await net.estimateSinglePose(
-            video,
-            imageScaleFactor,
-            flipHorizontal,
-            outputStride
-          )
-          poses.push(pose)
-        }
+        // default: {
+        //   const pose = await net.estimateSinglePose(
+        //     video,
+        //     imageScaleFactor,
+        //     flipHorizontal,
+        //     outputStride
+        //   )
+        //   poses.push(pose)
+        // }
       }
 
       canvasContext.clearRect(0, 0, videoWidth, videoHeight)
@@ -190,6 +197,16 @@ class PoseNet extends Component {
               canvasContext
             )
           }
+          const noseCords = findPoint('nose', keypoints)
+          const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
+
+          if (
+            noseCords.x <= objectCords.x + 50 &&
+            noseCords.x >= objectCords.x &&
+            (noseCords.y <= objectCords.y + 50 && noseCords.y >= objectCords.y)
+          ) {
+            console.log('HIT IT!!!!!!!')
+          }
         }
       })
       requestAnimationFrame(poseDetectionFrameInner)
@@ -207,8 +224,7 @@ class PoseNet extends Component {
         {/* <div>{loading}</div> */}
         <div>
           <video id="videoNoShow" playsInline ref={this.getVideo} />
-          <Object x={50} y={400} />
-          {/* <img src="https://i.imgur.com/LfGlPnu.png" id='test'/> */}
+          <Object x={this.props.ObjectX} y={this.props.ObjectY} />
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>
