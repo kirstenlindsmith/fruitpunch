@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
 import {drawKeyPoints, drawSkeleton} from './utils'
+import Object from './Object'
 
 class PoseNet extends Component {
   static defaultProps = {
@@ -40,9 +41,16 @@ class PoseNet extends Component {
   async componentDidMount() {
     try {
       await this.setupCamera()
+    } catch (error) {
+      throw new Error(
+        'This browser does not support video capture, or this device does not have a camera'
+      )
+    }
+
+    try {
       this.net = await posenet.load()
     } catch (error) {
-      throw 'This browser does not support video capture, or this device does not have a camera'
+      throw new Error('posenet failed to load')
     } finally {
       //NOTE: error thrown doesn't account for if posenet.load() fails!
       setTimeout(() => {
@@ -55,14 +63,16 @@ class PoseNet extends Component {
 
   async setupCamera() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      throw 'Browser API navigator.mediaDevices.getUserMedia not available'
+      throw new Error(
+        'Browser API navigator.mediaDevices.getUserMedia not available'
+      )
     }
     const {videoWidth, videoHeight} = this.props
     const video = this.video
     video.width = videoWidth
     video.height = videoHeight
 
-    const steam = await navigator.mediaDevices.getUserMedia({
+    const stream = await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
         facingMode: 'user',
@@ -71,7 +81,7 @@ class PoseNet extends Component {
       }
     })
 
-    video.srcObject = steam
+    video.srcObject = stream
 
     return new Promise(resolve => {
       video.onloadedmetadata = () => {
@@ -195,8 +205,9 @@ class PoseNet extends Component {
     return (
       <div>
         {/* <div>{loading}</div> */}
-        <div className="webcam-outer">
-          <video id="video" playsInline ref={this.getVideo} />
+        <div>
+          <video id="videoNoShow" playsInline ref={this.getVideo} />
+          <Object />
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>
