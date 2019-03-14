@@ -85,3 +85,16 @@ form div {
   z-index: 10;
   /* border: 5px solid white; */
 }
+
+.loading {
+  height: 200px;
+  margin-top: 200px;
+  margin-left: 300px;
+}
+
+.centered {
+  display: flex;
+  /* align-content: center; */
+  align-items: center;
+  justify-content: center;
+}

@@ -26,14 +26,15 @@ class PoseNet extends Component {
     skeletonColor: '#ffadea',
     skeletonLineWidth: 6,
     loadingText: 'Loading...please be patient...',
-    ObjectX: 100,
+    ObjectX: 300,
     ObjectY: 400
   }
 
   constructor(props) {
     super(props, PoseNet.defaultProps)
     this.state = {
-      loading: true
+      loading: true,
+      objectImage: 'https://i.gifer.com/5DYJ.gif'
     }
   }
 
@@ -157,15 +158,15 @@ class PoseNet extends Component {
           poses.push(pose)
           break
         }
-        // default: {
-        //   const pose = await net.estimateSinglePose(
-        //     video,
-        //     imageScaleFactor,
-        //     flipHorizontal,
-        //     outputStride
-        //   )
-        //   poses.push(pose)
-        // }
+        default: {
+          const pose = await net.estimateSinglePose(
+            video,
+            imageScaleFactor,
+            flipHorizontal,
+            outputStride
+          )
+          poses.push(pose)
+        }
       }
 
       canvasContext.clearRect(0, 0, videoWidth, videoHeight)
@@ -197,15 +198,32 @@ class PoseNet extends Component {
               canvasContext
             )
           }
-          const noseCords = findPoint('nose', keypoints)
+          // const noseCords = findPoint('nose', keypoints)
+          // const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
+
+          // if (
+          //   noseCords.x <= objectCords.x &&
+          //   noseCords.x >= objectCords.x - 50 &&
+          //   (noseCords.y <= objectCords.y && noseCords.y >= objectCords.y - 50)
+          // ) {
+          //   this.setState({
+          //     ...this.state,
+          //     objectImage: 'https://i.imgur.com/xhRjyzt.png'
+          //   })
+          // }
+
+          const handCords = findPoint('rightWrist', keypoints)
           const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
 
           if (
-            noseCords.x <= objectCords.x + 50 &&
-            noseCords.x >= objectCords.x &&
-            (noseCords.y <= objectCords.y + 50 && noseCords.y >= objectCords.y)
+            handCords.x <= objectCords.x &&
+            handCords.x >= objectCords.x - 50 &&
+            (handCords.y <= objectCords.y && handCords.y >= objectCords.y - 50)
           ) {
-            console.log('HIT IT!!!!!!!')
+            this.setState({
+              ...this.state,
+              objectImage: 'https://i.imgur.com/xhRjyzt.png'
+            })
           }
         }
       })
@@ -215,16 +233,30 @@ class PoseNet extends Component {
   }
 
   render() {
-    // const loading = this.state.loading ? (
-    //   //<video className= 'loading' src='wherever the loading anim is from' autoPlay muted />
-    // ) : (<p/>)
+    const loading = this.state.loading ? (
+      <img className="loading" src="/assets/loading.gif" />
+    ) : (
+      <p className="noShow" />
+    )
+
+    // const video = this.state.loading ? <div/> : <video id="videoNoShow" playsInline ref={this.getVideo} />
+    const object = this.state.loading ? (
+      <div />
+    ) : (
+      <Object
+        x={this.props.ObjectX}
+        y={this.props.ObjectY}
+        imageUrl={this.state.objectImage}
+      />
+    )
+    // const canvas = this.state.loading? <div/> : <canvas className="webcam" ref={this.getCanvas} />
 
     return (
-      <div>
-        {/* <div>{loading}</div> */}
+      <div className="centered">
+        <div>{loading}</div>
         <div>
           <video id="videoNoShow" playsInline ref={this.getVideo} />
-          <Object x={this.props.ObjectX} y={this.props.ObjectY} />
+          {object}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>

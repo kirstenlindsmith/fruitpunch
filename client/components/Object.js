@@ -4,7 +4,7 @@ class Object extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      imageUrl: 'https://i.gifer.com/5DYJ.gif' || props.imageUrl,
+      imageUrl: props.imageUrl || 'https://i.gifer.com/5DYJ.gif',
       x: 50,
       y: 400
     } //upper left hand corner is the actual coordinates
@@ -17,15 +17,14 @@ class Object extends Component {
     })
   }
 
-  // componentDidUpdate(prevProps){
-  //   if (prevProps.x !== this.props.x ||
-  //     prevProps.y !== this.props.x ){
-  //       this.setState({
-  //         x: this.props.x,
-  //         y: this.props.y
-  //       })
-  //     }
-  // }
+  componentDidUpdate(prevProps) {
+    if (prevProps.imageUrl !== this.props.imageUrl) {
+      this.setState({
+        ...this.state,
+        imageUrl: this.props.imageUrl
+      })
+    }
+  }
 
   render() {
     return (
