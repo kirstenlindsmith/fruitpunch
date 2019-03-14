@@ -5,4 +5,5 @@ import App from './app'
 // // establishes socket connection
 // import './socket'
 
-ReactDOM.render(<App />, document.getElementById('app'))
+// ReactDOM.render(<App />, document.getElementById('app'))
+ReactDOM.render(<h1>HELLO</h1>, document.getElementById('app'))

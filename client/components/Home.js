@@ -110,5 +110,98 @@ class PoseNet extends Component {
       skeletonColor,
       skeletonLineWidth
     } = this.props
+
+    const net = this.net
+    const video = this.video
+
+    const poseDetectionFrameInner = async () => {
+      let poses = []
+
+      switch (algorithm) {
+        case 'multi-pose': {
+          poses = await net.estimateMultiplePoses(
+            video,
+            imageScaleFactor,
+            flipHorizontal,
+            outputStride,
+            maxPoseDetections,
+            minPartConfidence,
+            nmsRadius
+          )
+          break
+        }
+        case 'single-pose': {
+          const pose = await net.estimateSinglePose(
+            video,
+            imageScaleFactor,
+            flipHorizontal,
+            outputStride
+          )
+          poses.push(pose)
+          break
+        }
+        default: {
+          const pose = await net.estimateSinglePose(
+            video,
+            imageScaleFactor,
+            flipHorizontal,
+            outputStride
+          )
+          poses.push(pose)
+        }
+      }
+
+      canvasContext.clearRect(0, 0, videoWidth, videoHeight)
+
+      if (showVideo) {
+        canvasContext.save()
+        canvasContext.scale(-1, 1)
+        canvasContext.translate(-videoWidth, 0)
+        canvasContext.drawImage(video, 0, 0, videoWidth, videoHeight)
+        canvasContext.restore()
+      }
+
+      poses.forEach(({score, keypoints}) => {
+        if (score >= minPoseConfidence) {
+          if (showPoints) {
+            drawKeyPoints(
+              keypoints,
+              minPartConfidence,
+              skeletonColor,
+              canvasContext
+            )
+          }
+          if (showSkeleton) {
+            drawSkeleton(
+              keypoints,
+              minPartConfidence,
+              skeletonColor,
+              skeletonLineWidth,
+              canvasContext
+            )
+          }
+        }
+      })
+      requestAnimationFrame(poseDetectionFrameInner)
+    }
+    poseDetectionFrameInner()
+  }
+
+  render() {
+    // const loading = this.state.loading ? (
+    //   //<video className= 'loading' src='wherever the loading anim is from' autoPlay muted />
+    // ) : (<p/>)
+
+    return (
+      <div>
+        {/* <div>{loading}</div> */}
+        <div className="webcam-outer">
+          <video id="video" playsInline ref={this.getVideo} />
+          <canvas className="webcam" ref={this.getCanvas} />
+        </div>
+      </div>
+    )
   }
 }
+
+export default PoseNet
