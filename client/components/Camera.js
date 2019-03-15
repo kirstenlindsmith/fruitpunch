@@ -9,6 +9,8 @@ import {
   bodyPointLocations
 } from './utils'
 import Object from './Object'
+import {connect} from 'react-redux'
+import {gotKeypoints} from '../store'
 
 class PoseNet extends Component {
   static defaultProps = {
@@ -182,6 +184,7 @@ class PoseNet extends Component {
       }
 
       poses.forEach(({score, keypoints}) => {
+        this.props.getKeypoints(keypoints)
         if (score >= minPoseConfidence) {
           if (showPoints) {
             drawKeyPoints(
@@ -266,4 +269,16 @@ class PoseNet extends Component {
   }
 }
 
-export default PoseNet
+const mapStateToProps = state => {
+  return {
+    keypointsOnState: state.keypoints
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  getKeypoints: keypoints => {
+    dispatch(gotKeypoints(keypoints))
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(PoseNet)

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter, Route, Switch} from 'react-router-dom'
-import Home from './components/Home'
+import Camera from './components/Camera'
 
 /**
  * COMPONENT
@@ -10,7 +10,7 @@ class Routes extends Component {
     return (
       <div>
         {/* <Switch> */}
-        <Route path="/" component={Home} key="home" />
+        <Route path="/" component={Camera} key="Camera" />
         {/* </Switch> */}
       </div>
     )
