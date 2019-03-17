@@ -1,5 +1,3 @@
-// testing master pull requests
-
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
 import {
@@ -8,7 +6,7 @@ import {
   findPoint,
   bodyPointLocations
 } from './utils'
-import Object from './Object'
+import Game from './Game'
 import {connect} from 'react-redux'
 import {gotKeypoints} from '../store'
 
@@ -29,16 +27,13 @@ class PoseNet extends Component {
     imageScaleFactor: 0.5,
     skeletonColor: '#ffadea',
     skeletonLineWidth: 6,
-    loadingText: 'Loading...please be patient...',
-    ObjectX: 300,
-    ObjectY: 400
+    loadingText: 'Loading...please be patient...'
   }
 
   constructor(props) {
     super(props, PoseNet.defaultProps)
     this.state = {
-      loading: true,
-      objectImage: 'https://i.gifer.com/5DYJ.gif'
+      loading: true
     }
   }
 
@@ -64,7 +59,6 @@ class PoseNet extends Component {
     } catch (error) {
       throw new Error('posenet failed to load')
     } finally {
-      //NOTE: error thrown doesn't account for if posenet.load() fails!
       setTimeout(() => {
         this.setState({loading: false})
       }, 200)
@@ -79,6 +73,7 @@ class PoseNet extends Component {
         'Browser API navigator.mediaDevices.getUserMedia not available'
       )
     }
+
     const {videoWidth, videoHeight} = this.props
     const video = this.video
     video.width = videoWidth
@@ -184,7 +179,9 @@ class PoseNet extends Component {
       }
 
       poses.forEach(({score, keypoints}) => {
+        // sending keypoints to the store
         this.props.getKeypoints(keypoints)
+
         if (score >= minPoseConfidence) {
           if (showPoints) {
             drawKeyPoints(
@@ -203,37 +200,12 @@ class PoseNet extends Component {
               canvasContext
             )
           }
-          // const noseCords = findPoint('nose', keypoints)
-          // const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
-
-          // if (
-          //   noseCords.x <= objectCords.x &&
-          //   noseCords.x >= objectCords.x - 50 &&
-          //   (noseCords.y <= objectCords.y && noseCords.y >= objectCords.y - 50)
-          // ) {
-          //   this.setState({
-          //     ...this.state,
-          //     objectImage: 'https://i.imgur.com/xhRjyzt.png'
-          //   })
-          // }
-
-          const handCords = findPoint('rightWrist', keypoints)
-          const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
-
-          if (
-            handCords.x <= objectCords.x &&
-            handCords.x >= objectCords.x - 50 &&
-            (handCords.y <= objectCords.y && handCords.y >= objectCords.y - 50)
-          ) {
-            this.setState({
-              ...this.state,
-              objectImage: 'https://i.imgur.com/xhRjyzt.png'
-            })
-          }
         }
       })
+
       requestAnimationFrame(poseDetectionFrameInner)
     }
+
     poseDetectionFrameInner()
   }
 
@@ -244,24 +216,22 @@ class PoseNet extends Component {
       <p className="noShow" />
     )
 
-    // const video = this.state.loading ? <div/> : <video id="videoNoShow" playsInline ref={this.getVideo} />
-    const object = this.state.loading ? (
+    const game = this.state.loading ? (
       <div />
     ) : (
-      <Object
-        x={this.props.ObjectX}
-        y={this.props.ObjectY}
-        imageUrl={this.state.objectImage}
+      <Game
+        keypoints={this.props.keypointsOnState}
+        width={this.canvas.width}
+        height={this.canvas.height}
       />
     )
-    // const canvas = this.state.loading? <div/> : <canvas className="webcam" ref={this.getCanvas} />
 
     return (
       <div className="centered">
         <div>{loading}</div>
         <div>
           <video id="videoNoShow" playsInline ref={this.getVideo} />
-          {object}
+          {game}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>
@@ -269,11 +239,9 @@ class PoseNet extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    keypointsOnState: state.keypoints
-  }
-}
+const mapStateToProps = state => ({
+  keypointsOnState: state.keypoints
+})
 
 const mapDispatchToProps = dispatch => ({
   getKeypoints: keypoints => {
