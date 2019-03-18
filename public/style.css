@@ -1,37 +1,8 @@
+html,
 body {
-  font-family: sans-serif;
-}
-
-a {
-  text-decoration: none;
-}
-
-label {
-  display: block;
-}
-
-nav a {
-  display: inline-block;
-  margin: 1em;
-}
-
-form div {
-  margin: 1em;
-  display: inline-block;
-}
-
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
   width: 100%;
-  color: black;
-}
-
-.footer-text {
-  max-width: 600px;
-  text-align: center;
-  margin: auto;
+  height: 100%;
+  margin: 0;
 }
 
 @media only screen and (max-width: 600px) {
@@ -45,7 +16,11 @@ form div {
   margin: 0 auto;
   margin-left: auto;
   margin-right: auto;
-  padding: 6px;
+  z-index: -11;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #videoNoShow {
@@ -87,9 +62,14 @@ form div {
 }
 
 .loading {
+  /* margin-top: 200px;
+  margin-left: 300px; */
   height: 200px;
-  margin-top: 200px;
-  margin-left: 300px;
+  margin: 0 auto;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .centered {
@@ -97,4 +77,82 @@ form div {
   /* align-content: center; */
   align-items: center;
   justify-content: center;
+}
+
+#countdownDiv {
+  z-index: 10;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* fade out: */
+  -moz-animation: cssAnimation 0s ease-in 13s forwards;
+  /* Firefox */
+  -webkit-animation: cssAnimation 0s ease-in 13s forwards;
+  /* Safari and Chrome */
+  -o-animation: cssAnimation 0s ease-in 13s forwards;
+  /* Opera */
+  animation: cssAnimation 0s ease-in 13s forwards;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+@keyframes cssAnimation {
+  to {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+}
+@-webkit-keyframes cssAnimation {
+  to {
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+}
+
+#countdownGif {
+  z-index: 11;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.getIntoTheFrame {
+  z-index: 8;
+  /* position: fixed;
+  top: 50px;
+  left: 300px */
+}
+
+#ready {
+  z-index: 10;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* fade out: */
+  -moz-animation: cssAnimation 0s ease-in 3s forwards;
+  /* Firefox */
+  -webkit-animation: cssAnimation 0s ease-in 3s forwards;
+  /* Safari and Chrome */
+  -o-animation: cssAnimation 0s ease-in 3s forwards;
+  /* Opera */
+  animation: cssAnimation 0s ease-in 3s forwards;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+#bodyMeasurements {
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: white;
 }
