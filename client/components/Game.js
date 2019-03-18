@@ -1,36 +1,46 @@
 import React, {Component} from 'react'
-import Object from './Object'
+import GameObject from './Object'
 import {connect} from 'react-redux'
 import {bodyPointLocations, findPoint} from './utils'
+// test without bodyPointLocations imported
 
 class Game extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      width: this.props.width,
-      height: this.props.height,
-      keypoints: this.props.keypoints,
-      imageUrl: 'https://i.gifer.com/5DYJ.gif',
-      objCoords: {
-        x: 300,
-        y: 400
-      }
+      gameObjects: [
+        {
+          imageUrl: 'https://i.gifer.com/5DYJ.gif',
+          x: 300,
+          y: 400
+        }
+      ]
     }
   }
 
   // THE GAME
   startGame = () => {
-    const noseCords = findPoint('nose', this.state.keypoints)
-    const objectCords = this.state.objCoords
+    const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
+    const objectCoords = {
+      x: this.state.gameObjects[0].x,
+      y: this.state.gameObjects[0].y
+    }
 
     if (
-      noseCords.x <= objectCords.x &&
-      noseCords.x >= objectCords.x - 50 &&
-      (noseCords.y <= objectCords.y && noseCords.y >= objectCords.y - 50)
+      rightWristCoords.x <= objectCoords.x &&
+      rightWristCoords.x >= objectCoords.x - 50 &&
+      (rightWristCoords.y <= objectCoords.y &&
+        rightWristCoords.y >= objectCoords.y - 50)
     ) {
       this.setState({
         ...this.state,
-        imageUrl: 'https://i.imgur.com/xhRjyzt.png'
+        gameObjects: [
+          {
+            ...gameObjects[0],
+            // invisible image
+            imageUrl: 'https://i.imgur.com/xhRjyzt.png'
+          }
+        ]
       })
     }
   }
@@ -39,14 +49,21 @@ class Game extends Component {
     return (
       <div>
         <h1>hit the object!</h1>
-        <Object imageUrl={this.state.imageUrl} />
+        {this.state.gameObjects.map(gameObj => (
+          <GameObject
+            key={gameObj.id}
+            imageUrl={gameObj.imageUrl}
+            x={gameObj.x}
+            y={gameObj.y}
+          />
+        ))}
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  objCoords: state.objCoords
+  keypoints: state.keypoints
 })
 
 export default connect(mapStateToProps)(Game)
