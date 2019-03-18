@@ -30,9 +30,8 @@ class Object extends Component {
   }
 
   render() {
-
     return (
-      <div>
+      <div className="gameObject">
         <img
           src={this.state.imageUrl}
           width="100"
@@ -47,6 +46,5 @@ class Object extends Component {
     )
   }
 }
-
 
 export default connect(Object)
