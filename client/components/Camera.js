@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
-import {drawKeyPoints, drawSkeleton} from './utils'
+import {drawKeyPoints, drawSkeleton, findPoint} from './utils'
 import Game from './Game'
 import {connect} from 'react-redux'
 import {gotKeypoints, recordInitialBody} from '../store'
 import GameInit from './GameInit'
+import GameObject from './GameObject'
 
 class PoseNet extends Component {
   static defaultProps = {
@@ -243,6 +244,35 @@ class PoseNet extends Component {
               canvasContext
             )
           }
+
+          // const noseCords = findPoint('nose', keypoints)
+          // const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
+          const handCoords = findPoint('rightWrist', keypoints)
+          // const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
+          const objectCoords = {x: 50, y: 400}
+
+          if (
+            handCoords.x <= objectCoords.x &&
+            handCoords.x >= objectCoords.x - 50 &&
+            (handCoords.y <= objectCoords.y &&
+              handCoords.y >= objectCoords.y - 50)
+          ) {
+            this.setState({
+              ...this.state,
+              objectImage: 'https://i.imgur.com/xhRjyzt.png'
+            })
+          }
+
+          // if (
+          //   noseCords.x <= objectCords.x &&
+          //   noseCords.x >= objectCords.x - 50 &&
+          //   (noseCords.y <= objectCords.y && noseCords.y >= objectCords.y - 50)
+          // ) {
+          //   this.setState({
+          //     ...this.state,
+          //     objectImage: 'https://i.imgur.com/xhRjyzt.png'
+          //   })
+          // }
         }
       })
 
@@ -268,6 +298,18 @@ class PoseNet extends Component {
         keypoints={this.props.keypointsOnState}
         width={this.canvas.width}
         height={this.canvas.height}
+      />
+    )
+
+    const object = this.state.loading ? (
+      <div />
+    ) : (
+      <GameObject
+        imageUrl="https://i.imgur.com/IUZT4Kd.gif"
+        style={{
+          width: window.innerWidth,
+          height: window.innerHeight
+        }}
       />
     )
 
@@ -304,6 +346,7 @@ class PoseNet extends Component {
     return {
       loading,
       game,
+      object,
       gameInit,
       getIntoTheFrame,
       ready,
@@ -315,6 +358,7 @@ class PoseNet extends Component {
     const {
       loading,
       game,
+      object,
       gameInit,
       getIntoTheFrame,
       ready,
@@ -326,7 +370,8 @@ class PoseNet extends Component {
         <div>{loading}</div>
         <div>
           <video id="videoNoShow" playsInline ref={this.getVideo} />
-          {game}
+          {/* {game} */}
+          {object}
           {ready}
           {gameInit}
           {getIntoTheFrame}

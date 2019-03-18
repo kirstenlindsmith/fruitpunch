@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import Object from './Object'
-import {connect} from 'react-redux'
+import GameObject from './GameObject'
+// import {connect} from 'react-redux'
 import {bodyPointLocations, findPoint} from './utils'
 
 class Game extends Component {
@@ -10,7 +10,7 @@ class Game extends Component {
       width: this.props.width,
       height: this.props.height,
       keypoints: this.props.keypoints,
-      imageUrl: 'https://i.gifer.com/5DYJ.gif',
+      imageUrl: 'https://i.imgur.com/IUZT4Kd.gif',
       objCoords: {
         x: 300,
         y: 400
@@ -39,14 +39,19 @@ class Game extends Component {
     return (
       <div>
         <h1>hit the object!</h1>
-        <Object imageUrl={this.state.imageUrl} />
+        <GameObject
+          imageUrl={this.state.imageUrl}
+          x={this.state.objCoords.x}
+          y={this.state.objCoords.y}
+        />
       </div>
     )
   }
 }
 
-const mapStateToProps = state => ({
-  objCoords: state.objCoords
-})
+// const mapStateToProps = state => ({
+//   objCoords: state.objCoords
+// })
 
-export default connect(mapStateToProps)(Game)
+// export default connect(mapStateToProps)(Game)
+export default Game
