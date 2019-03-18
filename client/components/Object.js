@@ -1,17 +1,20 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 
+// object coords in store so Game component can use
 class Object extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      imageUrl: props.imageUrl || 'https://i.gifer.com/5DYJ.gif',
+      imageUrl: this.props.imageUrl || 'https://i.gifer.com/5DYJ.gif',
       x: 50,
       y: 400
-    } //upper left hand corner is the actual coordinates
+    }
   }
 
   componentDidMount() {
     this.setState({
+      //calcuate user body to render image at coords proportionate to user body size
       x: this.props.x,
       y: this.props.y
     })
@@ -27,6 +30,7 @@ class Object extends Component {
   }
 
   render() {
+
     return (
       <div>
         <img
@@ -44,4 +48,5 @@ class Object extends Component {
   }
 }
 
-export default Object
+
+export default connect(Object)
