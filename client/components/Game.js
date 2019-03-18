@@ -14,6 +14,7 @@ class Game extends Component {
       objCoords: {
         x: 300,
         y: 400
+      }
     }
   }
 

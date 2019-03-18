@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 
+// object coords in store so Game component can use
 class Object extends Component {
   constructor(props) {
     super(props)
