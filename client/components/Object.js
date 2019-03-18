@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {gotObjCoords} from '../store'
 
 // object coords in store so Game component can use
 class Object extends Component {
@@ -31,7 +30,6 @@ class Object extends Component {
   }
 
   render() {
-    this.props.getObjCoords({x: this.state.x, y: this.state.y})
 
     return (
       <div>
@@ -50,10 +48,5 @@ class Object extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  getObjCoords: objCoords => {
-    dispatch(gotObjCoords(objCoords))
-  }
-})
 
-export default connect(null, mapDispatchToProps)(Object)
+export default connect(Object)
