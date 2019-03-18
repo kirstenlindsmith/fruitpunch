@@ -2,15 +2,13 @@
 const initialState = {
   keypoints: [],
   initialBody: [],
-  objCoords: {
-    x: 0,
-    y: 0
-  }
+  proportions: {}
 }
 
 //action types
 const GOT_KEYPOINTS = 'GOT_KEYPOINTS'
-const GOT_OBJCOORDS = 'GOT_OBJCOORDS'
+const GOT_INITIALBODY = 'GOT_INITIALBODY'
+const GOT_PROPORTIONS = 'GOT_PROPORTIONS'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -20,10 +18,17 @@ export const gotKeypoints = keypoints => {
   }
 }
 
-export const gotObjCoords = objCoords => {
+export const recordInitialBody = keypoints => {
   return {
-    type: GOT_OBJCOORDS,
-    objCoords
+    type: GOT_INITIALBODY,
+    keypoints
+  }
+}
+
+export const gotProportions = proportions => {
+  return {
+    type: GOT_PROPORTIONS,
+    proportions
   }
 }
 
@@ -35,10 +40,15 @@ const keyPointsReducer = (state = initialState, action) => {
         ...state,
         keypoints: action.keypoints
       }
-    case GOT_OBJCOORDS:
+    case GOT_INITIALBODY:
       return {
         ...state,
-        objCoords: action.objCoords
+        initialBody: action.keypoints
+      }
+    case GOT_PROPORTIONS:
+      return {
+        ...state,
+        proportions: action.proportions
       }
     default:
       return state
