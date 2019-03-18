@@ -114,19 +114,3 @@ export function findPoint(bodyPart, keypoints) {
   const bodyPartYCord = Math.floor(bodyPartPosition.y)
   return {x: bodyPartXCord, y: bodyPartYCord}
 }
-//OUR FUNCTIONNNN
-
-/*if (image.x === bodyPart.x && image.y === bodyPart.y){
-  console.log('HIT IT')
-}
-
-Gloobal state = {
-  images = [{objects with coordinates}, {obj2}, ...];
-  currentBodyPart = {object with string name and coordinates, score?}
-
-}
-
-
-
-
-*/
