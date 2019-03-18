@@ -6,7 +6,7 @@ import {
   drawSkeleton,
   findPoint
 } from './utils'
-import {gotProportions} from '../store'
+import {gotProportions} from '../store/store'
 
 class GameInit extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class GameInit extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !!this.props.initialBody.score
+    return !this.props.initialBody.score
   } /* equivalent to the ternary:
   `return this.props.initialBody.score ? false : true`
   meaning: if the initialBody in the global store has a score (and thus keypoints) property, no need to update. Otherwise, keep updating till it captures an initialBody

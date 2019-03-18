@@ -1,3 +1,5 @@
+import {createStore} from 'redux'
+
 //initial state
 const initialState = {
   keypoints: [],
@@ -33,7 +35,7 @@ export const gotProportions = proportions => {
 }
 
 //reducer
-const keyPointsReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case GOT_KEYPOINTS:
       return {
@@ -55,4 +57,6 @@ const keyPointsReducer = (state = initialState, action) => {
   }
 }
 
-export default keyPointsReducer
+const store = createStore(reducer)
+
+export default store

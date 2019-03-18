@@ -1,39 +1,24 @@
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
-import {drawKeyPoints, drawSkeleton, findPoint} from './utils'
-import Game from './Game'
+import {
+  drawKeyPoints,
+  drawSkeleton,
+  config,
+  variablesForCameraRender
+} from './utils'
 import {connect} from 'react-redux'
 import {gotKeypoints, recordInitialBody} from '../store'
-import GameInit from './GameInit'
-import GameObject from './GameObject'
+// import VariablesForRender from './utils/varsForCameraRender'
+// import store from '../store'
 
 class PoseNet extends Component {
-  static defaultProps = {
-    videoWidth: 1300,
-    videoHeight: 800,
-    flipHorizontal: true,
-    algorithm: 'single-pose',
-    showVideo: true,
-    showSkeleton: true,
-    showPoints: true,
-    minPoseConfidence: 0.1,
-    minPartConfidence: 0.5,
-    maxPoseDetections: 2,
-    nmsRadius: 20,
-    outputStride: 16,
-    imageScaleFactor: 0.5,
-    skeletonColor: '#ffadea',
-    skeletonLineWidth: 6,
-    loadingText: 'Loading...please be patient...'
-  }
+  static defaultProps = config
 
   constructor(props) {
     super(props, PoseNet.defaultProps)
     this.state = {
       loading: true
     }
-
-    this.variablesForRender = this.variablesForRender.bind(this)
   }
 
   getCanvas = elem => {
@@ -282,96 +267,22 @@ class PoseNet extends Component {
     poseDetectionFrameInner()
   }
 
-  variablesForRender() {
-    const poseCapture = this.props.initialBody ? this.props.initialBody : []
-
-    const loading = this.state.loading ? (
-      <img className="loading" src="/assets/loading.gif" />
-    ) : (
-      <p className="noShow" />
-    )
-
-    const game = this.state.loading ? (
-      <div />
-    ) : (
-      <Game
-        keypoints={this.props.keypointsOnState}
-        width={this.canvas.width}
-        height={this.canvas.height}
-      />
-    )
-
-    const object = this.state.loading ? (
-      <div />
-    ) : (
-      <GameObject
-        imageUrl="https://i.imgur.com/IUZT4Kd.gif"
-        style={{
-          width: window.innerWidth,
-          height: window.innerHeight
-        }}
-      />
-    )
-
-    const gameInit = this.state.loading ? (
-      <div />
-    ) : (
-      <GameInit initialPoseCapture={poseCapture} loading={this.state.loading} />
-    )
-
-    const getIntoTheFrame =
-      !this.props.proportions.height && !this.state.loading ? (
-        <img className="getIntoTheFrame" src="/assets/movePrompt.png" />
-      ) : (
-        <div className="getIntoTheFrame" />
-      )
-
-    const ready =
-      this.props.proportions.height && !this.state.loading ? (
-        <img id="ready" src="/assets/ready.png" />
-      ) : (
-        <div />
-      )
-
-    const proportions = this.props.proportions.height ? (
-      <h1 id="bodyMeasurements">
-        height: {this.props.proportions.height} <br />
-        arm length: {this.props.proportions.armLength} <br />
-        leg length: {this.props.proportions.legLength}
-      </h1>
-    ) : (
-      <div />
-    )
-
-    return {
-      loading,
-      game,
-      object,
-      gameInit,
-      getIntoTheFrame,
-      ready,
-      proportions
-    }
-  }
-
   render() {
     const {
       loading,
       game,
-      object,
       gameInit,
       getIntoTheFrame,
       ready,
       proportions
-    } = this.variablesForRender()
+    } = variablesForCameraRender(this.state.loading)
 
     return (
       <div className="centered">
         <div>{loading}</div>
         <div>
           <video id="videoNoShow" playsInline ref={this.getVideo} />
-          {/* {game} */}
-          {object}
+          {game}
           {ready}
           {gameInit}
           {getIntoTheFrame}

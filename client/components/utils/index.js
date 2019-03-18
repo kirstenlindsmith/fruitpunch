@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import * as posenet from '@tensorflow-models/posenet'
 
 const pointRadius = 3
@@ -114,19 +115,62 @@ export function findPoint(bodyPart, keypoints) {
   const bodyPartYCord = Math.floor(bodyPartPosition.y)
   return {x: bodyPartXCord, y: bodyPartYCord}
 }
-//OUR FUNCTIONNNN
 
-/*if (image.x === bodyPart.x && image.y === bodyPart.y){
-  console.log('HIT IT')
+//FUNCTION TO PRODUCE VARIABLES FOR THE CAMERA.JS RENDER
+import React from 'react'
+import Game from '../Game'
+import GameInit from '../GameInit'
+import store from '../store'
+
+export const variablesForCameraRender = loadingStatus => {
+  let state = store.getState()
+
+  const poseCapture = state.initialBody ? state.initialBody : []
+
+  const loading = loadingStatus ? (
+    <img className="loading" src="/assets/loading.gif" />
+  ) : (
+    <p className="noShow" />
+  )
+
+  const game = loadingStatus ? <div /> : <Game />
+
+  const gameInit = loadingStatus ? (
+    <div />
+  ) : (
+    <GameInit initialPoseCapture={poseCapture} loading={loadingStatus} />
+  )
+
+  const getIntoTheFrame =
+    !state.proportions.height && !loadingStatus ? (
+      <img className="getIntoTheFrame" src="/assets/movePrompt.png" />
+    ) : (
+      <div className="getIntoTheFrame" />
+    )
+
+  const ready =
+    state.proportions.height && !loadingStatus ? (
+      <img id="ready" src="/assets/ready.png" />
+    ) : (
+      <div />
+    )
+
+  const proportions = state.proportions.height ? (
+    <h1 id="bodyMeasurements">
+      height: {state.proportions.height} <br />
+      arm length: {state.proportions.armLength} <br />
+      leg length: {state.proportions.legLength}
+    </h1>
+  ) : (
+    <div />
+  )
+
+  return {
+    loading,
+    game,
+    gameInit,
+    getIntoTheFrame,
+    ready,
+    proportions
+  }
 }
-
-Gloobal state = {
-  images = [{objects with coordinates}, {obj2}, ...];
-  currentBodyPart = {object with string name and coordinates, score?}
-
-}
-
-
-
-
-*/
