@@ -1,6 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {bodyPointLocations, drawKeyPoints, drawSkeleton, findPoint} from './utils'
+import {
+  bodyPointLocations,
+  drawKeyPoints,
+  drawSkeleton,
+  findPoint
+} from './utils'
 import {gotProportions} from '../store'
 
 class GameInit extends Component {
@@ -56,31 +61,31 @@ class GameInit extends Component {
       //eye to ankle
       Math.sqrt(
         Math.pow(distanceBetween(leftEyeCoords.x, leftAnkleCoords.x), 2) +
-        Math.pow(distanceBetween(leftEyeCoords.y, leftAnkleCoords.y), 2)
+          Math.pow(distanceBetween(leftEyeCoords.y, leftAnkleCoords.y), 2)
       )
 
     const armLength =
       //shoulder to elbow
       Math.sqrt(
         Math.pow(distanceBetween(leftShoulderCoords.x, leftElbowCoords.x), 2) +
-        Math.pow(distanceBetween(leftShoulderCoords.y, leftElbowCoords.y), 2)
+          Math.pow(distanceBetween(leftShoulderCoords.y, leftElbowCoords.y), 2)
       ) +
       //+ elbow to wrist
       Math.sqrt(
         Math.pow(distanceBetween(leftElbowCoords.x, leftWristCoords.x), 2) +
-        Math.pow(distanceBetween(leftElbowCoords.y, leftWristCoords.y), 2)
+          Math.pow(distanceBetween(leftElbowCoords.y, leftWristCoords.y), 2)
       )
 
     const legLength =
       //hip to knee
       Math.sqrt(
         Math.pow(distanceBetween(leftHipCoords.x, leftKneeCoords.x), 2) +
-        Math.pow(distanceBetween(leftHipCoords.y, leftKneeCoords.y), 2)
+          Math.pow(distanceBetween(leftHipCoords.y, leftKneeCoords.y), 2)
       ) +
       //+ knee to ankle
       Math.sqrt(
         Math.pow(distanceBetween(leftKneeCoords.x, leftAnkleCoords.x), 2) +
-        Math.pow(distanceBetween(leftKneeCoords.y, leftAnkleCoords.y), 2)
+          Math.pow(distanceBetween(leftKneeCoords.y, leftAnkleCoords.y), 2)
       )
 
     const proportions = {

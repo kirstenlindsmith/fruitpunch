@@ -1,12 +1,7 @@
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
-import {
-  drawKeyPoints,
-  drawSkeleton,
-  findPoint,
-  bodyPointLocations
-} from './utils'
-import Object from './Object'
+import {drawKeyPoints, drawSkeleton} from './utils'
+import Game from './Game'
 import {connect} from 'react-redux'
 import {gotKeypoints, recordInitialBody} from '../store'
 import GameInit from './GameInit'
@@ -28,17 +23,13 @@ class PoseNet extends Component {
     imageScaleFactor: 0.5,
     skeletonColor: '#ffadea',
     skeletonLineWidth: 6,
-    loadingText: 'Loading...please be patient...',
-    ObjectX: 300,
-    ObjectY: 400
+    loadingText: 'Loading...please be patient...'
   }
 
   constructor(props) {
     super(props, PoseNet.defaultProps)
     this.state = {
-      loading: true,
-      objectImage: 'https://i.gifer.com/5DYJ.gif',
-      posesRecorded: false
+      loading: true
     }
 
     this.variablesForRender = this.variablesForRender.bind(this)
@@ -66,7 +57,6 @@ class PoseNet extends Component {
     } catch (error) {
       throw new Error('posenet failed to load')
     } finally {
-      //NOTE: error thrown doesn't account for if posenet.load() fails!
       setTimeout(() => {
         this.setState({loading: false})
       }, 200)
@@ -81,6 +71,7 @@ class PoseNet extends Component {
         'Browser API navigator.mediaDevices.getUserMedia not available'
       )
     }
+
     const {videoWidth, videoHeight} = this.props
     const video = this.video
     video.width = window.innerWidth //videoWidth
@@ -231,6 +222,7 @@ class PoseNet extends Component {
       } //NOTE: goal is recording the initial pose ONLY when all needed keypoints are in the frame
 
       poses.forEach(({score, keypoints}) => {
+        // sending keypoints to the store
         this.props.getKeypoints(keypoints)
 
         if (score >= minPoseConfidence) {
@@ -251,37 +243,12 @@ class PoseNet extends Component {
               canvasContext
             )
           }
-          const noseCords = findPoint('nose', keypoints)
-          const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
-
-          if (
-            noseCords.x <= objectCords.x &&
-            noseCords.x >= objectCords.x - 50 &&
-            (noseCords.y <= objectCords.y && noseCords.y >= objectCords.y - 50)
-          ) {
-            this.setState({
-              ...this.state,
-              objectImage: 'https://i.imgur.com/xhRjyzt.png'
-            })
-          }
-
-          // const handCords = findPoint('rightWrist', keypoints)
-          // const objectCords = {x: this.props.ObjectX, y: this.props.ObjectY}
-
-          // if (
-          //   handCords.x <= objectCords.x &&
-          //   handCords.x >= objectCords.x - 50 &&
-          //   (handCords.y <= objectCords.y && handCords.y >= objectCords.y - 50)
-          // ) {
-          //   this.setState({
-          //     ...this.state,
-          //     objectImage: 'https://i.imgur.com/xhRjyzt.png'
-          //   })
-          // }
         }
       })
+
       requestAnimationFrame(poseDetectionFrameInner)
     }
+
     poseDetectionFrameInner()
   }
 
@@ -294,13 +261,13 @@ class PoseNet extends Component {
       <p className="noShow" />
     )
 
-    const object = this.state.loading ? (
+    const game = this.state.loading ? (
       <div />
     ) : (
-      <Object
-        x={this.props.ObjectX}
-        y={this.props.ObjectY}
-        imageUrl={this.state.objectImage}
+      <Game
+        keypoints={this.props.keypointsOnState}
+        width={this.canvas.width}
+        height={this.canvas.height}
       />
     )
 
@@ -336,7 +303,7 @@ class PoseNet extends Component {
 
     return {
       loading,
-      object,
+      game,
       gameInit,
       getIntoTheFrame,
       ready,
@@ -347,7 +314,7 @@ class PoseNet extends Component {
   render() {
     const {
       loading,
-      object,
+      game,
       gameInit,
       getIntoTheFrame,
       ready,
@@ -359,7 +326,7 @@ class PoseNet extends Component {
         <div>{loading}</div>
         <div>
           <video id="videoNoShow" playsInline ref={this.getVideo} />
-          {object}
+          {game}
           {ready}
           {gameInit}
           {getIntoTheFrame}
