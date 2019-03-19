@@ -2,7 +2,7 @@ import React from 'react'
 
 // item coords in store so Game component can use
 const GameItem = props => {
-  const imageUrl = props.imageUrl || 'https://i.gifer.com/5DYJ.gif'
+  const imageUrl = props.imageUrl || '/assets/strawberry.gif'
   const x = props.x
   const y = props.y
   const width = props.width

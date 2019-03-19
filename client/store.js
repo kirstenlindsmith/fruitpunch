@@ -9,7 +9,7 @@ const initialState = {
     {
       id: 1,
       imageUrl: 'assets/strawberry.gif',
-      x: 100,
+      x: 200,
       y: 200
     }
   ],
@@ -80,7 +80,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         activeGameItems: [
-          state.activeGameItems.filter(obj => obj.id !== action.gameItems.id)
+          state.activeGameItems.filter(obj => obj.id !== action.gameItem.id)
         ],
         hiddenGameItems: [...state.hiddenGameItems, action.gameItem]
       }

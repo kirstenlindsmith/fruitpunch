@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
-import {bodyPointLocations, findPoint} from './utils'
-import {gotGameItem, removedGameItem, restartItems} from '../store'
+import {bodyPointLocations, findPoint, throttler} from './utils'
+import {removedGameItem, restartItems} from '../store'
+// import throttle from 'lodash.throttle'
 // test without bodyPointLocations imported
 
 class Game extends Component {
@@ -12,25 +13,38 @@ class Game extends Component {
     this.startGame = this.startGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
   }
+
+  shouldComponentUpdate() {
+    //if there are still any active game items...
+    return !!this.props.gameItems.length
+  }
+
+  componentDidUpdate() {
+    this.startGame()
+  }
+
   // THE GAME
   startGame() {
-    console.log('game started!')
     if (this.props.keypoints.length) {
       const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
       const itemCoords = {
         x: this.props.gameItems[0].x,
         y: this.props.gameItems[0].y
       }
-
+      console.log('wrist:', rightWristCoords)
+      console.log('item:', itemCoords)
       if (
         rightWristCoords.x <= itemCoords.x &&
         rightWristCoords.x >= itemCoords.x - 50 &&
         (rightWristCoords.y <= itemCoords.y &&
           rightWristCoords.y >= itemCoords.y - 50)
       ) {
-        //retire the item
+        console.log('WRIST COORDS WHEN IT HIT!!!', rightWristCoords)
         console.log('hit it!!!')
-        this.props.removeGameItem(this.props.gameItems[0])
+        if (this.props.gameItems.length) {
+          //retire the item
+          this.props.removeGameItem(this.props.gameItems[0])
+        }
       }
     }
   }
@@ -41,15 +55,15 @@ class Game extends Component {
   }
 
   render() {
-    const buttonStyle = {
-      position: 'fixed',
-      top: 700
-    }
+    let activeItems
+    if (this.props.gameItems.length) {
+      activeItems = this.props.gameItems
+    } else activeItems = []
 
     return (
       <div>
         <h1>hit it!</h1>
-        {this.props.gameItems.map(item => {
+        {activeItems.map(item => {
           return (
             <GameItem
               key={item.id}
@@ -59,14 +73,8 @@ class Game extends Component {
             />
           )
         })}
-        <div
-          id="start_restart_buttons"
-          // style={buttonStyle}
-        >
-          <button
-            type="button"
-            onClick={this.startGame} //only calls the function ONCE
-          >
+        <div id="start_restart_buttons">
+          <button type="button" onClick={this.startGame}>
             START
           </button>{' '}
           <button type="button" onClick={this.restartGame}>
