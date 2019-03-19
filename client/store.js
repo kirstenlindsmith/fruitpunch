@@ -10,7 +10,15 @@ const initialState = {
       id: 1,
       imageUrl: 'assets/strawberry.gif',
       x: 200,
-      y: 200
+      y: 200,
+      width: 100
+    },
+    {
+      id: 2,
+      imageUrl: 'assets/strawberry.gif',
+      x: 400,
+      y: 400,
+      width: 100
     }
   ],
   hiddenGameItems: []
@@ -79,9 +87,9 @@ const reducer = (state = initialState, action) => {
     case REMOVED_ITEM:
       return {
         ...state,
-        activeGameItems: [
-          state.activeGameItems.filter(obj => obj.id !== action.gameItem.id)
-        ],
+        activeGameItems: state.activeGameItems.filter(
+          obj => obj.id !== action.gameItem.id
+        ),
         hiddenGameItems: [...state.hiddenGameItems, action.gameItem]
       }
     case RESTART:

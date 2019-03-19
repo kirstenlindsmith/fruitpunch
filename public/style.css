@@ -47,6 +47,13 @@ body {
   /* border: 5px solid white; */
 }
 
+/* #marker {
+  z-index: 100;
+  position: fixed;
+  top: 200;
+  left: 200;
+} */
+
 .loading {
   /* margin-top: 200px;
   margin-left: 300px; */

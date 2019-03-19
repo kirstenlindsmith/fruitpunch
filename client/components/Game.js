@@ -25,20 +25,24 @@ class Game extends Component {
 
   // THE GAME
   startGame() {
-    if (this.props.keypoints.length) {
+    if (this.props.keypoints.length && this.props.gameItems.length) {
       const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
       const itemCoords = {
         x: this.props.gameItems[0].x,
         y: this.props.gameItems[0].y
       }
-      console.log('wrist:', rightWristCoords)
-      console.log('item:', itemCoords)
-      if (
-        rightWristCoords.x <= itemCoords.x &&
-        rightWristCoords.x >= itemCoords.x - 50 &&
-        (rightWristCoords.y <= itemCoords.y &&
-          rightWristCoords.y >= itemCoords.y - 50)
-      ) {
+      const objectWidth = this.props.gameItems[0].width
+      const objectRadius = objectWidth * Math.sqrt(2) / 2
+      const objectCenterX =
+        Math.floor(Math.cos(Math.PI / 4) * objectRadius) + itemCoords.x
+      const objectCenterY =
+        Math.floor(Math.sin(Math.PI / 4) * objectRadius) + itemCoords.y
+      const distance = Math.sqrt(
+        Math.pow(rightWristCoords.x - objectCenterX, 2) +
+          Math.pow(rightWristCoords.y - objectCenterY, 2)
+      )
+      //NOTE: when hand approaches from the bottom right angle, it's slightly less responsive (hand has to travel farther into the object for it to hit)
+      if (objectRadius > distance) {
         console.log('WRIST COORDS WHEN IT HIT!!!', rightWristCoords)
         console.log('hit it!!!')
         if (this.props.gameItems.length) {
@@ -46,7 +50,7 @@ class Game extends Component {
           this.props.removeGameItem(this.props.gameItems[0])
         }
       }
-    }
+    } else this.restartGame()
   }
 
   restartGame() {
@@ -55,28 +59,30 @@ class Game extends Component {
   }
 
   render() {
-    let activeItems
+    let item
     if (this.props.gameItems.length) {
-      activeItems = this.props.gameItems
-    } else activeItems = []
-
+      item = this.props.gameItems[0]
+    } else
+      item = {
+        id: null,
+        imageUrl: null,
+        x: null,
+        y: null
+      }
+    console.log('gameItems', this.props.gameItems)
     return (
       <div>
         <h1>hit it!</h1>
-        {activeItems.map(item => {
-          return (
-            <GameItem
-              key={item.id}
-              imageUrl={item.imageUrl}
-              x={item.x} //these are correct
-              y={item.y}
-            />
-          )
-        })}
-        <div id="start_restart_buttons">
-          <button type="button" onClick={this.startGame}>
-            START
-          </button>{' '}
+
+        <GameItem
+          key={item.id}
+          imageUrl={item.imageUrl}
+          x={item.x}
+          y={item.y}
+          width={item.width}
+        />
+
+        <div>
           <button type="button" onClick={this.restartGame}>
             RESTART
           </button>
