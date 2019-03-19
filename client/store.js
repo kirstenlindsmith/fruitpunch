@@ -9,8 +9,8 @@ const initialState = {
     {
       id: 1,
       imageUrl: 'assets/strawberry.gif',
-      x: 300,
-      y: 400
+      x: 100,
+      y: 200
     }
   ],
   hiddenGameItems: []
@@ -64,17 +64,17 @@ const reducer = (state = initialState, action) => {
     case GOT_KEYPOINTS:
       return {
         ...state,
-        keypoints: action.payload
+        keypoints: action.keypoints
       }
     case GOT_INITIALBODY:
       return {
         ...state,
-        initialBody: action.payload
+        initialBody: action.pose
       }
     case GOT_PROPORTIONS:
       return {
         ...state,
-        proportions: action.payload
+        proportions: action.proportions
       }
     case REMOVED_ITEM:
       return {

@@ -7,7 +7,7 @@ import {
   variablesForCameraRender
 } from './utils'
 import {connect} from 'react-redux'
-import {gotKeypoints, recordInitialBody} from '../store'
+import {gotKeypoints, gotInitialBody} from '../store'
 
 class PoseNet extends Component {
   static defaultProps = config

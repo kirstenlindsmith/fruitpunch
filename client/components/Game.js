@@ -6,13 +6,20 @@ import {gotGameItem, removedGameItem, restartItems} from '../store'
 // test without bodyPointLocations imported
 
 class Game extends Component {
+  constructor(props) {
+    super(props)
+
+    this.startGame = this.startGame.bind(this)
+    this.restartGame = this.restartGame.bind(this)
+  }
   // THE GAME
-  startGame = () => {
+  startGame() {
+    console.log('game started!')
     if (this.props.keypoints.length) {
       const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
       const itemCoords = {
-        x: this.state.gameItems[0].x,
-        y: this.state.gameItems[0].y
+        x: this.props.gameItems[0].x,
+        y: this.props.gameItems[0].y
       }
 
       if (
@@ -21,36 +28,51 @@ class Game extends Component {
         (rightWristCoords.y <= itemCoords.y &&
           rightWristCoords.y >= itemCoords.y - 50)
       ) {
-        // if (this.props.gameItems[0].imageUrl !== 'https://i.imgur.com/xhRjyzt.png'){
-        //   this.setState({
-        //     ...this.state,
-        //     gameItems: [
-        //       {
-        //         ...this.state.gameItems[0],
-        //         // invisible image
-        //         imageUrl: 'https://i.imgur.com/xhRjyzt.png'
-        //       }
-        //     ]
-        //   })
-        // }
+        //retire the item
+        console.log('hit it!!!')
+        this.props.removeGameItem(this.props.gameItems[0])
       }
     }
   }
 
+  restartGame() {
+    console.log('game restarted')
+    this.props.respawnItems()
+  }
+
   render() {
-    this.startGame()
+    const buttonStyle = {
+      position: 'fixed',
+      top: 700
+    }
 
     return (
       <div>
         <h1>hit it!</h1>
-        {this.state.gameItems.map(item => (
-          <GameItem
-            key={item.id}
-            imageUrl={item.imageUrl}
-            x={item.x}
-            y={item.y}
-          />
-        ))}
+        {this.props.gameItems.map(item => {
+          return (
+            <GameItem
+              key={item.id}
+              imageUrl={item.imageUrl}
+              x={item.x} //these are correct
+              y={item.y}
+            />
+          )
+        })}
+        <div
+          id="start_restart_buttons"
+          // style={buttonStyle}
+        >
+          <button
+            type="button"
+            onClick={this.startGame} //only calls the function ONCE
+          >
+            START
+          </button>{' '}
+          <button type="button" onClick={this.restartGame}>
+            RESTART
+          </button>
+        </div>
       </div>
     )
   }
@@ -71,4 +93,3 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game)
-// export default Game
