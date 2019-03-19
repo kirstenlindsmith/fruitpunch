@@ -248,7 +248,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(gotKeypoints(keypoints))
   },
   getInitialBody: keypoints => {
-    dispatch(recordInitialBody(keypoints))
+    dispatch(gotInitialBody(keypoints))
   }
 })
 

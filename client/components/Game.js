@@ -1,56 +1,55 @@
 import React, {Component} from 'react'
-import GameObject from './GameObject'
+import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {bodyPointLocations, findPoint} from './utils'
+import {gotGameItem, removedGameItem, restartItems} from '../store'
 // test without bodyPointLocations imported
 
 class Game extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      gameObjects: [
-        {
-          imageUrl: 'https://i.gifer.com/5DYJ.gif',
-          x: 300,
-          y: 400
-        }
-      ]
-    }
-  }
-
   // THE GAME
   startGame = () => {
-    const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
-    const objectCoords = {
-      x: this.state.gameObjects[0].x,
-      y: this.state.gameObjects[0].y
-    }
+    if (this.props.keypoints.length) {
+      const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
+      const itemCoords = {
+        x: this.state.gameItems[0].x,
+        y: this.state.gameItems[0].y
+      }
 
-    if (
-      rightWristCoords.x <= objectCoords.x &&
-      rightWristCoords.x >= objectCoords.x - 50 &&
-      (rightWristCoords.y <= objectCoords.y &&
-        rightWristCoords.y >= objectCoords.y - 50)
-    ) {
-      this.setState({
-        ...this.state,
-        gameObjects: [
-          {
-            ...gameObjects[0],
-            // invisible image
-            imageUrl: 'https://i.imgur.com/xhRjyzt.png'
-          }
-        ]
-      })
+      if (
+        rightWristCoords.x <= itemCoords.x &&
+        rightWristCoords.x >= itemCoords.x - 50 &&
+        (rightWristCoords.y <= itemCoords.y &&
+          rightWristCoords.y >= itemCoords.y - 50)
+      ) {
+        // if (this.props.gameItems[0].imageUrl !== 'https://i.imgur.com/xhRjyzt.png'){
+        //   this.setState({
+        //     ...this.state,
+        //     gameItems: [
+        //       {
+        //         ...this.state.gameItems[0],
+        //         // invisible image
+        //         imageUrl: 'https://i.imgur.com/xhRjyzt.png'
+        //       }
+        //     ]
+        //   })
+        // }
+      }
     }
   }
 
   render() {
+    this.startGame()
+
     return (
       <div>
-        <h1>hit the object!</h1>
-        {this.state.gameObjects.map(gameObj => (
-          <GameObject imageUrl={gameObj.imageUrl} x={gameObj.x} y={gameObj.y} />
+        <h1>hit it!</h1>
+        {this.state.gameItems.map(item => (
+          <GameItem
+            key={item.id}
+            imageUrl={item.imageUrl}
+            x={item.x}
+            y={item.y}
+          />
         ))}
       </div>
     )
@@ -58,8 +57,18 @@ class Game extends Component {
 }
 
 const mapStateToProps = state => ({
-  keypoints: state.keypoints
+  keypoints: state.keypoints,
+  gameItems: state.activeGameItems
 })
 
-export default connect(mapStateToProps)(Game)
+const mapDispatchToProps = dispatch => ({
+  removeGameItem: item => {
+    dispatch(removedGameItem(item))
+  },
+  respawnItems: () => {
+    dispatch(restartItems())
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game)
 // export default Game

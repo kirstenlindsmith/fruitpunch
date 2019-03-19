@@ -42,7 +42,7 @@ body {
   }
 }
 
-.gameObject {
+.gameItem {
   z-index: 10;
   /* border: 5px solid white; */
 }
