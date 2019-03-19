@@ -3,7 +3,7 @@ import {createStore} from 'redux'
 //initial state
 const initialState = {
   keypoints: [],
-  initialBody: [],
+  initialBody: {},
   proportions: {}
 }
 

@@ -50,12 +50,7 @@ class Game extends Component {
       <div>
         <h1>hit the object!</h1>
         {this.state.gameObjects.map(gameObj => (
-          <GameObject
-            key={gameObj.id}
-            imageUrl={gameObj.imageUrl}
-            x={gameObj.x}
-            y={gameObj.y}
-          />
+          <GameObject imageUrl={gameObj.imageUrl} x={gameObj.x} y={gameObj.y} />
         ))}
       </div>
     )

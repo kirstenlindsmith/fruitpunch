@@ -95,10 +95,10 @@ export function drawSkeleton(
     minConfidence
   )
 
-  adjacentKeyPoints.forEach(keypoints => {
+  adjacentKeyPoints.forEach(keypoint => {
     drawSegment(
-      toTuple(keypoints[0].position),
-      toTuple(keypoints[1].position),
+      toTuple(keypoint[0].position),
+      toTuple(keypoint[1].position),
       color,
       lineWidth,
       scale,
@@ -111,16 +111,14 @@ export function findPoint(bodyPart, keypoints) {
   const bodyPartIndex = bodyPointLocations[bodyPart]
   const bodyPartPosition = keypoints[bodyPartIndex].position
 
-  const bodyPartXCord = Math.floor(bodyPartPosition.x)
-  const bodyPartYCord = Math.floor(bodyPartPosition.y)
-  return {x: bodyPartXCord, y: bodyPartYCord}
+  return {x: bodyPartPosition.x, y: bodyPartPosition.y}
 }
 
 //FUNCTION TO PRODUCE VARIABLES FOR THE CAMERA.JS RENDER
 import React from 'react'
 import Game from '../Game'
 import GameInit from '../GameInit'
-import store from '../store'
+import store from '../../store'
 
 export const variablesForCameraRender = loadingStatus => {
   let state = store.getState()
@@ -129,31 +127,23 @@ export const variablesForCameraRender = loadingStatus => {
 
   const loading = loadingStatus ? (
     <img className="loading" src="/assets/loading.gif" />
-  ) : (
-    <p className="noShow" />
-  )
+  ) : null
 
-  const game = loadingStatus ? <div /> : <Game />
+  const game = loadingStatus ? null : <Game />
 
-  const gameInit = loadingStatus ? (
-    <div />
-  ) : (
+  const gameInit = loadingStatus ? null : (
     <GameInit initialPoseCapture={poseCapture} loading={loadingStatus} />
   )
 
   const getIntoTheFrame =
     !state.proportions.height && !loadingStatus ? (
       <img className="getIntoTheFrame" src="/assets/movePrompt.png" />
-    ) : (
-      <div className="getIntoTheFrame" />
-    )
+    ) : null
 
   const ready =
     state.proportions.height && !loadingStatus ? (
       <img id="ready" src="/assets/ready.png" />
-    ) : (
-      <div />
-    )
+    ) : null
 
   const proportions = state.proportions.height ? (
     <h1 id="bodyMeasurements">
@@ -161,9 +151,7 @@ export const variablesForCameraRender = loadingStatus => {
       arm length: {state.proportions.armLength} <br />
       leg length: {state.proportions.legLength}
     </h1>
-  ) : (
-    <div />
-  )
+  ) : null
 
   return {
     loading,

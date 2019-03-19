@@ -1,27 +1,13 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
-  bodyPointLocations,
-  drawKeyPoints,
-  drawSkeleton,
+  bodyPointLocations, //once everything WORKS, test taking this out
   findPoint
 } from './utils'
-import {gotProportions} from '../store/store'
+import {gotProportions} from '../store'
 
 class GameInit extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      // localInitialBody: [], //<--leave these commented out
-      // localProportions: {}  //<--they're just a reminder of state structure
-    }
-  }
-
-  componentDidMount() {
-    console.log('mounted')
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate() {
     return !this.props.initialBody.score
   } /* equivalent to the ternary:
   `return this.props.initialBody.score ? false : true`
@@ -29,20 +15,13 @@ class GameInit extends Component {
   */
 
   componentDidUpdate() {
-    if (!this.state.localInitialBody) {
-      //if there's no localInitialBody yet
-      this.setState({
-        //load the global intialBody to the local state
-        localInitialBody: this.props.initialBody
-      })
-      this.calculateProportions() //and calculate its proportions
+    if (this.props.initialBody.score) {
+      this.calculateProportions()
     }
   }
 
-  calculateProportions(pose) {
+  calculateProportions() {
     const initialKeypoints = this.props.initialBody.keypoints
-    this.setState({localInitialBody: initialKeypoints})
-    //make the local initial body the keypoints array of the intial pose
 
     const leftEyeCoords = findPoint('leftEye', initialKeypoints)
     const leftShoulderCoords = findPoint('leftShoulder', initialKeypoints)
@@ -94,38 +73,22 @@ class GameInit extends Component {
       legLength
     }
 
-    if (!this.state.localProportions) {
-      //if no local proportions were recorded yet
-      this.setState({
-        ...this.state,
-        localProportions: proportions //save them to the local state...
-      })
-    }
-
     //and send them to the global state via dispatch:
     this.props.getProportions(proportions)
   }
 
   render() {
-    // console.log('loading in render:', this.props.loading)
-    // if (!this.props.loading){
     return (
       <div id="countdownDiv" className="centered">
         <img id="countdownGif" src="/assets/countdown.gif" />
-        {/* <div id="bodyOutline" className="centered">
-          <img src="/assets/bodyOutline.png" />
-        </div> */}
       </div>
     )
-    // } else return <div/>
   }
 }
 
 const mapStateToProps = state => {
   return {
-    initialBody: state.initialBody,
-    proportionsOnState: state.proportions,
-    state: state
+    initialBody: state.initialBody
   }
 }
 
