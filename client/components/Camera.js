@@ -86,6 +86,8 @@ class PoseNet extends Component {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
+    // canvas.style.filter = "saturate(800%)"
+    // canvas.style.filter = "contrast(200%)"
     this.poseDetectionFrame(canvasContext)
   }
 

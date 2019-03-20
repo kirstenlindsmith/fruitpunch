@@ -41,8 +41,54 @@ export const bodyPointLocations = {
   leftAnkle: 15,
   rightAnkle: 16
 }
+//NOTE: e.g., bodyPointLocations[leftEye] = 1
 
-//bodyPointLocations[leftEye] = 1
+export const gameItems = [
+  {
+    id: 1,
+    type: 'strawberry',
+    imageUrl: '/assets/strawberry.gif',
+    activeUrl: '/assets/strawberry.gif',
+    explodeUrl: '/assets/explodeRED.gif',
+    active: true,
+    x: 200,
+    y: 200,
+    width: 150
+  },
+  {
+    id: 2,
+    type: 'banana',
+    imageUrl: '/assets/banana.gif',
+    activeUrl: '/assets/banana.gif',
+    explodeUrl: '/assets/explodeYELLOW.gif',
+    active: true,
+    x: 400,
+    y: 400,
+    width: 150
+  },
+  {
+    id: 3,
+    type: 'blackberry',
+    imageUrl: '/assets/blackberry.gif',
+    activeUrl: '/assets/blackberry.gif',
+    explodeUrl: '/assets/explodePURPLE.gif',
+    active: true,
+    x: 600,
+    y: 300,
+    width: 150
+  },
+  {
+    id: 4,
+    type: 'kiwi',
+    imageUrl: '/assets/kiwi.gif',
+    activeUrl: '/assets/kiwi.gif',
+    explodeUrl: '/assets/explodeGREEN.gif',
+    active: true,
+    x: 100,
+    y: 500,
+    width: 150
+  }
+]
 
 function toTuple({x, y}) {
   return [x, y]
