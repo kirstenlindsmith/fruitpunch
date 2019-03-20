@@ -4,22 +4,19 @@ import * as posenet from '@tensorflow-models/posenet'
 const pointRadius = 3
 
 export const config = {
-  videoWidth: 900,
-  videoHeight: 700,
   flipHorizontal: true,
-  algorithm: 'single-pose',
+  algorithm: 'multi-pose',
   showVideo: true,
   showSkeleton: true,
   showPoints: true,
-  minPoseConfidence: 0.1,
+  minPoseConfidence: 0.5,
   minPartConfidence: 0.5,
   maxPoseDetections: 2,
   nmsRadius: 20,
-  outputStride: 16,
+  outputStride: 32,
   imageScaleFactor: 0.5,
   skeletonColor: '#ffadea',
-  skeletonLineWidth: 6,
-  loadingText: 'Loading...please be patient...'
+  skeletonLineWidth: 6
 }
 
 export const bodyPointLocations = {
@@ -169,25 +166,16 @@ import store from '../../store'
 export const variablesForCameraRender = loadingStatus => {
   let state = store.getState()
 
-  const poseCapture = state.initialBody ? state.initialBody : []
-
   const loading = loadingStatus ? (
     <img className="loading" src="/assets/loading.gif" />
   ) : null
 
   const game = loadingStatus ? null : <Game />
 
-  const gameInit = loadingStatus ? null : (
-    <GameInit initialPoseCapture={poseCapture} loading={loadingStatus} />
-  )
-
-  const getIntoTheFrame =
-    !state.proportions.height && !loadingStatus ? (
-      <img className="getIntoTheFrame" src="/assets/movePrompt.png" />
-    ) : null
+  const gameInit = loadingStatus ? null : <GameInit loading={loadingStatus} />
 
   const ready =
-    state.proportions.height && !loadingStatus ? (
+    state.initialBody.keypoints && !loadingStatus ? (
       <img id="ready" src="/assets/ready.png" />
     ) : null
 
@@ -195,7 +183,6 @@ export const variablesForCameraRender = loadingStatus => {
     loading,
     game,
     gameInit,
-    getIntoTheFrame,
     ready
   }
 }

@@ -14,11 +14,10 @@ class Game extends Component {
   shouldComponentUpdate() {
     //if there are still any active game items...
     return !!this.props.gameItems.length
-    // return !!this.props.proportions.height
   }
 
   componentDidUpdate() {
-    if (this.props.proportions.height) {
+    if (this.props.initialBody.keypoints) {
       this.startGame()
     }
   }
@@ -65,7 +64,7 @@ class Game extends Component {
   }
 
   render() {
-    if (this.props.proportions.height) {
+    if (this.props.initialBody.keypoints) {
       const item1 = this.props.gameItems[0]
       const item2 = this.props.gameItems[1]
 
@@ -95,7 +94,7 @@ class Game extends Component {
 const mapStateToProps = state => ({
   keypoints: state.keypoints,
   gameItems: state.activeGameItems,
-  proportions: state.proportions
+  initialBody: state.initialBody
 })
 
 const mapDispatchToProps = dispatch => ({

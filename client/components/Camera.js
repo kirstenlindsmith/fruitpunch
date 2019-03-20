@@ -60,16 +60,19 @@ class PoseNet extends Component {
     video.width = window.innerWidth
     video.height = window.innerHeight
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: 'user',
-        width: window.innerWidth,
-        height: window.innerHeight
-      }
-    })
-
-    video.srcObject = stream
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {
+          facingMode: 'user',
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
+      })
+      video.srcObject = stream
+    } catch (error) {
+      throw new Error('Failed to access webcam')
+    }
 
     return new Promise(resolve => {
       video.onloadedmetadata = () => {
@@ -162,23 +165,21 @@ class PoseNet extends Component {
         canvasContext.restore()
       }
 
-      //if no initial proportions have been saved on state
-      if (!this.props.proportions.height) {
+      //if no initialbody has been saved on state
+      if (!this.props.initialBody.keypoints) {
         setTimeout(() => {
           if (
-            //if the left eye and left ankle are visible
+            //if the left eye and left knee are visible
             poses[0].keypoints[1].score > minPartConfidence &&
-            poses[0].keypoints[15].score > minPartConfidence &&
-            !this.props.proportions.height //and there still aren't proportions
+            poses[0].keypoints[13].score > minPartConfidence &&
+            !this.props.initialBody.keypoints
           ) {
             console.log('thanks! I can see you :)')
-            //NOTE: in the future, add a thing to turn on showPoints and showSkeleton briefly at this point, then turn them off again
 
             //dispatch the first pose into the state
             this.props.getInitialBody(poses[0])
-            //NOTE: TEST AGAIN to make sure poses[0] is different every time this async function runs
           }
-        }, 11000) //11 second timer
+        }, 5000)
       }
 
       poses.forEach(({score, keypoints}) => {
@@ -211,13 +212,9 @@ class PoseNet extends Component {
   }
 
   render() {
-    const {
-      loading,
-      game,
-      gameInit,
-      getIntoTheFrame,
-      ready
-    } = variablesForCameraRender(this.state.loading)
+    const {loading, game, gameInit, ready} = variablesForCameraRender(
+      this.state.loading
+    )
 
     return (
       <div className="centered">
@@ -227,7 +224,6 @@ class PoseNet extends Component {
           {gameInit}
           {game}
           {ready}
-          {getIntoTheFrame}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>
@@ -237,7 +233,7 @@ class PoseNet extends Component {
 
 const mapStateToProps = state => {
   return {
-    proportions: state.proportions
+    initialBody: state.initialBody
   }
 }
 
