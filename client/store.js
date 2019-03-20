@@ -1,35 +1,21 @@
+/* eslint-disable complexity */
 import {createStore} from 'redux'
+import {gameItems} from './components/utils'
 
 //initial state
 const initialState = {
   keypoints: [],
   initialBody: {},
   proportions: {},
-  activeGameItems: [
-    {
-      id: 1,
-      imageUrl: 'assets/strawberry.gif',
-      x: 200,
-      y: 200,
-      width: 100
-    },
-    {
-      id: 2,
-      imageUrl: 'assets/strawberry.gif',
-      x: 400,
-      y: 400,
-      width: 100
-    }
-  ],
-  hiddenGameItems: []
+  activeGameItems: gameItems
 }
 
 //action types
 const GOT_KEYPOINTS = 'GOT_KEYPOINTS'
 const GOT_INITIALBODY = 'GOT_INITIALBODY'
 const GOT_PROPORTIONS = 'GOT_PROPORTIONS'
+const KILLED_ITEM = 'KILLED_ITEM'
 const REMOVED_ITEM = 'REMOVED_ITEM'
-const RESTART = 'RESTART'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -53,16 +39,23 @@ export const gotProportions = proportions => {
   }
 }
 
-export const removedGameItem = gameItem => {
+export const killedGameItem = gameItem => {
+  gameItem.imageUrl = gameItem.explodeUrl
+  gameItem.active = false
+
   return {
-    type: REMOVED_ITEM,
+    type: KILLED_ITEM,
     gameItem
   }
 }
 
-export const restartItems = () => {
+export const removedGameItem = gameItem => {
+  gameItem.imageUrl = gameItem.activeUrl
+  gameItem.active = true
+
   return {
-    type: RESTART
+    type: REMOVED_ITEM,
+    gameItem
   }
 }
 
@@ -84,19 +77,25 @@ const reducer = (state = initialState, action) => {
         ...state,
         proportions: action.proportions
       }
+    case KILLED_ITEM: {
+      return {
+        ...state,
+        activeGameItems: state.activeGameItems.map(item => {
+          if (item.id === action.gameItem.id) {
+            return action.gameItem
+          } else return item
+        })
+      }
+    }
     case REMOVED_ITEM:
       return {
         ...state,
-        activeGameItems: state.activeGameItems.filter(
-          obj => obj.id !== action.gameItem.id
-        ),
-        hiddenGameItems: [...state.hiddenGameItems, action.gameItem]
-      }
-    case RESTART:
-      return {
-        ...state,
-        activeGameItems: [...state.hiddenGameItems],
-        hiddenGameItems: []
+        activeGameItems: [
+          ...state.activeGameItems.filter(item => {
+            return item.id !== action.gameItem.id
+          }),
+          action.gameItem
+        ]
       }
     default:
       return state

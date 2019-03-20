@@ -21,6 +21,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  filter: contrast(110%) brightness(140%) saturate(175%);
 }
 
 #videoNoShow {
