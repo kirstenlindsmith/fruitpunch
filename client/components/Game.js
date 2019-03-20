@@ -1,15 +1,8 @@
 import React, {Component} from 'react'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
-import {bodyPointLocations, findPoint} from './utils'
-import {
-  killedGameItem,
-  removedGameItem,
-  restartItems,
-  killItemThunk
-} from '../store'
-// import throttle from 'lodash.throttle'
-// test without bodyPointLocations imported
+import {findPoint} from './utils'
+import {killedGameItem, removedGameItem, restartItems} from '../store'
 
 class Game extends Component {
   constructor(props) {
@@ -21,10 +14,13 @@ class Game extends Component {
   shouldComponentUpdate() {
     //if there are still any active game items...
     return !!this.props.gameItems.length
+    // return !!this.props.proportions.height
   }
 
   componentDidUpdate() {
-    this.startGame()
+    if (this.props.proportions.height) {
+      this.startGame()
+    }
   }
 
   // THE GAME
@@ -69,34 +65,37 @@ class Game extends Component {
   }
 
   render() {
-    const item1 = this.props.gameItems[0]
-    const item2 = this.props.gameItems[1]
+    if (this.props.proportions.height) {
+      const item1 = this.props.gameItems[0]
+      const item2 = this.props.gameItems[1]
 
-    return (
-      <div>
-        <GameItem
-          key={item1.id}
-          imageUrl={item1.imageUrl}
-          x={item1.x}
-          y={item1.y}
-          width={item1.width}
-        />
+      return (
+        <div>
+          <GameItem
+            key={item1.id}
+            imageUrl={item1.imageUrl}
+            x={item1.x}
+            y={item1.y}
+            width={item1.width}
+          />
 
-        <GameItem
-          key={item2.id}
-          imageUrl={item2.imageUrl}
-          x={item2.x}
-          y={item2.y}
-          width={item2.width}
-        />
-      </div>
-    )
+          <GameItem
+            key={item2.id}
+            imageUrl={item2.imageUrl}
+            x={item2.x}
+            y={item2.y}
+            width={item2.width}
+          />
+        </div>
+      )
+    } else return <div />
   }
 }
 
 const mapStateToProps = state => ({
   keypoints: state.keypoints,
-  gameItems: state.activeGameItems
+  gameItems: state.activeGameItems,
+  proportions: state.proportions
 })
 
 const mapDispatchToProps = dispatch => ({

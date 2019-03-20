@@ -218,8 +218,7 @@ class PoseNet extends Component {
       game,
       gameInit,
       getIntoTheFrame,
-      ready,
-      proportions
+      ready
     } = variablesForCameraRender(this.state.loading)
 
     return (
@@ -232,7 +231,6 @@ class PoseNet extends Component {
           {ready}
           {getIntoTheFrame}
           <canvas className="webcam" ref={this.getCanvas} />
-          {proportions}
         </div>
       </div>
     )

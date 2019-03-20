@@ -191,20 +191,11 @@ export const variablesForCameraRender = loadingStatus => {
       <img id="ready" src="/assets/ready.png" />
     ) : null
 
-  const proportions = state.proportions.height ? (
-    <h1 id="bodyMeasurements">
-      height: {state.proportions.height} <br />
-      arm length: {state.proportions.armLength} <br />
-      leg length: {state.proportions.legLength}
-    </h1>
-  ) : null
-
   return {
     loading,
     game,
     gameInit,
     getIntoTheFrame,
-    ready,
-    proportions
+    ready
   }
 }

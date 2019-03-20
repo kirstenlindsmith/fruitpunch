@@ -1,9 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {
-  bodyPointLocations, //once everything WORKS, test taking this out
-  findPoint
-} from './utils'
+import {findPoint} from './utils'
 import {gotProportions} from '../store'
 
 class GameInit extends Component {
