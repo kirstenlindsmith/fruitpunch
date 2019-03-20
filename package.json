@@ -40,6 +40,7 @@
     "@tensorflow-models/posenet": "^1.0.0",
     "@tensorflow/tfjs": "^1.0.1",
     "compression": "^1.7.3",
+    "express": "^4.16.4",
     "history": "^4.6.3",
     "lodash.throttle": "^4.1.1",
     "morgan": "^1.9.1",
