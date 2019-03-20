@@ -150,3 +150,11 @@ body {
   left: 0;
   color: white;
 }
+
+#score {
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: black;
+  font-size: 70px;
+}
