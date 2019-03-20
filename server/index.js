@@ -2,7 +2,7 @@ const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const compression = require('compression')
-const PORT = process.env.PORT || 1337
+const PORT = process.env.port || 1337
 const app = express()
 
 module.exports = app
