@@ -8,6 +8,7 @@ const initialState = {
   activeGameItems: [
     {
       id: 1,
+      type: 'strawberry',
       imageUrl: 'assets/strawberry.gif',
       x: 200,
       y: 200,
@@ -15,7 +16,8 @@ const initialState = {
     },
     {
       id: 2,
-      imageUrl: 'assets/strawberry.gif',
+      type: 'banana',
+      imageUrl: 'assets/banana.gif',
       x: 400,
       y: 400,
       width: 100
@@ -98,12 +100,22 @@ const reducer = (state = initialState, action) => {
           ...state,
           activeGameItems: state.activeGameItems.map(obj => {
             if (obj.id === action.gameItem.id) {
-              return {
-                id: obj.id,
-                imageUrl: '/assets/explodeRED.gif',
-                x: obj.x,
-                y: obj.y,
-                width: obj.width
+              if (obj.type === 'strawberry') {
+                return {
+                  id: obj.id,
+                  imageUrl: '/assets/explodeRED.gif',
+                  x: obj.x,
+                  y: obj.y,
+                  width: obj.width
+                }
+              } else if (obj.type === 'banana') {
+                return {
+                  id: obj.id,
+                  imageUrl: '/assets/explodeYELLOW.gif',
+                  x: obj.x,
+                  y: obj.y,
+                  width: obj.width
+                }
               }
             } else return obj
           })

@@ -43,22 +43,20 @@ class Game extends Component {
       )
       //NOTE: when hand approaches from the bottom right angle, it's slightly less responsive (hand has to travel farther into the object for it to hit)
       if (objectRadius > distance) {
-        // console.log('WRIST COORDS WHEN IT HIT!!!', rightWristCoords)
-        // console.log('hit it!!!')
         if (this.props.gameItems.length) {
           //explode the item
           this.props.explodeItem(this.props.gameItems[0])
-          console.log(
-            'game items post-explode, pre-removal:',
-            this.props.gameItems
-          )
+          // console.log(
+          //   'game items post-explode, pre-removal:',
+          //   this.props.gameItems
+          // )
           //retire the item
           // this.props.removeGameItem(this.props.gameItems[0]) //removes too quick, before the gif can play
           setTimeout(() => {
             this.props.removeGameItem(this.props.gameItems[0])
             console.log('one item removed')
           }, 600)
-          console.log('game items AFTER REMOVAL:', this.props.gameItems)
+          // console.log('game items AFTER REMOVAL:', this.props.gameItems)
         }
       }
     } else {
@@ -76,6 +74,7 @@ class Game extends Component {
   }
 
   render() {
+    // console.log('ACTIVE GAME ITEMS:', this.props.gameItems)
     let item
     if (this.props.gameItems.length) {
       item = this.props.gameItems[0]
