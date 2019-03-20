@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import * as posenet from '@tensorflow-models/posenet'
 
 const pointRadius = 3
@@ -94,10 +95,10 @@ export function drawSkeleton(
     minConfidence
   )
 
-  adjacentKeyPoints.forEach(keypoints => {
+  adjacentKeyPoints.forEach(keypoint => {
     drawSegment(
-      toTuple(keypoints[0].position),
-      toTuple(keypoints[1].position),
+      toTuple(keypoint[0].position),
+      toTuple(keypoint[1].position),
       color,
       lineWidth,
       scale,
@@ -110,23 +111,54 @@ export function findPoint(bodyPart, keypoints) {
   const bodyPartIndex = bodyPointLocations[bodyPart]
   const bodyPartPosition = keypoints[bodyPartIndex].position
 
-  const bodyPartXCord = Math.floor(bodyPartPosition.x)
-  const bodyPartYCord = Math.floor(bodyPartPosition.y)
-  return {x: bodyPartXCord, y: bodyPartYCord}
-}
-//OUR FUNCTIONNNN
-
-/*if (image.x === bodyPart.x && image.y === bodyPart.y){
-  console.log('HIT IT')
+  return {x: bodyPartPosition.x, y: bodyPartPosition.y}
 }
 
-Gloobal state = {
-  images = [{objects with coordinates}, {obj2}, ...];
-  currentBodyPart = {object with string name and coordinates, score?}
+//FUNCTION TO PRODUCE VARIABLES FOR THE CAMERA.JS RENDER
+import React from 'react'
+import Game from '../Game'
+import GameInit from '../GameInit'
+import store from '../../store'
 
+export const variablesForCameraRender = loadingStatus => {
+  let state = store.getState()
+
+  const poseCapture = state.initialBody ? state.initialBody : []
+
+  const loading = loadingStatus ? (
+    <img className="loading" src="/assets/loading.gif" />
+  ) : null
+
+  const game = loadingStatus ? null : <Game />
+
+  const gameInit = loadingStatus ? null : (
+    <GameInit initialPoseCapture={poseCapture} loading={loadingStatus} />
+  )
+
+  const getIntoTheFrame =
+    !state.proportions.height && !loadingStatus ? (
+      <img className="getIntoTheFrame" src="/assets/movePrompt.png" />
+    ) : null
+
+  const ready =
+    state.proportions.height && !loadingStatus ? (
+      <img id="ready" src="/assets/ready.png" />
+    ) : null
+
+  const proportions = state.proportions.height ? (
+    <h1 id="bodyMeasurements">
+      height: {state.proportions.height} <br />
+      arm length: {state.proportions.armLength} <br />
+      leg length: {state.proportions.legLength}
+    </h1>
+  ) : null
+
+  return {
+    loading,
+    game,
+    gameInit,
+    getIntoTheFrame,
+    ready,
+    proportions
+  }
 }
-
-
-
-
-*/

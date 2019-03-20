@@ -1,14 +1,35 @@
+import {createStore} from 'redux'
+
 //initial state
 const initialState = {
   keypoints: [],
-  initialBody: [],
-  proportions: {}
+  initialBody: {},
+  proportions: {},
+  activeGameItems: [
+    {
+      id: 1,
+      imageUrl: 'assets/strawberry.gif',
+      x: 200,
+      y: 200,
+      width: 100
+    },
+    {
+      id: 2,
+      imageUrl: 'assets/strawberry.gif',
+      x: 400,
+      y: 400,
+      width: 100
+    }
+  ],
+  hiddenGameItems: []
 }
 
 //action types
 const GOT_KEYPOINTS = 'GOT_KEYPOINTS'
 const GOT_INITIALBODY = 'GOT_INITIALBODY'
 const GOT_PROPORTIONS = 'GOT_PROPORTIONS'
+const REMOVED_ITEM = 'REMOVED_ITEM'
+const RESTART = 'RESTART'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -18,10 +39,10 @@ export const gotKeypoints = keypoints => {
   }
 }
 
-export const recordInitialBody = keypoints => {
+export const gotInitialBody = pose => {
   return {
     type: GOT_INITIALBODY,
-    keypoints
+    pose
   }
 }
 
@@ -32,8 +53,21 @@ export const gotProportions = proportions => {
   }
 }
 
+export const removedGameItem = gameItem => {
+  return {
+    type: REMOVED_ITEM,
+    gameItem
+  }
+}
+
+export const restartItems = () => {
+  return {
+    type: RESTART
+  }
+}
+
 //reducer
-const keyPointsReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case GOT_KEYPOINTS:
       return {
@@ -43,16 +77,32 @@ const keyPointsReducer = (state = initialState, action) => {
     case GOT_INITIALBODY:
       return {
         ...state,
-        initialBody: action.keypoints
+        initialBody: action.pose
       }
     case GOT_PROPORTIONS:
       return {
         ...state,
         proportions: action.proportions
       }
+    case REMOVED_ITEM:
+      return {
+        ...state,
+        activeGameItems: state.activeGameItems.filter(
+          obj => obj.id !== action.gameItem.id
+        ),
+        hiddenGameItems: [...state.hiddenGameItems, action.gameItem]
+      }
+    case RESTART:
+      return {
+        ...state,
+        activeGameItems: [...state.hiddenGameItems],
+        hiddenGameItems: []
+      }
     default:
       return state
   }
 }
 
-export default keyPointsReducer
+const store = createStore(reducer)
+
+export default store
