@@ -10,7 +10,10 @@ const initialState = {
     {
       id: 1,
       type: 'strawberry',
-      imageUrl: 'assets/strawberry.gif',
+      imageUrl: '/assets/strawberry.gif',
+      activeUrl: '/assets/strawberry.gif',
+      explodeUrl: '/assets/explodeRED.gif',
+      active: true,
       x: 200,
       y: 200,
       width: 100
@@ -18,7 +21,10 @@ const initialState = {
     {
       id: 2,
       type: 'banana',
-      imageUrl: 'assets/banana.gif',
+      imageUrl: '/assets/banana.gif',
+      activeUrl: '/assets/banana.gif',
+      explodeUrl: '/assets/explodeYELLOW.gif',
+      active: true,
       x: 400,
       y: 400,
       width: 100
@@ -58,6 +64,10 @@ export const gotProportions = proportions => {
 }
 
 export const killedGameItem = gameItem => {
+  console.log('KILLED ITEM STATUS:', gameItem.active)
+  gameItem.imageUrl = gameItem.explodeUrl
+  gameItem.active = false
+
   return {
     type: KILLED_ITEM,
     gameItem
@@ -65,6 +75,10 @@ export const killedGameItem = gameItem => {
 }
 
 export const removedGameItem = gameItem => {
+  console.log('REMOVED ITEM STATUS:', gameItem.active)
+  gameItem.imageUrl = gameItem.activeUrl
+  gameItem.active = true
+
   return {
     type: REMOVED_ITEM,
     gameItem
@@ -96,48 +110,27 @@ const reducer = (state = initialState, action) => {
         proportions: action.proportions
       }
     case KILLED_ITEM: {
-      if (
-        action.gameItem.imageUrl !== '/assets/explodeRED.gif' &&
-        action.gameItem.imageUrl !== '/assets/explodeYELLOW.gif'
-      ) {
-        return {
-          ...state,
-          activeGameItems: state.activeGameItems.map(obj => {
-            if (obj.id === action.gameItem.id) {
-              if (obj.type === 'strawberry') {
-                return {
-                  id: obj.id,
-                  imageUrl: '/assets/explodeRED.gif',
-                  x: obj.x,
-                  y: obj.y,
-                  width: obj.width
-                }
-              } else if (obj.type === 'banana') {
-                return {
-                  id: obj.id,
-                  imageUrl: '/assets/explodeYELLOW.gif',
-                  x: obj.x,
-                  y: obj.y,
-                  width: obj.width
-                }
-              }
-            } else return obj
-          })
-        }
-      } else return state
+      return {
+        ...state,
+        activeGameItems: state.activeGameItems.map(item => {
+          if (item.id === action.gameItem.id) {
+            return action.gameItem
+          } else return item
+        })
+      }
     }
     case REMOVED_ITEM:
       return {
         ...state,
-        activeGameItems: state.activeGameItems.filter(obj => {
-          return obj.id !== action.gameItem.id
+        activeGameItems: state.activeGameItems.filter(item => {
+          return item.id !== action.gameItem.id
         }),
         hiddenGameItems: [...state.hiddenGameItems, action.gameItem]
       }
     case RESTART:
       return {
         ...state,
-        activeGameItems: [...initialState.activeGameItems],
+        activeGameItems: [...state.hiddenGameItems],
         hiddenGameItems: []
       }
     default:

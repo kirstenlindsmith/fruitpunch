@@ -26,7 +26,7 @@ class Game extends Component {
   // THE GAME
   startGame() {
     if (this.props.keypoints.length && this.props.gameItems.length) {
-      const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
+      const rightWristCoords = findPoint('leftWrist', this.props.keypoints)
       const itemCoords = {
         x: this.props.gameItems[0].x,
         y: this.props.gameItems[0].y
@@ -41,30 +41,21 @@ class Game extends Component {
         Math.pow(rightWristCoords.x - objectCenterX, 2) +
           Math.pow(rightWristCoords.y - objectCenterY, 2)
       )
-      //NOTE: when hand approaches from the bottom right angle, it's slightly less responsive (hand has to travel farther into the object for it to hit)
+
       if (objectRadius > distance) {
         if (this.props.gameItems.length) {
-          //explode the item
-          this.props.explodeItem(this.props.gameItems[0])
-          // console.log(
-          //   'game items post-explode, pre-removal:',
-          //   this.props.gameItems
-          // )
-          //retire the item
-          // this.props.removeGameItem(this.props.gameItems[0]) //removes too quick, before the gif can play
-          setTimeout(() => {
-            this.props.removeGameItem(this.props.gameItems[0])
-            console.log('one item removed')
-          }, 600)
-          // console.log('game items AFTER REMOVAL:', this.props.gameItems)
+          if (this.props.gameItems[0].active) {
+            //explode the item
+            this.props.explodeItem(this.props.gameItems[0])
+            setTimeout(() => {
+              //retire the item
+              this.props.removeGameItem(this.props.gameItems[0])
+            }, 600)
+          }
         }
       }
-    } else {
-      setTimeout(() => {
-        if (!this.props.gameItems.length) {
-          this.restartGame()
-        }
-      }, 500)
+    } else if (!this.props.gameItems.length) {
+      this.restartGame()
     }
   }
 
