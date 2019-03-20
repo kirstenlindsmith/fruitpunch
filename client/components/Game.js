@@ -64,7 +64,7 @@ class Game extends Component {
         if (!this.props.gameItems.length) {
           this.restartGame()
         }
-      }, 1000)
+      }, 500)
     }
   }
 

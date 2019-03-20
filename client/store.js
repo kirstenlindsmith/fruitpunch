@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {createStore} from 'redux'
 
 //initial state
@@ -95,7 +96,10 @@ const reducer = (state = initialState, action) => {
         proportions: action.proportions
       }
     case KILLED_ITEM: {
-      if (action.gameItem.imageUrl !== '/assets/explodeRED.gif') {
+      if (
+        action.gameItem.imageUrl !== '/assets/explodeRED.gif' &&
+        action.gameItem.imageUrl !== '/assets/explodeYELLOW.gif'
+      ) {
         return {
           ...state,
           activeGameItems: state.activeGameItems.map(obj => {
