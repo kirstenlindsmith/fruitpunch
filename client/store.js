@@ -28,6 +28,7 @@ const initialState = {
 const GOT_KEYPOINTS = 'GOT_KEYPOINTS'
 const GOT_INITIALBODY = 'GOT_INITIALBODY'
 const GOT_PROPORTIONS = 'GOT_PROPORTIONS'
+const KILLED_ITEM = 'KILLED_ITEM'
 const REMOVED_ITEM = 'REMOVED_ITEM'
 const RESTART = 'RESTART'
 
@@ -50,6 +51,13 @@ export const gotProportions = proportions => {
   return {
     type: GOT_PROPORTIONS,
     proportions
+  }
+}
+
+export const killedGameItem = gameItem => {
+  return {
+    type: KILLED_ITEM,
+    gameItem
   }
 }
 
@@ -84,18 +92,36 @@ const reducer = (state = initialState, action) => {
         ...state,
         proportions: action.proportions
       }
+    case KILLED_ITEM: {
+      if (action.gameItem.imageUrl !== '/assets/explodeRED.gif') {
+        return {
+          ...state,
+          activeGameItems: state.activeGameItems.map(obj => {
+            if (obj.id === action.gameItem.id) {
+              return {
+                id: obj.id,
+                imageUrl: '/assets/explodeRED.gif',
+                x: obj.x,
+                y: obj.y,
+                width: obj.width
+              }
+            } else return obj
+          })
+        }
+      } else return state
+    }
     case REMOVED_ITEM:
       return {
         ...state,
-        activeGameItems: state.activeGameItems.filter(
-          obj => obj.id !== action.gameItem.id
-        ),
+        activeGameItems: state.activeGameItems.filter(obj => {
+          return obj.id !== action.gameItem.id
+        }),
         hiddenGameItems: [...state.hiddenGameItems, action.gameItem]
       }
     case RESTART:
       return {
         ...state,
-        activeGameItems: [...state.hiddenGameItems],
+        activeGameItems: [...initialState.activeGameItems],
         hiddenGameItems: []
       }
     default:

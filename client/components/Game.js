@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
-import {bodyPointLocations, findPoint, throttler} from './utils'
-import {removedGameItem, restartItems} from '../store'
+import {bodyPointLocations, findPoint} from './utils'
+import {killedGameItem, removedGameItem, restartItems} from '../store'
 // import throttle from 'lodash.throttle'
 // test without bodyPointLocations imported
 
@@ -43,14 +43,31 @@ class Game extends Component {
       )
       //NOTE: when hand approaches from the bottom right angle, it's slightly less responsive (hand has to travel farther into the object for it to hit)
       if (objectRadius > distance) {
-        console.log('WRIST COORDS WHEN IT HIT!!!', rightWristCoords)
-        console.log('hit it!!!')
+        // console.log('WRIST COORDS WHEN IT HIT!!!', rightWristCoords)
+        // console.log('hit it!!!')
         if (this.props.gameItems.length) {
+          //explode the item
+          this.props.explodeItem(this.props.gameItems[0])
+          console.log(
+            'game items post-explode, pre-removal:',
+            this.props.gameItems
+          )
           //retire the item
-          this.props.removeGameItem(this.props.gameItems[0])
+          // this.props.removeGameItem(this.props.gameItems[0]) //removes too quick, before the gif can play
+          setTimeout(() => {
+            this.props.removeGameItem(this.props.gameItems[0])
+            console.log('one item removed')
+          }, 600)
+          console.log('game items AFTER REMOVAL:', this.props.gameItems)
         }
       }
-    } else this.restartGame()
+    } else {
+      setTimeout(() => {
+        if (!this.props.gameItems.length) {
+          this.restartGame()
+        }
+      }, 1000)
+    }
   }
 
   restartGame() {
@@ -69,11 +86,9 @@ class Game extends Component {
         x: null,
         y: null
       }
-    console.log('gameItems', this.props.gameItems)
+
     return (
       <div>
-        <h1>hit it!</h1>
-
         <GameItem
           key={item.id}
           imageUrl={item.imageUrl}
@@ -81,12 +96,6 @@ class Game extends Component {
           y={item.y}
           width={item.width}
         />
-
-        <div>
-          <button type="button" onClick={this.restartGame}>
-            RESTART
-          </button>
-        </div>
       </div>
     )
   }
@@ -98,6 +107,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  explodeItem: item => {
+    dispatch(killedGameItem(item))
+  },
   removeGameItem: item => {
     dispatch(removedGameItem(item))
   },
