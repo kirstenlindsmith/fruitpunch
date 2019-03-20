@@ -7,7 +7,9 @@ import {killedGameItem, removedGameItem, restartItems} from '../store'
 class Game extends Component {
   constructor(props) {
     super(props)
-
+    this.state = {
+      score: 0
+    }
     this.startGame = this.startGame.bind(this)
   }
 
@@ -57,6 +59,9 @@ class Game extends Component {
               //retire the item
               this.props.removeGameItem(toRemove)
             }, 260)
+            this.setState(state => ({
+              score: state.score + 10
+            }))
           }
         }
       }
@@ -70,21 +75,24 @@ class Game extends Component {
 
       return (
         <div>
-          <GameItem
-            key={item1.id}
-            imageUrl={item1.imageUrl}
-            x={item1.x}
-            y={item1.y}
-            width={item1.width}
-          />
+          <div id="score">Score: {this.state.score}</div>
+          <div>
+            <GameItem
+              key={item1.id}
+              imageUrl={item1.imageUrl}
+              x={item1.x}
+              y={item1.y}
+              width={item1.width}
+            />
 
-          <GameItem
-            key={item2.id}
-            imageUrl={item2.imageUrl}
-            x={item2.x}
-            y={item2.y}
-            width={item2.width}
-          />
+            <GameItem
+              key={item2.id}
+              imageUrl={item2.imageUrl}
+              x={item2.x}
+              y={item2.y}
+              width={item2.width}
+            />
+          </div>
         </div>
       )
     } else return <div />
