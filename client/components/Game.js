@@ -107,9 +107,6 @@ const mapDispatchToProps = dispatch => ({
   },
   respawnItems: () => {
     dispatch(restartItems())
-  },
-  killThunk: item => {
-    dispatch(killItemThunk(item))
   }
 })
 
