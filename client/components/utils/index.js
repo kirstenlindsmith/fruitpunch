@@ -49,7 +49,7 @@ export const gameItems = [
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
     x: 200,
-    y: 200,
+    y: 70,
     width: 150
   },
   {
@@ -59,8 +59,8 @@ export const gameItems = [
     activeUrl: '/assets/banana.gif',
     explodeUrl: '/assets/explodeYELLOW.gif',
     active: true,
-    x: 400,
-    y: 400,
+    x: 800,
+    y: 600,
     width: 150
   },
   {
@@ -70,8 +70,8 @@ export const gameItems = [
     activeUrl: '/assets/blackberry.gif',
     explodeUrl: '/assets/explodePURPLE.gif',
     active: true,
-    x: 600,
-    y: 300,
+    x: 900,
+    y: 100,
     width: 150
   },
   {
@@ -82,7 +82,7 @@ export const gameItems = [
     explodeUrl: '/assets/explodeGREEN.gif',
     active: true,
     x: 100,
-    y: 500,
+    y: 600,
     width: 150
   }
 ]

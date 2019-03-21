@@ -19,6 +19,13 @@ class Game extends Component {
       metWonCondition: false
     }
     this.startGame = this.startGame.bind(this)
+    this.restartGame = this.restartGame.bind(this)
+  }
+
+  componentDidMount() {
+    this.setState({
+      score: 0
+    })
   }
 
   shouldComponentUpdate() {
@@ -75,11 +82,9 @@ class Game extends Component {
               //retire the item
               this.props.removeGameItem(toRemove)
             }, 260)
-            if (!this.state.metWonCondition) {
-              this.setState(state => ({
-                score: state.score + 10
-              }))
-            }
+            this.setState(state => ({
+              score: state.score + 10
+            })) //score starts at over 0 for some reason??
           }
         }
       }
@@ -92,10 +97,6 @@ class Game extends Component {
         //explode all the fruits
         for (let i = 0; i < this.props.gameItems.length; i++) {
           this.props.explodeItem(this.props.gameItems[i])
-          let toRemove = this.props.gameItems[i]
-          setTimeout(() => {
-            this.props.removeGameItem(toRemove)
-          }, 801)
         }
         setTimeout(() => {
           this.props.toggleEnd()
@@ -107,8 +108,16 @@ class Game extends Component {
     }
   }
 
-  refreshPage() {
-    window.location.reload()
+  restartGame() {
+    this.setState({
+      won: false,
+      metWonCondition: false,
+      score: 0
+    })
+    for (let i = 0; i < this.props.gameItems.length; i++) {
+      this.props.removeGameItem(this.props.gameItems[i])
+    }
+    this.props.toggleStart()
   }
 
   render() {
@@ -150,7 +159,7 @@ class Game extends Component {
           <img
             id="replayButton"
             src="/assets/replayButton.png"
-            onClick={this.refreshPage}
+            onClick={this.restartGame}
           />
         </div>
       )
