@@ -15,7 +15,8 @@ class Game extends Component {
     super(props)
     this.state = {
       score: 0,
-      won: false
+      won: false,
+      metWonCondition: false
     }
     this.startGame = this.startGame.bind(this)
   }
@@ -74,26 +75,34 @@ class Game extends Component {
               //retire the item
               this.props.removeGameItem(toRemove)
             }, 260)
-            this.setState(state => ({
-              score: state.score + 10
-            }))
+            if (!this.state.metWonCondition) {
+              this.setState(state => ({
+                score: state.score + 10
+              }))
+            }
           }
         }
       }
-      if (this.state.score >= 500) {
+      if (this.state.score >= 100 && !this.state.metWonCondition) {
+        //NOTE: if statement is too inclusive; this will call itself over and over until the timers on lines 89 & 93 finish...aka blowing the call stack
         console.log('YOU WON!!!')
+        this.setState({
+          metWonCondition: true
+        })
         //explode all the fruits
         for (let i = 0; i < this.props.gameItems.length; i++) {
           this.props.explodeItem(this.props.gameItems[i])
           let toRemove = this.props.gameItems[i]
           setTimeout(() => {
             this.props.removeGameItem(toRemove)
-          }, 260)
+          }, 801)
         }
-        this.props.toggleEnd()
-        this.setState({
-          won: true
-        })
+        setTimeout(() => {
+          this.props.toggleEnd()
+          this.setState({
+            won: true
+          })
+        }, 800)
       }
     }
   }

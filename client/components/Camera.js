@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
 import {
@@ -165,21 +166,19 @@ class PoseNet extends Component {
         canvasContext.restore()
       }
 
-      //if no initialbody has been saved on state
-      if (!this.props.initialBody.keypoints) {
-        setTimeout(() => {
-          if (
-            //if the left eye and left knee are visible
-            poses[0].keypoints[1].score > minPartConfidence &&
-            poses[0].keypoints[13].score > minPartConfidence &&
-            !this.props.initialBody.keypoints
-          ) {
-            console.log('thanks! I can see you :)')
+      //if no initialbody has been saved on state, and poses[0] is valid (negates a weird error where poses[0] undefined)
+      if (!this.props.initialBody.keypoints && poses[0]) {
+        if (
+          //if the left eye and left hip are visible
+          poses[0].keypoints[1].score > minPartConfidence &&
+          poses[0].keypoints[11].score > minPartConfidence &&
+          !this.props.initialBody.keypoints
+        ) {
+          console.log('thanks! I can see you now :)')
 
-            //dispatch the first pose into the state
-            this.props.getInitialBody(poses[0])
-          }
-        }, 5000)
+          //dispatch the first pose into the state
+          this.props.getInitialBody(poses[0])
+        }
       }
 
       poses.forEach(({score, keypoints}) => {
