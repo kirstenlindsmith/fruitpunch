@@ -174,15 +174,9 @@ export const variablesForCameraRender = loadingStatus => {
 
   const gameInit = loadingStatus ? null : <GameInit loading={loadingStatus} />
 
-  const ready =
-    state.initialBody.keypoints && !loadingStatus ? (
-      <img id="ready" src="/assets/ready.png" />
-    ) : null
-
   return {
     loading,
     game,
-    gameInit,
-    ready
+    gameInit
   }
 }

@@ -212,7 +212,7 @@ class PoseNet extends Component {
   }
 
   render() {
-    const {loading, game, gameInit, ready} = variablesForCameraRender(
+    const {loading, game, gameInit} = variablesForCameraRender(
       this.state.loading
     )
 
@@ -223,7 +223,6 @@ class PoseNet extends Component {
           <video id="videoNoShow" playsInline ref={this.getVideo} />
           {gameInit}
           {game}
-          {ready}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>

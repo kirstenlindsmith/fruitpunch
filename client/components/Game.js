@@ -8,7 +8,8 @@ class Game extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      score: 0
+      score: 0,
+      won: false
     }
     this.startGame = this.startGame.bind(this)
   }
@@ -26,7 +27,7 @@ class Game extends Component {
 
   // THE GAME
   startGame() {
-    if (this.props.keypoints.length) {
+    if (this.props.keypoints.length && !this.state.won) {
       for (let i = 0; i < 2; i++) {
         const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
         const itemCoords = {
@@ -65,11 +66,17 @@ class Game extends Component {
           }
         }
       }
+      if (this.state.score >= 100) {
+        console.log('YOU WON!!!')
+        this.setState({
+          won: true
+        })
+      }
     }
   }
 
   render() {
-    if (this.props.initialBody.keypoints) {
+    if (this.props.initialBody.keypoints && !this.state.won) {
       const item1 = this.props.gameItems[0]
       const item2 = this.props.gameItems[1]
 
@@ -93,6 +100,12 @@ class Game extends Component {
               width={item2.width}
             />
           </div>
+        </div>
+      )
+    } else if (this.state.won) {
+      return (
+        <div>
+          <div id="score">Score: {this.state.score}</div>
         </div>
       )
     } else return <div />

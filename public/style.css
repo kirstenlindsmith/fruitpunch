@@ -45,19 +45,9 @@ body {
 
 .gameItem {
   z-index: 10;
-  /* border: 5px solid white; */
 }
 
-/* #marker {
-  z-index: 100;
-  position: fixed;
-  top: 200;
-  left: 200;
-} */
-
 .loading {
-  /* margin-top: 200px;
-  margin-left: 300px; */
   height: 200px;
   margin: 0 auto;
   position: absolute;
@@ -82,13 +72,13 @@ body {
   transform: translate(-50%, -50%);
 
   /* fade out: */
-  -moz-animation: cssAnimation 0s ease-in 13s forwards;
+  -moz-animation: cssAnimation 0s ease-in 6s forwards;
   /* Firefox */
-  -webkit-animation: cssAnimation 0s ease-in 13s forwards;
+  -webkit-animation: cssAnimation 0s ease-in 6s forwards;
   /* Safari and Chrome */
-  -o-animation: cssAnimation 0s ease-in 13s forwards;
+  -o-animation: cssAnimation 0s ease-in 6s forwards;
   /* Opera */
-  animation: cssAnimation 0s ease-in 13s forwards;
+  animation: cssAnimation 0s ease-in 6s forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
@@ -119,9 +109,11 @@ body {
 
 .getIntoTheFrame {
   z-index: 8;
-  /* position: fixed;
-  top: 50px;
-  left: 300px */
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 #ready {
@@ -133,13 +125,13 @@ body {
   transform: translate(-50%, -50%);
 
   /* fade out: */
-  -moz-animation: cssAnimation 0s ease-in 3s forwards;
+  -moz-animation: cssAnimation 0s ease-in 5s forwards;
   /* Firefox */
-  -webkit-animation: cssAnimation 0s ease-in 3s forwards;
+  -webkit-animation: cssAnimation 0s ease-in 5s forwards;
   /* Safari and Chrome */
-  -o-animation: cssAnimation 0s ease-in 3s forwards;
+  -o-animation: cssAnimation 0s ease-in 5s forwards;
   /* Opera */
-  animation: cssAnimation 0s ease-in 3s forwards;
+  animation: cssAnimation 0s ease-in 5s forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
