@@ -1,7 +1,7 @@
 {
-  "name": "boilermaker",
+  "name": "fruit-punch",
   "version": "1.0.0",
-  "description": "Some boilerplate code to get you started - get shakin'!",
+  "description": "Capstone project",
   "engines": {
     "node": ">= 7.0.0"
   },
@@ -34,7 +34,7 @@
       "git add"
     ]
   },
-  "author": "Fullstack Academy of Code",
+  "author": "Samantha Ashley, Kirsten Lindsmith, Cassie Rosner",
   "license": "MIT",
   "dependencies": {
     "@tensorflow-models/posenet": "^1.0.0",

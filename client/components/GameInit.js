@@ -16,12 +16,9 @@ const GameInit = props => {
     <div>
       {getIntoTheFrame}
       {ready}
-      {/* <div id="countdownDiv" className="centered">
-        <img id="countdownGif" src="/assets/countdown.gif" />
-      </div> */}
     </div>
   )
-} //NOTE: is the countdown even necessary??
+}
 
 const mapStateToProps = state => {
   return {
