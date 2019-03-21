@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
 import {
@@ -60,16 +61,19 @@ class PoseNet extends Component {
     video.width = window.innerWidth
     video.height = window.innerHeight
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: 'user',
-        width: window.innerWidth,
-        height: window.innerHeight
-      }
-    })
-
-    video.srcObject = stream
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {
+          facingMode: 'user',
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
+      })
+      video.srcObject = stream
+    } catch (error) {
+      throw new Error('Failed to access webcam')
+    }
 
     return new Promise(resolve => {
       video.onloadedmetadata = () => {
@@ -162,23 +166,19 @@ class PoseNet extends Component {
         canvasContext.restore()
       }
 
-      //if no initial proportions have been saved on state
-      if (!this.props.proportions.height) {
-        setTimeout(() => {
-          if (
-            //if the left eye and left ankle are visible
-            poses[0].keypoints[1].score > minPartConfidence &&
-            poses[0].keypoints[15].score > minPartConfidence &&
-            !this.props.proportions.height //and there still aren't proportions
-          ) {
-            console.log('thanks! I can see you :)')
-            //NOTE: in the future, add a thing to turn on showPoints and showSkeleton briefly at this point, then turn them off again
+      //if no initialbody has been saved on state, and poses[0] is valid (negates a weird error where poses[0] undefined)
+      if (!this.props.initialBody.keypoints && poses[0]) {
+        if (
+          //if the left eye and left hip are visible
+          poses[0].keypoints[1].score > minPartConfidence &&
+          poses[0].keypoints[11].score > minPartConfidence &&
+          !this.props.initialBody.keypoints
+        ) {
+          console.log('thanks! I can see you now :)')
 
-            //dispatch the first pose into the state
-            this.props.getInitialBody(poses[0])
-            //NOTE: TEST AGAIN to make sure poses[0] is different every time this async function runs
-          }
-        }, 11000) //11 second timer
+          //dispatch the first pose into the state
+          this.props.getInitialBody(poses[0])
+        }
       }
 
       poses.forEach(({score, keypoints}) => {
@@ -211,13 +211,9 @@ class PoseNet extends Component {
   }
 
   render() {
-    const {
-      loading,
-      game,
-      gameInit,
-      getIntoTheFrame,
-      ready
-    } = variablesForCameraRender(this.state.loading)
+    const {loading, game, gameInit} = variablesForCameraRender(
+      this.state.loading
+    )
 
     return (
       <div className="centered">
@@ -226,8 +222,6 @@ class PoseNet extends Component {
           <video id="videoNoShow" playsInline ref={this.getVideo} />
           {gameInit}
           {game}
-          {ready}
-          {getIntoTheFrame}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>
@@ -237,7 +231,7 @@ class PoseNet extends Component {
 
 const mapStateToProps = state => {
   return {
-    proportions: state.proportions
+    initialBody: state.initialBody
   }
 }
 
