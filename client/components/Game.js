@@ -82,13 +82,16 @@ class Game extends Component {
               //retire the item
               this.props.removeGameItem(toRemove)
             }, 260)
-            this.setState(state => ({
-              score: state.score + 10
-            })) //score starts at over 0 for some reason??
+            if (!this.state.metWonCondition) {
+              //helps prevent score from going OVER win condition amount
+              this.setState(state => ({
+                score: state.score + 10
+              })) //score starts at over 0 for some reason??
+            }
           }
         }
       }
-      if (this.state.score >= 100 && !this.state.metWonCondition) {
+      if (this.state.score >= 500 && !this.state.metWonCondition) {
         //NOTE: if statement is too inclusive; this will call itself over and over until the timers on lines 89 & 93 finish...aka blowing the call stack
         console.log('YOU WON!!!')
         this.setState({

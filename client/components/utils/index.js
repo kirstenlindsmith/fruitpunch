@@ -161,11 +161,8 @@ export function findPoint(bodyPart, keypoints) {
 import React from 'react'
 import Game from '../Game'
 import GameInit from '../GameInit'
-import store from '../../store'
 
 export const variablesForCameraRender = loadingStatus => {
-  let state = store.getState()
-
   const loading = loadingStatus ? (
     <img className="loading" src="/assets/loading.gif" />
   ) : null

@@ -1,8 +1,21 @@
-html,
+html {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  overflow: scroll;
+}
+
 body {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   margin: 0;
+  background: rgb(109, 199, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(109, 199, 255, 1) 0%,
+    rgba(157, 247, 255, 1) 32%,
+    rgba(222, 249, 255, 1) 100%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 @media only screen and (max-width: 600px) {
@@ -10,6 +23,49 @@ body {
   .dg {
     display: none;
   }
+}
+
+.homePage {
+  position: center;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#logo {
+  width: 700px;
+}
+
+#homeButtons {
+  margin-left: -30px;
+}
+
+#startButton {
+  margin-top: -60px;
+  margin-bottom: 10px;
+}
+
+#instructions {
+  margin-top: 30px;
+  margin-bottom: 100px;
+}
+
+#instructionsText {
+  width: 625px;
+  border: 4px solid #a0ffe2;
+  border-radius: 25px;
+  background: #edfffb;
+}
+
+#instructions p {
+  width: 570px;
+  color: #34a7c1;
+  font-size: 14pt;
+  line-height: 25pt;
 }
 
 .webcam {
