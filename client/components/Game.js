@@ -1,31 +1,55 @@
+/* eslint-disable complexity */
 import React, {Component} from 'react'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {findPoint} from './utils'
-import {killedGameItem, removedGameItem, restartItems} from '../store'
+import {
+  killedGameItem,
+  removedGameItem,
+  gameStarted,
+  gameFinished
+} from '../store'
 
 class Game extends Component {
   constructor(props) {
     super(props)
-
+    this.state = {
+      score: 0,
+      won: false,
+      metWonCondition: false
+    }
     this.startGame = this.startGame.bind(this)
+    this.restartGame = this.restartGame.bind(this)
+  }
+
+  componentDidMount() {
+    this.setState({
+      score: 0
+    })
   }
 
   shouldComponentUpdate() {
     //if there are still any active game items...
     return !!this.props.gameItems.length
-    // return !!this.props.proportions.height
   }
 
   componentDidUpdate() {
-    if (this.props.proportions.height) {
-      this.startGame()
+    if (
+      this.props.initialBody.keypoints &&
+      !this.state.won &&
+      !this.props.gameStarted
+    ) {
+      setTimeout(() => {
+        this.props.toggleStart()
+      }, 5000)
     }
+
+    this.startGame()
   }
 
   // THE GAME
   startGame() {
-    if (this.props.keypoints.length) {
+    if (this.props.keypoints.length && !this.state.won) {
       for (let i = 0; i < 2; i++) {
         const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
         const itemCoords = {
@@ -58,33 +82,84 @@ class Game extends Component {
               //retire the item
               this.props.removeGameItem(toRemove)
             }, 260)
+            this.setState(state => ({
+              score: state.score + 10
+            })) //score starts at over 0 for some reason??
           }
         }
+      }
+      if (this.state.score >= 100 && !this.state.metWonCondition) {
+        //NOTE: if statement is too inclusive; this will call itself over and over until the timers on lines 89 & 93 finish...aka blowing the call stack
+        console.log('YOU WON!!!')
+        this.setState({
+          metWonCondition: true
+        })
+        //explode all the fruits
+        for (let i = 0; i < this.props.gameItems.length; i++) {
+          this.props.explodeItem(this.props.gameItems[i])
+        }
+        setTimeout(() => {
+          this.props.toggleEnd()
+          this.setState({
+            won: true
+          })
+        }, 800)
       }
     }
   }
 
+  restartGame() {
+    this.setState({
+      won: false,
+      metWonCondition: false,
+      score: 0
+    })
+    for (let i = 0; i < this.props.gameItems.length; i++) {
+      this.props.removeGameItem(this.props.gameItems[i])
+    }
+    this.props.toggleStart()
+  }
+
   render() {
-    if (this.props.proportions.height) {
+    if (
+      this.props.initialBody.keypoints &&
+      !this.state.won &&
+      this.props.gameStarted
+    ) {
       const item1 = this.props.gameItems[0]
       const item2 = this.props.gameItems[1]
 
       return (
         <div>
-          <GameItem
-            key={item1.id}
-            imageUrl={item1.imageUrl}
-            x={item1.x}
-            y={item1.y}
-            width={item1.width}
-          />
+          <div id="score">Score: {this.state.score}</div>
+          <div>
+            <GameItem
+              key={item1.id}
+              imageUrl={item1.imageUrl}
+              x={item1.x}
+              y={item1.y}
+              width={item1.width}
+            />
 
-          <GameItem
-            key={item2.id}
-            imageUrl={item2.imageUrl}
-            x={item2.x}
-            y={item2.y}
-            width={item2.width}
+            <GameItem
+              key={item2.id}
+              imageUrl={item2.imageUrl}
+              x={item2.x}
+              y={item2.y}
+              width={item2.width}
+            />
+          </div>
+        </div>
+      )
+    } else if (this.state.won) {
+      return (
+        <div>
+          <div id="score">Score: {this.state.score}</div>
+          <img id="youWin" src="/assets/win.gif" />
+          <img
+            id="replayButton"
+            src="/assets/replayButton.png"
+            onClick={this.restartGame}
           />
         </div>
       )
@@ -95,7 +170,8 @@ class Game extends Component {
 const mapStateToProps = state => ({
   keypoints: state.keypoints,
   gameItems: state.activeGameItems,
-  proportions: state.proportions
+  initialBody: state.initialBody,
+  gameStarted: state.gameStarted
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -105,8 +181,11 @@ const mapDispatchToProps = dispatch => ({
   removeGameItem: item => {
     dispatch(removedGameItem(item))
   },
-  respawnItems: () => {
-    dispatch(restartItems())
+  toggleStart: () => {
+    dispatch(gameStarted())
+  },
+  toggleEnd: () => {
+    dispatch(gameFinished())
   }
 })
 

@@ -4,22 +4,19 @@ import * as posenet from '@tensorflow-models/posenet'
 const pointRadius = 3
 
 export const config = {
-  videoWidth: 900,
-  videoHeight: 700,
   flipHorizontal: true,
-  algorithm: 'single-pose',
+  algorithm: 'multi-pose',
   showVideo: true,
-  showSkeleton: true,
-  showPoints: true,
-  minPoseConfidence: 0.1,
+  showSkeleton: false,
+  showPoints: false,
+  minPoseConfidence: 0.5,
   minPartConfidence: 0.5,
   maxPoseDetections: 2,
   nmsRadius: 20,
-  outputStride: 16,
+  outputStride: 32,
   imageScaleFactor: 0.5,
   skeletonColor: '#ffadea',
-  skeletonLineWidth: 6,
-  loadingText: 'Loading...please be patient...'
+  skeletonLineWidth: 6
 }
 
 export const bodyPointLocations = {
@@ -52,7 +49,7 @@ export const gameItems = [
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
     x: 200,
-    y: 200,
+    y: 70,
     width: 150
   },
   {
@@ -62,8 +59,8 @@ export const gameItems = [
     activeUrl: '/assets/banana.gif',
     explodeUrl: '/assets/explodeYELLOW.gif',
     active: true,
-    x: 400,
-    y: 400,
+    x: 800,
+    y: 600,
     width: 150
   },
   {
@@ -73,8 +70,8 @@ export const gameItems = [
     activeUrl: '/assets/blackberry.gif',
     explodeUrl: '/assets/explodePURPLE.gif',
     active: true,
-    x: 600,
-    y: 300,
+    x: 900,
+    y: 100,
     width: 150
   },
   {
@@ -85,7 +82,7 @@ export const gameItems = [
     explodeUrl: '/assets/explodeGREEN.gif',
     active: true,
     x: 100,
-    y: 500,
+    y: 600,
     width: 150
   }
 ]
@@ -169,33 +166,17 @@ import store from '../../store'
 export const variablesForCameraRender = loadingStatus => {
   let state = store.getState()
 
-  const poseCapture = state.initialBody ? state.initialBody : []
-
   const loading = loadingStatus ? (
     <img className="loading" src="/assets/loading.gif" />
   ) : null
 
   const game = loadingStatus ? null : <Game />
 
-  const gameInit = loadingStatus ? null : (
-    <GameInit initialPoseCapture={poseCapture} loading={loadingStatus} />
-  )
-
-  const getIntoTheFrame =
-    !state.proportions.height && !loadingStatus ? (
-      <img className="getIntoTheFrame" src="/assets/movePrompt.png" />
-    ) : null
-
-  const ready =
-    state.proportions.height && !loadingStatus ? (
-      <img id="ready" src="/assets/ready.png" />
-    ) : null
+  const gameInit = loadingStatus ? null : <GameInit loading={loadingStatus} />
 
   return {
     loading,
     game,
-    gameInit,
-    getIntoTheFrame,
-    ready
+    gameInit
   }
 }
