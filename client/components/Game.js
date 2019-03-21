@@ -1,8 +1,14 @@
+/* eslint-disable complexity */
 import React, {Component} from 'react'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {findPoint} from './utils'
-import {killedGameItem, removedGameItem, restartItems} from '../store'
+import {
+  killedGameItem,
+  removedGameItem,
+  gameStarted,
+  gameFinished
+} from '../store'
 
 class Game extends Component {
   constructor(props) {
@@ -20,9 +26,17 @@ class Game extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.initialBody.keypoints) {
-      this.startGame()
+    if (
+      this.props.initialBody.keypoints &&
+      !this.state.won &&
+      !this.props.gameStarted
+    ) {
+      setTimeout(() => {
+        this.props.toggleStart()
+      }, 5000)
     }
+
+    this.startGame()
   }
 
   // THE GAME
@@ -66,8 +80,17 @@ class Game extends Component {
           }
         }
       }
-      if (this.state.score >= 100) {
+      if (this.state.score >= 500) {
         console.log('YOU WON!!!')
+        //explode all the fruits
+        for (let i = 0; i < this.props.gameItems.length; i++) {
+          this.props.explodeItem(this.props.gameItems[i])
+          let toRemove = this.props.gameItems[i]
+          setTimeout(() => {
+            this.props.removeGameItem(toRemove)
+          }, 260)
+        }
+        this.props.toggleEnd()
         this.setState({
           won: true
         })
@@ -75,8 +98,16 @@ class Game extends Component {
     }
   }
 
+  refreshPage() {
+    window.location.reload()
+  }
+
   render() {
-    if (this.props.initialBody.keypoints && !this.state.won) {
+    if (
+      this.props.initialBody.keypoints &&
+      !this.state.won &&
+      this.props.gameStarted
+    ) {
       const item1 = this.props.gameItems[0]
       const item2 = this.props.gameItems[1]
 
@@ -106,6 +137,12 @@ class Game extends Component {
       return (
         <div>
           <div id="score">Score: {this.state.score}</div>
+          <img id="youWin" src="/assets/win.gif" />
+          <img
+            id="replayButton"
+            src="/assets/replayButton.png"
+            onClick={this.refreshPage}
+          />
         </div>
       )
     } else return <div />
@@ -115,7 +152,8 @@ class Game extends Component {
 const mapStateToProps = state => ({
   keypoints: state.keypoints,
   gameItems: state.activeGameItems,
-  initialBody: state.initialBody
+  initialBody: state.initialBody,
+  gameStarted: state.gameStarted
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -125,8 +163,11 @@ const mapDispatchToProps = dispatch => ({
   removeGameItem: item => {
     dispatch(removedGameItem(item))
   },
-  respawnItems: () => {
-    dispatch(restartItems())
+  toggleStart: () => {
+    dispatch(gameStarted())
+  },
+  toggleEnd: () => {
+    dispatch(gameFinished())
   }
 })
 

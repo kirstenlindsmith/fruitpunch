@@ -7,7 +7,8 @@ const initialState = {
   keypoints: [],
   initialBody: {},
   proportions: {},
-  activeGameItems: gameItems
+  activeGameItems: gameItems,
+  gameStarted: false
 }
 
 //action types
@@ -16,6 +17,8 @@ const GOT_INITIALBODY = 'GOT_INITIALBODY'
 const GOT_PROPORTIONS = 'GOT_PROPORTIONS'
 const KILLED_ITEM = 'KILLED_ITEM'
 const REMOVED_ITEM = 'REMOVED_ITEM'
+const GAME_STARTED = 'GAME_STARTED'
+const GAME_FINISHED = 'GAME_FINISHED'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -59,6 +62,18 @@ export const removedGameItem = gameItem => {
   }
 }
 
+export const gameStarted = () => {
+  return {
+    type: GAME_STARTED
+  }
+}
+
+export const gameFinished = () => {
+  return {
+    type: GAME_FINISHED
+  }
+}
+
 //reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -96,6 +111,16 @@ const reducer = (state = initialState, action) => {
           }),
           action.gameItem
         ]
+      }
+    case GAME_STARTED:
+      return {
+        ...state,
+        gameStarted: true
+      }
+    case GAME_FINISHED:
+      return {
+        ...state,
+        gameStarted: false
       }
     default:
       return state
