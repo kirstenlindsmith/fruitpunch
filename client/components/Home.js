@@ -22,7 +22,7 @@ const Home = () => {
             <img id="logo" src="/assets/FruitPunch.gif" />
           </div>
           <div id="homeButtons">
-            <Link to="/game">
+            <Link to="/select">
               <img id="startButton" src="/assets/startButton.png" />
             </Link>
             <br />

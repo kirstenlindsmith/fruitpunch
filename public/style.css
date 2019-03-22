@@ -246,3 +246,14 @@ body {
   left: 50%;
   transform: translate(-50%, -94%);
 }
+
+#gameSelectDiv {
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+}
+
+.gameSelectButton {
+  /* height: 40px;
+  width: */
+}

@@ -13,7 +13,7 @@ import {
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
 
-class Game extends Component {
+class Game2 extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -22,8 +22,7 @@ class Game extends Component {
       metWonCondition: false,
       musicPlaying: false,
       isTimerOn: false,
-      time: 0,
-      start: 0
+      time: 60000
     }
     this.startGame = this.startGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
@@ -39,7 +38,7 @@ class Game extends Component {
     this.setState({
       score: 0,
       musicPlaying: true,
-      time: 0,
+      time: 60000,
       isTimerOn: false
     })
   }
@@ -123,8 +122,7 @@ class Game extends Component {
           }
         }
       }
-      if (this.state.score >= 30 && !this.state.metWonCondition) {
-        //NOTE: if statement is too inclusive; this will call itself over and over until the timers on lines 89 & 93 finish...aka blowing the call stack
+      if (this.state.time <= 0 && !this.state.metWonCondition) {
         console.log('YOU WON!!!')
         music.pause()
         this.stopTimer()
@@ -153,7 +151,8 @@ class Game extends Component {
     this.setState({
       won: false,
       metWonCondition: false,
-      score: 0
+      score: 0,
+      time: 60000
     })
     for (let i = 0; i < this.props.gameItems.length; i++) {
       this.props.removeGameItem(this.props.gameItems[i])
@@ -165,13 +164,13 @@ class Game extends Component {
   startTimer() {
     this.setState({
       isTimerOn: true,
-      time: 0,
+      time: 60000,
       start: Date.now()
     })
     this.timer = setInterval(
       () =>
         this.setState({
-          time: Date.now() - this.state.start
+          time: this.state.time - 1000
         }),
       1000
     )
@@ -200,6 +199,7 @@ class Game extends Component {
   }
 
   render() {
+    const totalFruit = this.state.score / 10
     const time = this.msToTime(this.state.time)
 
     if (
@@ -238,10 +238,11 @@ class Game extends Component {
         <div>
           <div className="gameInfo">
             <div id="score">Score: {this.state.score}</div>
+            <div id="time">Time: {time}</div>
           </div>
           <div className="center">
             <img id="youWin" src="/assets/win.gif" />
-            <div id="finalTime">Your time was: {time}</div>
+            <div id="finalTime">You got {totalFruit} fruit!</div>
             <img
               id="replayButton"
               src="/assets/replayButton.png"
@@ -279,4 +280,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game)
+export default connect(mapStateToProps, mapDispatchToProps)(Game2)

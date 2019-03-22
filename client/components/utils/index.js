@@ -214,7 +214,6 @@ export function findPoint(bodyPart, keypoints) {
 
 //FUNCTION TO PRODUCE VARIABLES FOR THE CAMERA.JS RENDER
 import React from 'react'
-import Game from '../Game'
 import GameInit from '../GameInit'
 
 export const variablesForCameraRender = loadingStatus => {
@@ -222,13 +221,10 @@ export const variablesForCameraRender = loadingStatus => {
     <img className="loading" src="/assets/loading.gif" />
   ) : null
 
-  const game = loadingStatus ? null : <Game />
-
   const gameInit = loadingStatus ? null : <GameInit loading={loadingStatus} />
 
   return {
     loading,
-    game,
     gameInit
   }
 }

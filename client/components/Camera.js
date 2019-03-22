@@ -211,9 +211,12 @@ class PoseNet extends Component {
   }
 
   render() {
-    const {loading, game, gameInit} = variablesForCameraRender(
-      this.state.loading
-    )
+    const {loading, gameInit} = variablesForCameraRender(this.state.loading)
+
+    const selectedGame = this.props.game
+    const game = this.state.loading
+      ? null
+      : React.createElement(selectedGame, {})
 
     return (
       <div className="centered">
