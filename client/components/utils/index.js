@@ -59,7 +59,7 @@ export const gameItems = [
     activeUrl: '/assets/banana.gif',
     explodeUrl: '/assets/explodeYELLOW.gif',
     active: true,
-    x: 800,
+    x: 1200,
     y: 600,
     width: 150
   },
@@ -83,6 +83,61 @@ export const gameItems = [
     active: true,
     x: 100,
     y: 600,
+    width: 150
+  },
+  {
+    id: 4,
+    type: 'kiwi',
+    imageUrl: '/assets/kiwi.gif',
+    activeUrl: '/assets/kiwi.gif',
+    explodeUrl: '/assets/explodeGREEN.gif',
+    active: true,
+    x: 100,
+    y: 600,
+    width: 150
+  },
+  {
+    id: 5,
+    type: 'cherry',
+    imageUrl: '/assets/cherry.gif',
+    activeUrl: '/assets/cherry.gif',
+    explodeUrl: '/assets/explodeRED.gif',
+    active: true,
+    x: 950,
+    y: 500,
+    width: 150
+  },
+  {
+    id: 6,
+    type: 'pineapple',
+    imageUrl: '/assets/pineapple.gif',
+    activeUrl: '/assets/pineapple.gif',
+    explodeUrl: '/assets/explodeYELLOW.gif',
+    active: true,
+    x: 1000,
+    y: 600,
+    width: 150
+  },
+  {
+    id: 7,
+    type: 'apple',
+    imageUrl: '/assets/apple.gif',
+    activeUrl: '/assets/apple.gif',
+    explodeUrl: '/assets/explodeRED.gif',
+    active: true,
+    x: 950,
+    y: 100,
+    width: 150
+  },
+  {
+    id: 8,
+    type: 'watermelon',
+    imageUrl: '/assets/watermelon.gif',
+    activeUrl: '/assets/watermelon.gif',
+    explodeUrl: '/assets/explodeRED.gif',
+    active: true,
+    x: 800,
+    y: 500,
     width: 150
   }
 ]
@@ -161,11 +216,8 @@ export function findPoint(bodyPart, keypoints) {
 import React from 'react'
 import Game from '../Game'
 import GameInit from '../GameInit'
-import store from '../../store'
 
 export const variablesForCameraRender = loadingStatus => {
-  let state = store.getState()
-
   const loading = loadingStatus ? (
     <img className="loading" src="/assets/loading.gif" />
   ) : null
