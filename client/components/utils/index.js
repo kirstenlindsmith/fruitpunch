@@ -59,8 +59,8 @@ export const gameItems = [
     activeUrl: '/assets/banana.gif',
     explodeUrl: '/assets/explodeYELLOW.gif',
     active: true,
-    x: 1200,
-    y: 600,
+    x: 1300,
+    y: 450,
     width: 150
   },
   {
@@ -72,17 +72,6 @@ export const gameItems = [
     active: true,
     x: 900,
     y: 100,
-    width: 150
-  },
-  {
-    id: 4,
-    type: 'kiwi',
-    imageUrl: '/assets/kiwi.gif',
-    activeUrl: '/assets/kiwi.gif',
-    explodeUrl: '/assets/explodeGREEN.gif',
-    active: true,
-    x: 100,
-    y: 600,
     width: 150
   },
   {
@@ -125,8 +114,8 @@ export const gameItems = [
     activeUrl: '/assets/apple.gif',
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
-    x: 950,
-    y: 100,
+    x: 110,
+    y: 150,
     width: 150
   },
   {
@@ -228,3 +217,18 @@ export const variablesForCameraRender = loadingStatus => {
     gameInit
   }
 }
+
+// const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
+// const rightElbowCoords = findPoint('rightElbow', this.props.keypoints)
+
+// let angle = Math.atan((rightWristCoords.y-rightElbowCoords.y)/(rightWristCoords.x-rightElbowCoords.x))
+// let yDistance = Math.sin(angle)*50
+// let xDistance = Math.cos(angle)*50
+// let rightHandCoordY = yDistance + rightWristCoords.y
+// let rightHandCoordX = xDistance + rightWristCoords.x
+// let handToItemDistance = Math.sqrt(
+//   Math.pow(rightHandCoordX - itemCenterX, 2) +
+//     Math.pow(rightHandCoordY - itemCenterY, 2)
+// )
+
+// if(itemRadius+50 > handToItemDistance)

@@ -238,15 +238,6 @@ body {
   margin-top: 4px;
 }
 
-#aboutHomeButton {
-  z-index: 50;
-  margin: 0 auto;
-  position: absolute;
-  top: 94%;
-  left: 50%;
-  transform: translate(-50%, -94%);
-}
-
 #gameSelectDiv {
   display: flex;
   align-content: center;
