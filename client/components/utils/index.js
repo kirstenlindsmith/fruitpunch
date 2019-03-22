@@ -59,8 +59,8 @@ export const gameItems = [
     activeUrl: '/assets/banana.gif',
     explodeUrl: '/assets/explodeYELLOW.gif',
     active: true,
-    x: 1200,
-    y: 600,
+    x: 1300,
+    y: 450,
     width: 150
   },
   {
@@ -72,17 +72,6 @@ export const gameItems = [
     active: true,
     x: 900,
     y: 100,
-    width: 150
-  },
-  {
-    id: 4,
-    type: 'kiwi',
-    imageUrl: '/assets/kiwi.gif',
-    activeUrl: '/assets/kiwi.gif',
-    explodeUrl: '/assets/explodeGREEN.gif',
-    active: true,
-    x: 100,
-    y: 600,
     width: 150
   },
   {
@@ -125,8 +114,8 @@ export const gameItems = [
     activeUrl: '/assets/apple.gif',
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
-    x: 950,
-    y: 100,
+    x: 110,
+    y: 150,
     width: 150
   },
   {
@@ -214,7 +203,6 @@ export function findPoint(bodyPart, keypoints) {
 
 //FUNCTION TO PRODUCE VARIABLES FOR THE CAMERA.JS RENDER
 import React from 'react'
-import Game from '../Game'
 import GameInit from '../GameInit'
 
 export const variablesForCameraRender = loadingStatus => {
@@ -222,13 +210,10 @@ export const variablesForCameraRender = loadingStatus => {
     <img className="loading" src="/assets/loading.gif" />
   ) : null
 
-  const game = loadingStatus ? null : <Game />
-
   const gameInit = loadingStatus ? null : <GameInit loading={loadingStatus} />
 
   return {
     loading,
-    game,
     gameInit
   }
 }

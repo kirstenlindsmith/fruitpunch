@@ -108,7 +108,7 @@ body {
 }
 
 .loading {
-  height: 200px;
+  height: 250px;
   margin: 0 auto;
   position: absolute;
   top: 40%;
@@ -196,11 +196,10 @@ body {
   animation-fill-mode: forwards;
 }
 
-#bodyMeasurements {
-  position: fixed;
-  top: 0;
-  left: 0;
-  color: white;
+.gameInfo {
+  display: flex;
+  flex-direction: column;
+  /* align-content: flex-start; */
 }
 
 #score {
@@ -212,11 +211,54 @@ body {
   font-size: 40px;
 }
 
+#time {
+  z-index: 10;
+  position: fixed;
+  top: 45px;
+  left: 0;
+  color: black;
+  font-size: 40px;
+}
+
+#youWin {
+  margin-top: -55px;
+}
+
+#finalTime {
+  margin-top: -115px;
+  font-size: 40px;
+  color: white;
+}
+
 #replayButton {
-  z-index: 50;
-  margin: 0 auto;
-  position: absolute;
-  top: 80%;
-  left: 50%;
-  transform: translate(-50%, -80%);
+  margin-top: 9px;
+}
+
+#homeButton {
+  margin-top: 4px;
+}
+
+#gameSelectDiv {
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+}
+
+#beatTheClock {
+  margin-bottom: 25px;
+}
+
+button {
+  background-color: #c12e7f;
+  color: white;
+  text-align: center;
+  border-radius: 12px;
+  padding: 15px 28px;
+  border: none;
+  font-size: 12pt;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+button:hover {
+  background-color: #b22dc1;
 }

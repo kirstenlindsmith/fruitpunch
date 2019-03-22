@@ -3,7 +3,7 @@
 import React, {Component} from 'react'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
-import {findPoint, drawKeyPoints} from './utils'
+import {findPoint} from './utils'
 import {
   killedGameItem,
   removedGameItem,
@@ -13,17 +13,21 @@ import {
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
 
-class Game extends Component {
+class Game2 extends Component {
   constructor(props) {
     super(props)
     this.state = {
       score: 0,
       won: false,
       metWonCondition: false,
-      musicPlaying: false
+      musicPlaying: false,
+      isTimerOn: false,
+      time: 60000
     }
     this.startGame = this.startGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
+    this.startTimer = this.startTimer.bind(this)
+    this.stopTimer = this.stopTimer.bind(this)
   }
 
   componentDidMount() {
@@ -33,7 +37,9 @@ class Game extends Component {
     }
     this.setState({
       score: 0,
-      musicPlaying: true
+      musicPlaying: true,
+      time: 60000,
+      isTimerOn: false
     })
   }
 
@@ -60,6 +66,15 @@ class Game extends Component {
   startGame() {
     const squish = new Audio('/assets/squish.mp3')
     squish.volume = 1
+
+    if (
+      !this.state.isTimerOn &&
+      !this.state.metWonCondition &&
+      this.props.gameStarted
+    ) {
+      this.startTimer()
+    }
+
     if (this.props.keypoints.length && !this.state.won) {
       for (let i = 0; i < 2; i++) {
         // const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
@@ -91,19 +106,6 @@ class Game extends Component {
         let xDistanceR = Math.cos(angleR) * 50
         let rightHandCoordY = yDistanceR + rightWristCoords.y
         let rightHandCoordX = xDistanceR + rightWristCoords.x
-        console.log()
-        drawKeyPoints(
-          [
-            {
-              part: 'rightHand',
-              position: {x: rightHandCoordX, y: rightHandCoordY},
-              score: 0.5
-            }
-          ],
-          0.5,
-          'white',
-          this.props.canvasContext
-        )
 
         let handToItemDistanceR = Math.sqrt(
           Math.pow(rightHandCoordX - itemCenterX, 2) +
@@ -130,19 +132,6 @@ class Game extends Component {
         let xDistanceL = Math.cos(angleL) * 50
         let leftHandCoordY = yDistanceL + leftWristCoords.y
         let leftHandCoordX = xDistanceL + leftWristCoords.x
-        console.log()
-        drawKeyPoints(
-          [
-            {
-              part: 'leftHand',
-              position: {x: leftHandCoordX, y: leftHandCoordY},
-              score: 0.5
-            }
-          ],
-          0.5,
-          'white',
-          this.props.canvasContext
-        )
 
         let handToItemDistanceL = Math.sqrt(
           Math.pow(leftHandCoordX - itemCenterX, 2) +
@@ -153,7 +142,7 @@ class Game extends Component {
           !this.state.won &&
           this.props.gameStarted &&
           (itemRadius + 50 > handToItemDistanceL ||
-          itemRadius + 50 > handToItemDistanceR)
+            itemRadius + 50 > handToItemDistanceR)
         ) {
           if (this.props.gameItems[i].active) {
             //explode the item
@@ -173,9 +162,10 @@ class Game extends Component {
           }
         }
       }
-      if (this.state.score >= 500 && !this.state.metWonCondition) {
+      if (this.state.time <= 0 && !this.state.metWonCondition) {
         console.log('YOU WON!!!')
         music.pause()
+        this.stopTimer()
         this.setState({
           metWonCondition: true,
           musicPlaying: false
@@ -185,7 +175,6 @@ class Game extends Component {
         for (let i = 0; i < this.props.gameItems.length; i++) {
           this.props.explodeItem(this.props.gameItems[i])
         }
-        //play squish sound for the two visible fruits on screen
         squish.play()
         squish.play()
         setTimeout(() => {
@@ -202,7 +191,8 @@ class Game extends Component {
     this.setState({
       won: false,
       metWonCondition: false,
-      score: 0
+      score: 0,
+      time: 60000
     })
     for (let i = 0; i < this.props.gameItems.length; i++) {
       this.props.removeGameItem(this.props.gameItems[i])
@@ -211,7 +201,47 @@ class Game extends Component {
     music.play()
   }
 
+  startTimer() {
+    this.setState({
+      isTimerOn: true,
+      time: 60000,
+      start: Date.now()
+    })
+    this.timer = setInterval(
+      () =>
+        this.setState({
+          time: this.state.time - 1000
+        }),
+      1000
+    )
+  }
+
+  stopTimer() {
+    this.setState({isTimerOn: false})
+    clearInterval(this.timer)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
+  msToTime(givenTime) {
+    // let milliseconds = parseInt((givenTime%1000)/100)
+    let seconds = parseInt((givenTime / 1000) % 60)
+    let minutes = parseInt((givenTime / (1000 * 60)) % 60)
+
+    minutes = minutes < 10 ? '0' + minutes : minutes
+    seconds = seconds < 10 ? '0' + seconds : seconds
+    // milliseconds = (milliseconds < 10) ? '0' + milliseconds : milliseconds
+
+    // return minutes + ':' + seconds + ':' + milliseconds
+    return minutes + ':' + seconds
+  }
+
   render() {
+    const totalFruit = this.state.score / 10
+    const time = this.msToTime(this.state.time)
+
     if (
       this.props.initialBody.keypoints &&
       !this.state.won &&
@@ -221,8 +251,9 @@ class Game extends Component {
       const item2 = this.props.gameItems[1]
 
       return (
-        <div>
+        <div className="gameInfo">
           <div id="score">Score: {this.state.score}</div>
+          <div id="time">Time: {time}</div>
           <div>
             <GameItem
               key={item1.id}
@@ -245,17 +276,22 @@ class Game extends Component {
     } else if (this.state.won) {
       return (
         <div>
-          <div id="score">Score: {this.state.score}</div>
-          <img id="youWin" src="/assets/win.gif" />
-          <img
-            id="replayButton"
-            src="/assets/replayButton.png"
-            onClick={this.restartGame}
-          />
-          <br />
-          <a href="/">
-            <img id="homeButton" src="/assets/homeButton.png" />
-          </a>
+          <div className="gameInfo">
+            <div id="score">Score: {this.state.score}</div>
+            <div id="time">Time: {time}</div>
+          </div>
+          <div className="center">
+            <img id="youWin" src="/assets/timesUp.gif" />
+            <div id="finalTime">You got {totalFruit} fruit!</div>
+            <img
+              id="replayButton"
+              src="/assets/replayButton.png"
+              onClick={this.restartGame}
+            />
+            <a href="/">
+              <img id="homeButton" src="/assets/homeButton.png" />
+            </a>
+          </div>
         </div>
       )
     } else return <div />
@@ -266,8 +302,7 @@ const mapStateToProps = state => ({
   keypoints: state.keypoints,
   gameItems: state.activeGameItems,
   initialBody: state.initialBody,
-  gameStarted: state.gameStarted,
-  canvasContext: state.canvasContext
+  gameStarted: state.gameStarted
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -285,4 +320,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game)
+export default connect(mapStateToProps, mapDispatchToProps)(Game2)
