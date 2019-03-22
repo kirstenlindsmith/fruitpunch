@@ -8,7 +8,8 @@ const initialState = {
   initialBody: {},
   proportions: {},
   activeGameItems: gameItems,
-  gameStarted: false
+  gameStarted: false,
+  canvasContext: []
 }
 
 //action types
@@ -19,6 +20,7 @@ const KILLED_ITEM = 'KILLED_ITEM'
 const REMOVED_ITEM = 'REMOVED_ITEM'
 const GAME_STARTED = 'GAME_STARTED'
 const GAME_FINISHED = 'GAME_FINISHED'
+const GOT_CANVAS_CONTEXT = 'GOT_CANVAS_CONTEXT'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -74,6 +76,13 @@ export const gameFinished = () => {
   }
 }
 
+export const gotCanvasContext = canvas => {
+  return {
+    type: GOT_CANVAS_CONTEXT,
+    canvas
+  }
+}
+
 //reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -121,6 +130,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         gameStarted: false
+      }
+    case GOT_CANVAS_CONTEXT:
+      return {
+        ...state,
+        canvasContext: action.canvas
       }
     default:
       return state

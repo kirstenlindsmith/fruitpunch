@@ -180,3 +180,18 @@ export const variablesForCameraRender = loadingStatus => {
     gameInit
   }
 }
+
+// const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
+// const rightElbowCoords = findPoint('rightElbow', this.props.keypoints)
+
+// let angle = Math.atan((rightWristCoords.y-rightElbowCoords.y)/(rightWristCoords.x-rightElbowCoords.x))
+// let yDistance = Math.sin(angle)*50
+// let xDistance = Math.cos(angle)*50
+// let rightHandCoordY = yDistance + rightWristCoords.y
+// let rightHandCoordX = xDistance + rightWristCoords.x
+// let handToItemDistance = Math.sqrt(
+//   Math.pow(rightHandCoordX - itemCenterX, 2) +
+//     Math.pow(rightHandCoordY - itemCenterY, 2)
+// )
+
+// if(itemRadius+50 > handToItemDistance)
