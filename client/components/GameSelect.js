@@ -30,7 +30,11 @@ const GameSelect = () => {
             </Link>
             <br />
             <Link to="/game2">
-              <button type="button" className="gameSelectButton">
+              <button
+                type="button"
+                id="beatTheClock"
+                className="gameSelectButton"
+              >
                 Beat The Clock
               </button>
             </Link>

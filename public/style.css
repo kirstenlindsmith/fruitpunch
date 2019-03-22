@@ -253,7 +253,21 @@ body {
   flex-direction: column;
 }
 
-.gameSelectButton {
-  /* height: 40px;
-  width: */
+#beatTheClock {
+  margin-bottom: 25px;
+}
+
+button {
+  background-color: #c12e7f;
+  color: white;
+  text-align: center;
+  border-radius: 12px;
+  padding: 15px 28px;
+  border: none;
+  font-size: 12pt;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+button:hover {
+  background-color: #b22dc1;
 }

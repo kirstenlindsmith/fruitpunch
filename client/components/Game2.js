@@ -241,7 +241,7 @@ class Game2 extends Component {
             <div id="time">Time: {time}</div>
           </div>
           <div className="center">
-            <img id="youWin" src="/assets/win.gif" />
+            <img id="youWin" src="/assets/timesUp.gif" />
             <div id="finalTime">You got {totalFruit} fruit!</div>
             <img
               id="replayButton"
