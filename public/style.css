@@ -4,6 +4,7 @@ html {
 }
 
 body {
+  z-index: -10;
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -68,11 +69,15 @@ body {
   line-height: 25pt;
 }
 
+#aboutText {
+  margin-top: -60px;
+}
+
 .webcam {
   margin: 0 auto;
   margin-left: auto;
   margin-right: auto;
-  z-index: -11;
+  z-index: -1;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -200,11 +205,12 @@ body {
 }
 
 #score {
+  z-index: 10;
   position: fixed;
   top: 0;
   left: 0;
   color: black;
-  font-size: 70px;
+  font-size: 40px;
 }
 
 #replayButton {
