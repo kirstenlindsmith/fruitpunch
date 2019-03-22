@@ -3,7 +3,7 @@
 import React, {Component} from 'react'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
-import {findPoint} from './utils'
+import {findPoint, drawKeyPoints} from './utils'
 import {
   killedGameItem,
   removedGameItem,
@@ -62,7 +62,7 @@ class Game extends Component {
     squish.volume = 1
     if (this.props.keypoints.length && !this.state.won) {
       for (let i = 0; i < 2; i++) {
-        const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
+        // const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
         const itemCoords = {
           x: this.props.gameItems[i].x,
           y: this.props.gameItems[i].y
@@ -73,21 +73,87 @@ class Game extends Component {
           Math.floor(Math.cos(Math.PI / 4) * itemRadius) + itemCoords.x
         const itemCenterY =
           Math.floor(Math.sin(Math.PI / 4) * itemRadius) + itemCoords.y
-        const distanceR = Math.sqrt(
-          Math.pow(rightWristCoords.x - itemCenterX, 2) +
-            Math.pow(rightWristCoords.y - itemCenterY, 2)
+
+        const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
+        const rightElbowCoords = findPoint('rightElbow', this.props.keypoints)
+        const yDiffR = rightWristCoords.y - rightElbowCoords.y
+        const xDiffR = rightWristCoords.x - rightElbowCoords.x
+
+        let angleR = Math.atan(Math.abs(yDiffR) / Math.abs(xDiffR))
+        if (yDiffR >= 0 && xDiffR <= 0) {
+          angleR = angleR + Math.PI / 2
+        }
+        if (xDiffR <= 0 && yDiffR < 0) {
+          angleR = angleR + Math.PI
+        }
+
+        let yDistanceR = Math.sin(angleR) * 50
+        let xDistanceR = Math.cos(angleR) * 50
+        let rightHandCoordY = yDistanceR + rightWristCoords.y
+        let rightHandCoordX = xDistanceR + rightWristCoords.x
+        console.log()
+        drawKeyPoints(
+          [
+            {
+              part: 'rightHand',
+              position: {x: rightHandCoordX, y: rightHandCoordY},
+              score: 0.5
+            }
+          ],
+          0.5,
+          'white',
+          this.props.canvasContext
+        )
+
+        let handToItemDistanceR = Math.sqrt(
+          Math.pow(rightHandCoordX - itemCenterX, 2) +
+            Math.pow(rightHandCoordY - itemCenterY, 2)
         )
 
         const leftWristCoords = findPoint('leftWrist', this.props.keypoints)
-        const distanceL = Math.sqrt(
-          Math.pow(leftWristCoords.x - itemCenterX, 2) +
-            Math.pow(leftWristCoords.y - itemCenterY, 2)
+        const leftElbowCoords = findPoint('leftElbow', this.props.keypoints)
+        const yDiffL = leftWristCoords.y - leftElbowCoords.y
+        const xDiffL = leftWristCoords.x - leftElbowCoords.x
+
+        let angleL = Math.atan(Math.abs(yDiffL) / Math.abs(xDiffL))
+        if (yDiffL >= 0 && xDiffL <= 0) {
+          angleL = angleL + Math.PI / 2
+        }
+        if (xDiffL <= 0 && yDiffL < 0) {
+          angleL = angleL + Math.PI
+        }
+        if (xDiffL > 0 && yDiffL < 0) {
+          angleL = angleL + 3 * Math.PI / 2
+        }
+
+        let yDistanceL = Math.sin(angleL) * 50
+        let xDistanceL = Math.cos(angleL) * 50
+        let leftHandCoordY = yDistanceL + leftWristCoords.y
+        let leftHandCoordX = xDistanceL + leftWristCoords.x
+        console.log()
+        drawKeyPoints(
+          [
+            {
+              part: 'leftHand',
+              position: {x: leftHandCoordX, y: leftHandCoordY},
+              score: 0.5
+            }
+          ],
+          0.5,
+          'white',
+          this.props.canvasContext
+        )
+
+        let handToItemDistanceL = Math.sqrt(
+          Math.pow(leftHandCoordX - itemCenterX, 2) +
+            Math.pow(leftHandCoordY - itemCenterY, 2)
         )
 
         if (
           !this.state.won &&
           this.props.gameStarted &&
-          (itemRadius > distanceR || itemRadius > distanceL)
+          (itemRadius + 50 > handToItemDistanceL ||
+          itemRadius + 50 > handToItemDistanceR)
         ) {
           if (this.props.gameItems[i].active) {
             //explode the item
@@ -108,7 +174,6 @@ class Game extends Component {
         }
       }
       if (this.state.score >= 500 && !this.state.metWonCondition) {
-        //NOTE: if statement is too inclusive; this will call itself over and over until the timers on lines 89 & 93 finish...aka blowing the call stack
         console.log('YOU WON!!!')
         music.pause()
         this.setState({
@@ -120,6 +185,7 @@ class Game extends Component {
         for (let i = 0; i < this.props.gameItems.length; i++) {
           this.props.explodeItem(this.props.gameItems[i])
         }
+        //play squish sound for the two visible fruits on screen
         squish.play()
         squish.play()
         setTimeout(() => {
@@ -200,7 +266,8 @@ const mapStateToProps = state => ({
   keypoints: state.keypoints,
   gameItems: state.activeGameItems,
   initialBody: state.initialBody,
-  gameStarted: state.gameStarted
+  gameStarted: state.gameStarted,
+  canvasContext: state.canvasContext
 })
 
 const mapDispatchToProps = dispatch => ({
