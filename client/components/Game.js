@@ -20,10 +20,15 @@ class Game extends Component {
       score: 0,
       won: false,
       metWonCondition: false,
-      musicPlaying: false
+      musicPlaying: false,
+      isTimerOn: false,
+      time: 0,
+      start: 0
     }
     this.startGame = this.startGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
+    this.startTimer = this.startTimer.bind(this)
+    this.stopTimer = this.stopTimer.bind(this)
   }
 
   componentDidMount() {
@@ -33,7 +38,9 @@ class Game extends Component {
     }
     this.setState({
       score: 0,
-      musicPlaying: true
+      musicPlaying: true,
+      time: 0,
+      isTimerOn: false
     })
   }
 
@@ -60,6 +67,15 @@ class Game extends Component {
   startGame() {
     const squish = new Audio('/assets/squish.mp3')
     squish.volume = 1
+
+    if (
+      !this.state.isTimerOn &&
+      !this.state.metWonCondition &&
+      this.props.gameStarted
+    ) {
+      this.startTimer()
+    }
+
     if (this.props.keypoints.length && !this.state.won) {
       for (let i = 0; i < 2; i++) {
         const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
@@ -107,10 +123,11 @@ class Game extends Component {
           }
         }
       }
-      if (this.state.score >= 500 && !this.state.metWonCondition) {
+      if (this.state.score >= 30 && !this.state.metWonCondition) {
         //NOTE: if statement is too inclusive; this will call itself over and over until the timers on lines 89 & 93 finish...aka blowing the call stack
         console.log('YOU WON!!!')
         music.pause()
+        this.stopTimer()
         this.setState({
           metWonCondition: true,
           musicPlaying: false
@@ -145,7 +162,46 @@ class Game extends Component {
     music.play()
   }
 
+  startTimer() {
+    this.setState({
+      isTimerOn: true,
+      time: 0,
+      start: Date.now()
+    })
+    this.timer = setInterval(
+      () =>
+        this.setState({
+          time: Date.now() - this.state.start
+        }),
+      1000
+    )
+  }
+
+  stopTimer() {
+    this.setState({isTimerOn: false})
+    clearInterval(this.timer)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
+  msToTime(givenTime) {
+    // let milliseconds = parseInt((givenTime%1000)/100)
+    let seconds = parseInt((givenTime / 1000) % 60)
+    let minutes = parseInt((givenTime / (1000 * 60)) % 60)
+
+    minutes = minutes < 10 ? '0' + minutes : minutes
+    seconds = seconds < 10 ? '0' + seconds : seconds
+    // milliseconds = (milliseconds < 10) ? '0' + milliseconds : milliseconds
+
+    // return minutes + ':' + seconds + ':' + milliseconds
+    return minutes + ':' + seconds
+  }
+
   render() {
+    const time = this.msToTime(this.state.time)
+
     if (
       this.props.initialBody.keypoints &&
       !this.state.won &&
@@ -155,8 +211,9 @@ class Game extends Component {
       const item2 = this.props.gameItems[1]
 
       return (
-        <div>
+        <div className="gameInfo">
           <div id="score">Score: {this.state.score}</div>
+          <div id="time">Time: {time}</div>
           <div>
             <GameItem
               key={item1.id}
@@ -179,17 +236,21 @@ class Game extends Component {
     } else if (this.state.won) {
       return (
         <div>
-          <div id="score">Score: {this.state.score}</div>
-          <img id="youWin" src="/assets/win.gif" />
-          <img
-            id="replayButton"
-            src="/assets/replayButton.png"
-            onClick={this.restartGame}
-          />
-          <br />
-          <a href="/">
-            <img id="homeButton" src="/assets/homeButton.png" />
-          </a>
+          <div className="gameInfo">
+            <div id="score">Score: {this.state.score}</div>
+          </div>
+          <div className="center">
+            <img id="youWin" src="/assets/win.gif" />
+            <div id="finalTime">Your time was: {time}</div>
+            <img
+              id="replayButton"
+              src="/assets/replayButton.png"
+              onClick={this.restartGame}
+            />
+            <a href="/">
+              <img id="homeButton" src="/assets/homeButton.png" />
+            </a>
+          </div>
         </div>
       )
     } else return <div />

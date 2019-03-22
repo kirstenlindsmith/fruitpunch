@@ -24,7 +24,7 @@ const About = () => {
             </h1>
             <p>We are really really cool.</p>
             <a href="/">
-              <img id="homeButton" src="/assets/homeButton.png" />
+              <img id="aboutHomeButton" src="/assets/homeButton.png" />
             </a>
           </div>
         </div>
