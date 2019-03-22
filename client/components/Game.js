@@ -10,6 +10,8 @@ import {
   gameStarted,
   gameFinished
 } from '../store'
+const music = new Audio('/assets/CrystalIceArea.mp3')
+const winSound = new Audio('/assets/winSound.mp3')
 
 class Game extends Component {
   constructor(props) {
@@ -17,15 +19,21 @@ class Game extends Component {
     this.state = {
       score: 0,
       won: false,
-      metWonCondition: false
+      metWonCondition: false,
+      musicPlaying: false
     }
     this.startGame = this.startGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
   }
 
   componentDidMount() {
+    music.volume = 0.5
+    if (!this.state.musicPlaying) {
+      music.play()
+    }
     this.setState({
-      score: 0
+      score: 0,
+      musicPlaying: true
     })
   }
 
@@ -50,6 +58,8 @@ class Game extends Component {
 
   // THE GAME
   startGame() {
+    const squish = new Audio('/assets/squish.mp3')
+    squish.volume = 1
     if (this.props.keypoints.length && !this.state.won) {
       for (let i = 0; i < 2; i++) {
         // const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
@@ -140,33 +150,44 @@ class Game extends Component {
         )
 
         if (
-          itemRadius + 50 > handToItemDistanceL ||
-          itemRadius + 50 > handToItemDistanceR
+          !this.state.won &&
+          this.props.gameStarted &&
+          (itemRadius + 50 > handToItemDistanceL ||
+          itemRadius + 50 > handToItemDistanceR)
         ) {
           if (this.props.gameItems[i].active) {
             //explode the item
             this.props.explodeItem(this.props.gameItems[i])
+            squish.play()
             let toRemove = this.props.gameItems[i]
             setTimeout(() => {
               //retire the item
               this.props.removeGameItem(toRemove)
             }, 260)
-            this.setState(state => ({
-              score: state.score + 10
-            })) //score starts at over 0 for some reason??
+            if (!this.state.metWonCondition) {
+              //helps prevent score from going OVER win condition amount
+              this.setState(state => ({
+                score: state.score + 10
+              })) //score starts at over 0 for some reason??
+            }
           }
         }
       }
-      if (this.state.score >= 300 && !this.state.metWonCondition) {
-        //NOTE: if statement is too inclusive; this will call itself over and over until the timers on lines 89 & 93 finish...aka blowing the call stack
+      if (this.state.score >= 500 && !this.state.metWonCondition) {
         console.log('YOU WON!!!')
+        music.pause()
         this.setState({
-          metWonCondition: true
+          metWonCondition: true,
+          musicPlaying: false
         })
+        winSound.play()
         //explode all the fruits
         for (let i = 0; i < this.props.gameItems.length; i++) {
           this.props.explodeItem(this.props.gameItems[i])
         }
+        //play squish sound for the two visible fruits on screen
+        squish.play()
+        squish.play()
         setTimeout(() => {
           this.props.toggleEnd()
           this.setState({
@@ -187,6 +208,7 @@ class Game extends Component {
       this.props.removeGameItem(this.props.gameItems[i])
     }
     this.props.toggleStart()
+    music.play()
   }
 
   render() {
@@ -230,6 +252,10 @@ class Game extends Component {
             src="/assets/replayButton.png"
             onClick={this.restartGame}
           />
+          <br />
+          <a href="/">
+            <img id="homeButton" src="/assets/homeButton.png" />
+          </a>
         </div>
       )
     } else return <div />

@@ -1,0 +1,6 @@
+export {default as About} from './About'
+export {default as Camera} from './Camera'
+export {default as Game} from './Game'
+export {default as GameInit} from './GameInit'
+export {default as GameItem} from './GameItem'
+export {default as Home} from './Home'
