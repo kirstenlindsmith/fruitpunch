@@ -8,7 +8,7 @@ import {
   variablesForCameraRender
 } from './utils'
 import {connect} from 'react-redux'
-import {gotKeypoints, gotInitialBody} from '../store'
+import {gotKeypoints, gotInitialBody, gotCanvasContext} from '../store'
 
 class PoseNet extends Component {
   static defaultProps = config
@@ -86,6 +86,7 @@ class PoseNet extends Component {
   detectPose() {
     const canvas = this.canvas
     const canvasContext = canvas.getContext('2d')
+    this.props.getCanvasContext(canvasContext)
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
@@ -241,6 +242,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getInitialBody: keypoints => {
     dispatch(gotInitialBody(keypoints))
+  },
+  getCanvasContext: canvas => {
+    dispatch(gotCanvasContext(canvas))
   }
 })
 

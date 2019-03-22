@@ -4,6 +4,18 @@ import {Link} from 'react-router-dom'
 const Home = () => {
   return (
     <div className="center homePage">
+      <iframe
+        src="/assets/silence.mp3"
+        allow="autoplay"
+        style={{display: 'none'}}
+        id="iframeAudio"
+      />
+      <audio loop="loop" autoPlay="autoplay">
+        <source
+          src="/assets/theWonderfulStarsWalkIsWonderful.mp3"
+          type="audio/mpeg"
+        />
+      </audio>
       <center>
         <div>
           <div className="title">
