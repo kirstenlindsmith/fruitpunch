@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable complexity */
 import React, {Component} from 'react'
 import GameItem from './GameItem'
@@ -26,7 +27,7 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    music.volume = 0.25
+    music.volume = 0.5
     if (!this.state.musicPlaying) {
       music.play()
     }
