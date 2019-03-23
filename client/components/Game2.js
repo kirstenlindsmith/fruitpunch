@@ -74,28 +74,40 @@ class Game2 extends Component {
     if (
       !this.state.isTimerOn &&
       !this.state.metWonCondition &&
-      this.props.gameStarted &&
+      this.props.gameHasStarted &&
       !this.state.gamePaused
     ) {
       this.startTimer()
     }
 
-    if (this.props.keypoints.length && !this.state.won) {
+    const {
+      gameItems,
+      keypoints,
+      gameHasStarted,
+      explodeItem,
+      removeGameItem,
+      toggleEnd
+    } = this.props
+
+    if (keypoints.length && !this.state.won) {
       for (let i = 0; i < 2; i++) {
-        // const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
-        const itemCoords = {
-          x: this.props.gameItems[i].x,
-          y: this.props.gameItems[i].y
+        const itemWidth = gameItems[i].width
+        const rightWristCoords = findPoint('rightWrist', keypoints)
+        const leftWristCoords = findPoint('leftWrist', keypoints)
+        const rightElbowCoords = findPoint('rightElbow', this.props.keypoints)
+        const leftElbowCoords = findPoint('leftElbow', this.props.keypoints)
+
+        let itemCoords = {
+          x: gameItems[i].x,
+          y: gameItems[i].y
         }
-        const itemWidth = this.props.gameItems[i].width
+
         const itemRadius = itemWidth * Math.sqrt(2) / 2
         const itemCenterX =
           Math.floor(Math.cos(Math.PI / 4) * itemRadius) + itemCoords.x
         const itemCenterY =
           Math.floor(Math.sin(Math.PI / 4) * itemRadius) + itemCoords.y
 
-        const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
-        const rightElbowCoords = findPoint('rightElbow', this.props.keypoints)
         const yDiffR = rightWristCoords.y - rightElbowCoords.y
         const xDiffR = rightWristCoords.x - rightElbowCoords.x
 
@@ -117,8 +129,6 @@ class Game2 extends Component {
             Math.pow(rightHandCoordY - itemCenterY, 2)
         )
 
-        const leftWristCoords = findPoint('leftWrist', this.props.keypoints)
-        const leftElbowCoords = findPoint('leftElbow', this.props.keypoints)
         const yDiffL = leftWristCoords.y - leftElbowCoords.y
         const xDiffL = leftWristCoords.x - leftElbowCoords.x
 
@@ -145,19 +155,19 @@ class Game2 extends Component {
 
         if (
           !this.state.won &&
-          this.props.gameStarted &&
+          gameHasStarted &&
           !this.state.gamePaused &&
           (itemRadius + 50 > handToItemDistanceL ||
             itemRadius + 50 > handToItemDistanceR)
         ) {
           if (this.props.gameItems[i].active) {
             //explode the item
-            this.props.explodeItem(this.props.gameItems[i])
+            explodeItem(this.props.gameItems[i])
             squish.play()
             let toRemove = this.props.gameItems[i]
             setTimeout(() => {
               //retire the item
-              this.props.removeGameItem(toRemove)
+              removeGameItem(toRemove)
             }, 260)
             if (!this.state.metWonCondition) {
               //helps prevent score from going OVER win condition amount
@@ -184,7 +194,7 @@ class Game2 extends Component {
         squish.play()
         squish.play()
         setTimeout(() => {
-          this.props.toggleEnd()
+          toggleEnd()
           this.setState({
             won: true
           })
@@ -284,7 +294,7 @@ class Game2 extends Component {
     if (
       this.props.initialBody.keypoints &&
       !this.state.won &&
-      this.props.gameStarted
+      this.props.gameHasStarted
     ) {
       const item1 = this.props.gameItems[0]
       const item2 = this.props.gameItems[1]
@@ -363,7 +373,8 @@ const mapStateToProps = state => ({
   keypoints: state.keypoints,
   gameItems: state.activeGameItems,
   initialBody: state.initialBody,
-  gameStarted: state.gameStarted
+  gameHasStarted: state.gameStarted,
+  canvasContext: state.canvasContext
 })
 
 const mapDispatchToProps = dispatch => ({

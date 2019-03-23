@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import {createStore} from 'redux'
-import {gameItems} from './components/utils'
+import {gameItems, generateRandomCoords} from './components/utils'
 
 //initial state
 const initialState = {
@@ -57,6 +57,9 @@ export const killedGameItem = gameItem => {
 export const removedGameItem = gameItem => {
   gameItem.imageUrl = gameItem.activeUrl
   gameItem.active = true
+  const newCoords = generateRandomCoords(gameItem)
+  gameItem.x = newCoords.x
+  gameItem.y = newCoords.y
 
   return {
     type: REMOVED_ITEM,
