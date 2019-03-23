@@ -131,6 +131,18 @@ export const gameItems = [
   }
 ]
 
+export const bomb = {
+  id: 9,
+  type: 'bomb',
+  imageUrl: '/assets/bomb.gif',
+  activeUrl: '/assets/bomb.gif',
+  explodeUrl: '/assets/explodeYELLOW.gif',
+  active: true,
+  x: 950,
+  y: 20,
+  width: 150
+}
+
 function toTuple({x, y}) {
   return [x, y]
 }
@@ -251,4 +263,22 @@ export function generateRandomCoords(gameItem) {
     x: gameItem.x,
     y: gameItem.y
   }
+}
+
+export function shuffle(array) {
+  const newArray = array.slice()
+  let currentIndex = newArray.length
+  let tempValue
+  let randomIndex
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex -= 1
+
+    tempValue = newArray[currentIndex]
+    newArray[currentIndex] = newArray[randomIndex]
+    newArray[randomIndex] = tempValue
+  }
+
+  return newArray
 }

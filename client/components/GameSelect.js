@@ -37,6 +37,16 @@ const GameSelect = () => {
                 Beat The Clock
               </button>
             </Link>
+            <br />
+            <Link to="/game3">
+              <button
+                type="button"
+                id="suddenDeath"
+                className="gameSelectButton"
+              >
+                Sudden Death
+              </button>
+            </Link>
             <a href="/">
               <img className="homeButton" src="/assets/backButton.png" />
             </a>

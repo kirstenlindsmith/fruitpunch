@@ -1,6 +1,11 @@
 /* eslint-disable complexity */
 import {createStore} from 'redux'
-import {gameItems, generateRandomCoords} from './components/utils'
+import {
+  gameItems,
+  generateRandomCoords,
+  bomb,
+  shuffle
+} from './components/utils'
 
 //initial state
 const initialState = {
@@ -8,6 +13,7 @@ const initialState = {
   initialBody: {},
   proportions: {},
   activeGameItems: gameItems,
+  riskyGameItems: [...gameItems, bomb],
   gameStarted: false,
   canvasContext: []
 }
@@ -21,6 +27,10 @@ const REMOVED_ITEM = 'REMOVED_ITEM'
 const GAME_STARTED = 'GAME_STARTED'
 const GAME_FINISHED = 'GAME_FINISHED'
 const GOT_CANVAS_CONTEXT = 'GOT_CANVAS_CONTEXT'
+const ADDED_BOMB = 'ADDED_BOMB'
+const REMOVED_BOMBS = 'REMOVED_BOMBS'
+const KILLED_BOMB = 'KILLED_BOMB'
+const RETIRED_BOMB = 'RETIRED_BOMB'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -86,6 +96,48 @@ export const gotCanvasContext = canvas => {
   }
 }
 
+export const addedBomb = () => {
+  const newBomb = bomb
+  if (newBomb.id >= 9) newBomb.id++
+  const newCoords = generateRandomCoords(newBomb)
+  newBomb.x = newCoords.x
+  newBomb.y = newCoords.y
+
+  return {
+    type: ADDED_BOMB,
+    newBomb
+  }
+}
+
+export const retiredBomb = gameItem => {
+  gameItem.imageUrl = gameItem.activeUrl
+  gameItem.active = true
+  const newCoords = generateRandomCoords(gameItem)
+  gameItem.x = newCoords.x
+  gameItem.y = newCoords.y
+
+  return {
+    type: RETIRED_BOMB,
+    gameItem
+  }
+}
+
+export const removedBombs = () => {
+  return {
+    type: REMOVED_BOMBS
+  }
+}
+
+export const killedBomb = gameItem => {
+  gameItem.imageUrl = gameItem.explodeUrl
+  gameItem.active = false
+
+  return {
+    type: KILLED_BOMB,
+    gameItem
+  }
+}
+
 //reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -139,6 +191,41 @@ const reducer = (state = initialState, action) => {
         ...state,
         canvasContext: action.canvas
       }
+    case ADDED_BOMB:
+      return {
+        ...state,
+        riskyGameItems: shuffle([...state.riskyGameItems, action.newBomb])
+      }
+    case REMOVED_BOMBS:
+      return {
+        ...state,
+        riskyGameItems: [
+          ...state.riskyGameItems.filter(item => {
+            return item.type !== 'bomb'
+          }),
+          bomb
+        ]
+      }
+    case RETIRED_BOMB:
+      return {
+        ...state,
+        riskyGameItems: [
+          ...state.riskyGameItems.filter(item => {
+            return item.id !== action.gameItem.id
+          }),
+          action.gameItem
+        ]
+      }
+    case KILLED_BOMB: {
+      return {
+        ...state,
+        riskyGameItems: state.riskyGameItems.map(item => {
+          if (item.id === action.gameItem.id) {
+            return action.gameItem
+          } else return item
+        })
+      }
+    }
     default:
       return state
   }
