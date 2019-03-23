@@ -33,6 +33,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-content: center;
   justify-content: center;
 }
 
@@ -130,7 +131,6 @@ body {
 
 .centered {
   display: flex;
-  /* align-content: center; */
   align-items: center;
   justify-content: center;
 }
@@ -251,6 +251,33 @@ body {
   left: 0;
 }
 
+#pauseButton {
+  height: 40px;
+  position: fixed;
+  z-index: 10;
+  left: 5px;
+  top: 110px;
+}
+
+#pausedText {
+  margin-left: 50px;
+}
+
+#pauseScreen {
+  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 100;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+}
+
 #youWin {
   margin-top: -55px;
 }
@@ -300,6 +327,15 @@ button:hover {
   box-shadow: 0 0 5px 3px rgb(29, 255, 116);
 }
 
-#homeButton:hover {
+.homeButton:hover {
   box-shadow: 0 0 5px 3px rgb(29, 210, 255);
+}
+
+.continueButton {
+  margin-bottom: 10px;
+  max-width: 203px;
+}
+
+.continueButton:hover {
+  box-shadow: 0 0 5px 3px rgb(144, 132, 255);
 }

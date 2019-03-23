@@ -38,11 +38,7 @@ const GameSelect = () => {
               </button>
             </Link>
             <a href="/">
-              <img
-                id="homeButton"
-                className="button"
-                src="/assets/backButton.png"
-              />
+              <img className="homeButton" src="/assets/backButton.png" />
             </a>
           </div>
         </div>

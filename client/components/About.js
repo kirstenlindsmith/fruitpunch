@@ -25,8 +25,8 @@ const About = () => {
             <p>We are really really cool.</p>
             <a href="/">
               <img
+                className="homeButton"
                 id="homeButton"
-                className="button"
                 src="/assets/backButton.png"
               />
             </a>

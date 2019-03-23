@@ -12,6 +12,7 @@ import {
 } from '../store'
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
+const buttonSound = new Audio('/assets/buttonPress.mp3')
 
 class Game1 extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class Game1 extends Component {
       score: 0,
       won: false,
       metWonCondition: false,
+      gamePaused: false,
       musicPlaying: false,
       isTimerOn: false,
       time: 0,
@@ -29,6 +31,7 @@ class Game1 extends Component {
     this.restartGame = this.restartGame.bind(this)
     this.startTimer = this.startTimer.bind(this)
     this.stopTimer = this.stopTimer.bind(this)
+    this.togglePause = this.togglePause.bind(this)
   }
 
   componentDidMount() {
@@ -71,14 +74,14 @@ class Game1 extends Component {
     if (
       !this.state.isTimerOn &&
       !this.state.metWonCondition &&
-      this.props.gameStarted
+      this.props.gameStarted &&
+      !this.state.gamePaused
     ) {
       this.startTimer()
     }
 
     if (this.props.keypoints.length && !this.state.won) {
       for (let i = 0; i < 2; i++) {
-        // const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
         const itemCoords = {
           x: this.props.gameItems[i].x,
           y: this.props.gameItems[i].y
@@ -142,6 +145,7 @@ class Game1 extends Component {
         if (
           !this.state.won &&
           this.props.gameStarted &&
+          !this.state.gamePaused &&
           (itemRadius + 50 > handToItemDistanceL ||
             itemRadius + 50 > handToItemDistanceR)
         ) {
@@ -193,7 +197,9 @@ class Game1 extends Component {
     this.setState({
       won: false,
       metWonCondition: false,
-      score: 0
+      score: 0,
+      time: 0,
+      start: Date.now()
     })
     for (let i = 0; i < this.props.gameItems.length; i++) {
       this.props.removeGameItem(this.props.gameItems[i])
@@ -205,8 +211,8 @@ class Game1 extends Component {
   startTimer() {
     this.setState({
       isTimerOn: true,
-      time: 0,
-      start: Date.now()
+      time: this.state.time,
+      start: Date.now() - this.state.time
     })
     this.timer = setInterval(
       () =>
@@ -222,24 +228,55 @@ class Game1 extends Component {
     clearInterval(this.timer)
   }
 
+  togglePause() {
+    buttonSound.play()
+    if (!this.state.gamePaused) {
+      music.pause()
+      this.stopTimer()
+      this.setState({
+        musicPlaying: false,
+        gamePaused: true
+      })
+    } else {
+      music.play()
+      this.startTimer()
+      this.setState({
+        musicPlaying: true,
+        gamePaused: false
+      })
+    }
+  }
+
   componentWillUnmount() {
     clearInterval(this.timer)
   }
 
   msToTime(givenTime) {
-    // let milliseconds = parseInt((givenTime%1000)/100)
     let seconds = parseInt((givenTime / 1000) % 60)
     let minutes = parseInt((givenTime / (1000 * 60)) % 60)
 
     minutes = minutes < 10 ? '0' + minutes : minutes
     seconds = seconds < 10 ? '0' + seconds : seconds
-    // milliseconds = (milliseconds < 10) ? '0' + milliseconds : milliseconds
-
-    // return minutes + ':' + seconds + ':' + milliseconds
     return minutes + ':' + seconds
   }
 
   render() {
+    const pauseMenu = this.state.gamePaused ? (
+      <div id="pauseScreen" className="center">
+        <img className="pausedText" src="/assets/PAUSED.png" />
+        <img
+          className="continueButton"
+          src="/assets/continueButton.png"
+          onClick={this.togglePause}
+        />
+        <a href="/select">
+          <img
+            className="homeButton"
+            src="/assets/returnToGameSelectButton.png"
+          />
+        </a>
+      </div>
+    ) : null
     const time = this.msToTime(this.state.time)
 
     if (
@@ -251,11 +288,19 @@ class Game1 extends Component {
       const item2 = this.props.gameItems[1]
 
       return (
-        <div className="gameInfo">
-          <img id="scoreText" src="/assets/score.png" />
-          <div id="score">: {this.state.score}</div>
-          <img id="timeText" src="/assets/timer.png" />
-          <div id="time">: {time}</div>
+        <div>
+          <div className="gameInfo">
+            <img id="scoreText" src="/assets/score.png" />
+            <div id="score">: {this.state.score}</div>
+            <img id="timeText" src="/assets/timer.png" />
+            <div id="time">: {time}</div>
+            <img
+              id="pauseButton"
+              src="/assets/pauseButton.png"
+              onClick={this.togglePause}
+            />
+          </div>
+          <div className="center">{pauseMenu}</div>
           <div>
             <GameItem
               key={item1.id}
