@@ -86,17 +86,6 @@ export const gameItems = [
     width: 150
   },
   {
-    id: 4,
-    type: 'kiwi',
-    imageUrl: '/assets/kiwi.gif',
-    activeUrl: '/assets/kiwi.gif',
-    explodeUrl: '/assets/explodeGREEN.gif',
-    active: true,
-    x: 100,
-    y: 600,
-    width: 150
-  },
-  {
     id: 5,
     type: 'cherry',
     imageUrl: '/assets/cherry.gif',
