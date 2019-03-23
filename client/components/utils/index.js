@@ -7,8 +7,8 @@ export const config = {
   flipHorizontal: true,
   algorithm: 'multi-pose',
   showVideo: true,
-  showSkeleton: true,
-  showPoints: true,
+  showSkeleton: false,
+  showPoints: false,
   minPoseConfidence: 0.5,
   minPartConfidence: 0.5,
   maxPoseDetections: 2,
@@ -139,7 +139,7 @@ export const bomb = {
   explodeUrl: '/assets/explodeYELLOW.gif',
   active: true,
   x: 950,
-  y: 500,
+  y: 20,
   width: 150
 }
 
@@ -263,4 +263,22 @@ export function generateRandomCoords(gameItem) {
     x: gameItem.x,
     y: gameItem.y
   }
+}
+
+export function shuffle(array) {
+  const newArray = array.slice()
+  let currentIndex = newArray.length
+  let tempValue
+  let randomIndex
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex -= 1
+
+    tempValue = newArray[currentIndex]
+    newArray[currentIndex] = newArray[randomIndex]
+    newArray[randomIndex] = tempValue
+  }
+
+  return newArray
 }

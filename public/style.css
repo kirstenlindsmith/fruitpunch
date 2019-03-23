@@ -251,12 +251,38 @@ body {
   left: 0;
 }
 
+#level {
+  z-index: 10;
+  position: fixed;
+  top: 110px;
+  left: 175px;
+  color: rgb(22, 179, 145);
+  font-size: 40px;
+  text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+}
+
+#levelText {
+  height: 50px;
+  z-index: 10;
+  position: fixed;
+  top: 110px;
+  left: 0;
+}
+
 #pauseButton {
   height: 40px;
   position: fixed;
   z-index: 10;
   left: 5px;
-  top: 110px;
+  top: 115px;
+}
+
+#bombPauseButton {
+  height: 40px;
+  position: fixed;
+  z-index: 10;
+  left: 5px;
+  top: 165px;
 }
 
 #pausedText {
@@ -282,10 +308,23 @@ body {
   margin-top: -55px;
 }
 
+#youDied {
+  margin-top: -35px;
+}
+
 #finalTime {
   margin-top: -115px;
   font-size: 40px;
   color: white;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+#finalLevel {
+  margin-top: -45px;
+  font-size: 40px;
+  color: white;
+  text-align: center;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
 
 #replayButton {
@@ -302,7 +341,7 @@ body {
   flex-direction: column;
 }
 
-#beatTheClock {
+#suddenDeath {
   margin-bottom: 25px;
 }
 
