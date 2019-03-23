@@ -262,3 +262,9 @@ button {
 button:hover {
   background-color: #b22dc1;
 }
+
+#highscores {
+  top: 100;
+  left: 200;
+  color: 'white';
+}

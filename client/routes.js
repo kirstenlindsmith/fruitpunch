@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import {About, Camera, Home, Game1, Game2, GameSelect} from './components'
+import Leaderboard from './components/leaderboard'
 
 /**
  * COMPONENT
@@ -11,6 +12,7 @@ class Routes extends Component {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/select" component={GameSelect} />
+        <Route path="/leaderboard" component={Leaderboard} />
         <Route
           exact
           path="/game1"

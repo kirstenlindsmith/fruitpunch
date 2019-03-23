@@ -8,7 +8,8 @@ import {
   killedGameItem,
   removedGameItem,
   gameStarted,
-  gameFinished
+  gameFinished,
+  gotScore
 } from '../store'
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
@@ -183,6 +184,9 @@ class Game2 extends Component {
             won: true
           })
         }, 800)
+        console.log(this.state.score)
+        let score = this.state.score
+        this.props.getFinalScore(score)
       }
     }
   }
@@ -283,6 +287,9 @@ class Game2 extends Component {
           <div className="center">
             <img id="youWin" src="/assets/timesUp.gif" />
             <div id="finalTime">You got {totalFruit} fruit!</div>
+            <a href="/leaderboard">
+              <button>Submit Score</button>
+            </a>
             <img
               id="replayButton"
               src="/assets/replayButton.png"
@@ -317,6 +324,9 @@ const mapDispatchToProps = dispatch => ({
   },
   toggleEnd: () => {
     dispatch(gameFinished())
+  },
+  getFinalScore: score => {
+    dispatch(gotScore(score))
   }
 })
 

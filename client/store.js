@@ -1,6 +1,9 @@
 /* eslint-disable complexity */
-import {createStore} from 'redux'
 import {gameItems} from './components/utils'
+import axios from 'axios'
+import {createStore, applyMiddleware} from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import {composeWithDevTools} from 'redux-devtools-extension'
 
 //initial state
 const initialState = {
@@ -9,7 +12,9 @@ const initialState = {
   proportions: {},
   activeGameItems: gameItems,
   gameStarted: false,
-  canvasContext: []
+  canvasContext: [],
+  leaderboard: [],
+  finalScore: 0
 }
 
 //action types
@@ -21,6 +26,8 @@ const REMOVED_ITEM = 'REMOVED_ITEM'
 const GAME_STARTED = 'GAME_STARTED'
 const GAME_FINISHED = 'GAME_FINISHED'
 const GOT_CANVAS_CONTEXT = 'GOT_CANVAS_CONTEXT'
+const GOT_LEADERBOARD = 'GOT_LEADERBOARD'
+const GOT_SCORE = 'GOT_SCORE'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -83,6 +90,32 @@ export const gotCanvasContext = canvas => {
   }
 }
 
+export const gotLeaderboard = leaderboard => {
+  return {
+    type: GOT_LEADERBOARD,
+    leaderboard
+  }
+}
+
+export const loadLeaderboard = () => {
+  return async dispatch => {
+    try {
+      const {data: leaderboard} = await axios.get('/api/score/topten')
+      dispatch(gotLeaderboard(leaderboard))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+export const gotScore = finalScore => {
+  console.log('I WENT INTO GOTSCORE', finalScore)
+  return {
+    type: GOT_SCORE,
+    finalScore
+  }
+}
+
 //reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -136,11 +169,22 @@ const reducer = (state = initialState, action) => {
         ...state,
         canvasContext: action.canvas
       }
+    case GOT_LEADERBOARD:
+      return {
+        ...state,
+        leaderboard: action.leaderboard
+      }
+    case GOT_SCORE:
+      return {
+        ...state,
+        finalScore: action.finalScore
+      }
     default:
       return state
   }
 }
 
-const store = createStore(reducer)
+const middleware = composeWithDevTools(applyMiddleware(thunkMiddleware))
+const store = createStore(reducer, middleware)
 
 export default store

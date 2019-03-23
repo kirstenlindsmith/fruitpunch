@@ -1,5 +1,5 @@
 {
-  "name": "boilermaker",
+  "name": "fruitpunch",
   "version": "1.0.0",
   "description": "Some boilerplate code to get you started - get shakin'!",
   "engines": {
@@ -39,11 +39,14 @@
   "dependencies": {
     "@tensorflow-models/posenet": "^1.0.0",
     "@tensorflow/tfjs": "^1.0.1",
+    "axios": "^0.18.0",
     "compression": "^1.7.3",
     "express": "^4.16.4",
     "history": "^4.6.3",
     "lodash.throttle": "^4.1.1",
     "morgan": "^1.9.1",
+    "pg": "^7.9.0",
+    "pg-hstore": "^2.3.2",
     "pretty-ms": "^4.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
@@ -52,6 +55,8 @@
     "react-router-dom": "^4.3.1",
     "redux": "^3.6.0",
     "redux-logger": "^2.8.1",
+    "redux-thunk": "^2.3.0",
+    "sequelize": "^5.1.1",
     "stats.js": "^0.17.0"
   },
   "devDependencies": {
@@ -86,7 +91,7 @@
     "npm-merge-driver": "^2.3.5",
     "prettier": "1.11.1",
     "react-test-renderer": "^16.4.2",
-    "redux-devtools-extension": "^2.13.5",
+    "redux-devtools-extension": "^2.13.8",
     "redux-mock-store": "^1.5.3",
     "supertest": "^3.1.0",
     "webpack": "^4.16.4",

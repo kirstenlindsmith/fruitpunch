@@ -163,7 +163,7 @@ class Game1 extends Component {
           }
         }
       }
-      if (this.state.score >= 500 && !this.state.metWonCondition) {
+      if (this.state.score >= 10 && !this.state.metWonCondition) {
         console.log('YOU WON!!!')
         music.pause()
         this.stopTimer()
