@@ -252,8 +252,10 @@ class Game1 extends Component {
 
       return (
         <div className="gameInfo">
-          <div id="score">Score: {this.state.score}</div>
-          <div id="time">Time: {time}</div>
+          <img id="scoreText" src="/assets/score.png" />
+          <div id="score">: {this.state.score}</div>
+          <img id="timeText" src="/assets/timer.png" />
+          <div id="time">: {time}</div>
           <div>
             <GameItem
               key={item1.id}
@@ -277,7 +279,10 @@ class Game1 extends Component {
       return (
         <div>
           <div className="gameInfo">
-            <div id="score">Score: {this.state.score}</div>
+            <div id="score">
+              <img id="scoreText" src="/assets/score.png" /> :{' '}
+              {this.state.score}
+            </div>
           </div>
           <div className="center">
             <img id="youWin" src="/assets/win.gif" />
@@ -285,10 +290,15 @@ class Game1 extends Component {
             <img
               id="replayButton"
               src="/assets/replayButton.png"
+              className="button"
               onClick={this.restartGame}
             />
             <a href="/">
-              <img id="homeButton" src="/assets/homeButton.png" />
+              <img
+                id="homeButton"
+                className="button"
+                src="/assets/homeButton.png"
+              />
             </a>
           </div>
         </div>

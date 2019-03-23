@@ -19,8 +19,7 @@ const GameSelect = () => {
       <center>
         <div>
           <div className="title">
-            <h1>SELECT A GAME:</h1>
-            {/* <img id="logo" src="/assets/FruitPunch.gif" /> */}
+            <img id="gameSelectTitle" src="/assets/selectAGame.png" />
           </div>
           <div id="gameSelectDiv">
             <Link to="/game1">
@@ -39,7 +38,11 @@ const GameSelect = () => {
               </button>
             </Link>
             <a href="/">
-              <img id="homeButton" src="/assets/homeButton.png" />
+              <img
+                id="homeButton"
+                className="button"
+                src="/assets/backButton.png"
+              />
             </a>
           </div>
         </div>

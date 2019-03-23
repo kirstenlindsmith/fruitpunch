@@ -24,7 +24,11 @@ const About = () => {
             </h1>
             <p>We are really really cool.</p>
             <a href="/">
-              <img id="homeButton" src="/assets/homeButton.png" />
+              <img
+                id="homeButton"
+                className="button"
+                src="/assets/backButton.png"
+              />
             </a>
           </div>
         </div>

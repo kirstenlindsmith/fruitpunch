@@ -287,9 +287,14 @@ class Game2 extends Component {
               id="replayButton"
               src="/assets/replayButton.png"
               onClick={this.restartGame}
+              className="button"
             />
             <a href="/">
-              <img id="homeButton" src="/assets/homeButton.png" />
+              <img
+                id="homeButton"
+                className="button"
+                src="/assets/homeButton.png"
+              />
             </a>
           </div>
         </div>
