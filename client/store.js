@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import {createStore} from 'redux'
-import {gameItems, generateRandomCoords} from './components/utils'
+import {gameItems, generateRandomCoords, bomb} from './components/utils'
 
 //initial state
 const initialState = {
@@ -8,6 +8,7 @@ const initialState = {
   initialBody: {},
   proportions: {},
   activeGameItems: gameItems,
+  riskyGameItems: [...gameItems, bomb],
   gameStarted: false,
   canvasContext: []
 }
@@ -21,6 +22,8 @@ const REMOVED_ITEM = 'REMOVED_ITEM'
 const GAME_STARTED = 'GAME_STARTED'
 const GAME_FINISHED = 'GAME_FINISHED'
 const GOT_CANVAS_CONTEXT = 'GOT_CANVAS_CONTEXT'
+const ADDED_BOMB = 'ADDED_BOMB'
+const REMOVED_BOMBS = 'REMOVED_BOMBS'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -86,6 +89,21 @@ export const gotCanvasContext = canvas => {
   }
 }
 
+export const addedBomb = () => {
+  const newBomb = bomb
+  if (newBomb.id >= 9) newBomb.id++
+  return {
+    type: ADDED_BOMB,
+    newBomb
+  }
+}
+
+export const removedBombs = () => {
+  return {
+    type: REMOVED_BOMBS
+  }
+}
+
 //reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -138,6 +156,21 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         canvasContext: action.canvas
+      }
+    case ADDED_BOMB:
+      return {
+        ...state,
+        riskyGameItems: [...state.activeGameItems, action.newBomb]
+      }
+    case REMOVED_BOMBS:
+      return {
+        ...state,
+        riskyGameItems: [
+          ...state.riskyGameItems.filter(item => {
+            return item.type !== 'bomb'
+          }),
+          bomb
+        ]
       }
     default:
       return state

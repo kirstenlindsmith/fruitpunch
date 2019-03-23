@@ -131,6 +131,18 @@ export const gameItems = [
   }
 ]
 
+export const bomb = {
+  id: 9,
+  type: 'bomb',
+  imageUrl: '/assets/bomb.gif',
+  activeUrl: '/assets/bomb.gif',
+  explodeUrl: '/assets/explodeYELLOW.gif',
+  active: true,
+  x: 950,
+  y: 500,
+  width: 150
+}
+
 function toTuple({x, y}) {
   return [x, y]
 }

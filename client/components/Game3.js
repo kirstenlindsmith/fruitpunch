@@ -8,7 +8,9 @@ import {
   killedGameItem,
   removedGameItem,
   gameStarted,
-  gameFinished
+  gameFinished,
+  addedBomb,
+  removedBombs
 } from '../store'
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
@@ -24,7 +26,8 @@ class Game2 extends Component {
       gamePaused: false,
       musicPlaying: false,
       isTimerOn: false,
-      time: 60000
+      time: 60000,
+      numBombs: 1
     }
     this.startGame = this.startGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
@@ -179,26 +182,13 @@ class Game2 extends Component {
         }
       }
       if (this.state.time <= 0 && !this.state.metWonCondition) {
-        console.log('YOU WON!!!')
+        console.log('YOU SURVIVED A ROUND!!!')
         music.pause()
         this.stopTimer()
         this.setState({
           metWonCondition: true,
           musicPlaying: false
         })
-        winSound.play()
-        //explode all the fruits
-        for (let i = 0; i < this.props.gameItems.length; i++) {
-          this.props.explodeItem(this.props.gameItems[i])
-        }
-        squish.play()
-        squish.play()
-        setTimeout(() => {
-          toggleEnd()
-          this.setState({
-            won: true
-          })
-        }, 800)
       }
     }
   }
@@ -389,6 +379,12 @@ const mapDispatchToProps = dispatch => ({
   },
   toggleEnd: () => {
     dispatch(gameFinished())
+  },
+  addBomb: () => {
+    dispatch(addedBomb())
+  },
+  removeBombs: () => {
+    dispatch(removedBombs())
   }
 })
 
