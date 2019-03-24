@@ -4,6 +4,8 @@ import * as posenet from '@tensorflow-models/posenet'
 const pointRadius = 3
 
 export const config = {
+  width: window.innerWidth,
+  height: window.innerHeight,
   flipHorizontal: true,
   algorithm: 'multi-pose',
   showVideo: true,
