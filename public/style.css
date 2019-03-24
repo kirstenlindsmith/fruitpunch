@@ -77,6 +77,16 @@ body {
   line-height: 25pt;
 }
 
+#punchMan {
+  margin-left: -850px;
+  margin-top: -260px;
+}
+
+#punchMan2 {
+  margin-left: 878px;
+  margin-top: -310px;
+}
+
 #aboutText {
   margin-top: -60px;
 }

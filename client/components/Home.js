@@ -52,6 +52,9 @@ const Home = () => {
               </p>
             </div>
           </div>
+          <div id="punchMan">
+            <img id="instructionsGif" src="/assets/punch.gif" />
+          </div>
           <div id="privacy">
             <img id="privacyTitle" src="/assets/privacy.png" />
             <div className="homePageText">
@@ -64,6 +67,9 @@ const Home = () => {
                 stays on your computer. <br />Enjoy the game!
               </p>
             </div>
+          </div>
+          <div id="punchMan2">
+            <img id="privacyGif" src="/assets/punch2.gif" />
           </div>
         </div>
       </center>
