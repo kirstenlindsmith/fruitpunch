@@ -442,3 +442,8 @@ button:hover {
 .continueButton:hover {
   box-shadow: 0 0 5px 3px rgb(144, 132, 255);
 }
+
+#noMatch h3 {
+  color: white;
+  text-shadow: 2px 4px 8px #80b1c2;
+}
