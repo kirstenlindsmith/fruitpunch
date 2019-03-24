@@ -52,9 +52,9 @@ const Home = () => {
               <p>
                 This app tracks your motions using your built-in webcam.<br />
                 Click <b>START</b> once you are in front of an empty, well-lit
-                backdrop, and have fun punching fruit. If you are in a busy
-                space, try to make sure that you only have a max of two people
-                in the frame!
+                backdrop. If you are in a visually-busy space, try to make sure
+                that you only have a max of two people in the frame. Have fun
+                punching fruit!
               </p>
             </div>
           </div>

@@ -101,10 +101,18 @@ body {
 
 #aboutTheGame img {
   margin-bottom: -10px;
+  margin-left: 14px;
+}
+
+#githubButton {
+  padding: 10px 20px;
+  margin: 5px;
+  margin-bottom: 35px;
 }
 
 #aboutUs img {
   margin-bottom: -40px;
+  margin-left: 10px;
 }
 
 .aboutText {
@@ -121,6 +129,17 @@ body {
   font-size: 14pt;
   line-height: 25pt;
   margin-left: 20px;
+}
+
+.aboutText ul {
+  font-size: 11pt;
+  list-style: none;
+  width: 580px;
+  color: #34a7c1;
+  line-height: 25pt;
+  padding: 0;
+  margin-left: 25px;
+  text-align: center;
 }
 
 #gameSelectTitle {

@@ -23,22 +23,34 @@ const About = () => {
           <img src="/assets/aboutTheGame.gif" />
           <div className="aboutText">
             <p>
-              This awesomely fun game was made created with PoseNet via
-              TensorFlowjs, and rendered with React.
-              <br />
+              This series of awesomely fun games was made created using PoseNet
+              via TensorFlowjs, and rendered with React.
               <br />
               <br />
               Music credits:
-              <ul>
-                <li>
-                  <i>The Wonderful Star's Walk is Wonderful</i>, from Katamary
-                  Damacy
-                </li>
-                <li>
-                  <i>Crystal Ice Area</i>, from Kirby & The Amazing Mirror
-                </li>
-              </ul>
             </p>
+            <ul>
+              <li>
+                <i>The Wonderful Star's Walk is Wonderful</i>, from Katamari
+                Damacy
+              </li>
+              <li>
+                <i>Crystal Ice Area</i>, from Kirby & The Amazing Mirror
+              </li>
+              <li>
+                <i>Lazy Afternoons</i>, from Kingdom Hearts II
+              </li>
+            </ul>
+            <a href="https://github.com/team-siren/fruit-punch">
+              <button
+                type="button"
+                id="githubButton"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
+              >
+                View on Github
+              </button>
+            </a>
           </div>
         </div>
         <div id="aboutUs">
