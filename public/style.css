@@ -211,7 +211,6 @@ body {
 .gameInfo {
   display: flex;
   flex-direction: column;
-  /* align-content: flex-start; */
 }
 
 #score {
@@ -222,7 +221,6 @@ body {
   color: rgb(22, 179, 145);
   font-size: 40px;
   text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
-  /* background: -webkit-linear-gradient(rgb(66,189,48), rgb(31,134,201)); */
 }
 
 #scoreText {

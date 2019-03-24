@@ -92,8 +92,8 @@ export const gameItems = [
     activeUrl: '/assets/cherry.gif',
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
-    x: 950,
-    y: 500,
+    x: 1300,
+    y: 400,
     width: 150
   },
   {
@@ -125,7 +125,7 @@ export const gameItems = [
     activeUrl: '/assets/watermelon.gif',
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
-    x: 800,
+    x: 1300,
     y: 500,
     width: 150
   }
@@ -136,9 +136,9 @@ export const bomb = {
   type: 'bomb',
   imageUrl: '/assets/bomb.gif',
   activeUrl: '/assets/bomb.gif',
-  explodeUrl: '/assets/explodeYELLOW.gif',
+  explodeUrl: '/assets/boom.gif',
   active: true,
-  x: 950,
+  x: 1050,
   y: 20,
   width: 150
 }

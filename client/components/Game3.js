@@ -14,9 +14,10 @@ import {
   killedBomb,
   retiredBomb
 } from '../store'
-import {constant} from '@tensorflow/tfjs-layers/dist/exports_initializers'
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const buttonSound = new Audio('/assets/buttonPress.mp3')
+const boom = new Audio('/assets/bomb.mp3')
+const squish = new Audio('/assets/squish.mp3')
 
 class Game2 extends Component {
   constructor(props) {
@@ -73,9 +74,6 @@ class Game2 extends Component {
 
   // THE GAME
   startGame() {
-    const squish = new Audio('/assets/squish.mp3')
-    squish.volume = 1
-
     if (
       !this.state.isTimerOn &&
       !this.state.metDeathCondition &&
@@ -92,7 +90,6 @@ class Game2 extends Component {
       toggleEnd,
       explodeBomb,
       addBomb,
-      removeAllBombs,
       removeBomb
     } = this.props
 
@@ -193,11 +190,11 @@ class Game2 extends Component {
             } else {
               //IF YOU HIT A BOMB:
               explodeBomb(this.props.gameItems[i])
-              squish.play() //replace with bomb sound later
+              boom.play()
               let toRemove = this.props.gameItems[i]
-              setTimeout(() => {
-                removeBomb(toRemove)
-              }, 260)
+              // setTimeout(() => {
+              //   removeBomb(toRemove)
+              // }, 750)
               this.setState({
                 metDeathCondition: true,
                 died: true,
