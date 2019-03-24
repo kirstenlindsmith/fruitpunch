@@ -343,6 +343,10 @@ body {
   margin-top: 15px;
 }
 
+#selectBackButton {
+  margin-top: 20px;
+}
+
 #gameSelectDiv {
   display: flex;
   align-content: center;

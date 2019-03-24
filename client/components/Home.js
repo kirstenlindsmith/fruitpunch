@@ -2,6 +2,8 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 const Home = () => {
+  const buttonSound = new Audio('/assets/buttonPress.mp3')
+  const hoverSound = new Audio('/assets/buttonHover.mp3')
   return (
     <div className="center homePage">
       <iframe
@@ -27,6 +29,8 @@ const Home = () => {
                 id="startButton"
                 className="button"
                 src="/assets/startButton.png"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
               />
             </Link>
             <br />
@@ -35,6 +39,8 @@ const Home = () => {
                 id="aboutButton"
                 className="button"
                 src="/assets/aboutButton.png"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
               />
             </Link>
           </div>

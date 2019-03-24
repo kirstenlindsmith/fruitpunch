@@ -1,6 +1,9 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 const About = () => {
+  const buttonSound = new Audio('/assets/buttonPress.mp3')
+  const hoverSound = new Audio('/assets/buttonHover.mp3')
   return (
     <div className="center aboutPage">
       <iframe
@@ -23,13 +26,15 @@ const About = () => {
               This app was created by <br />SAM & CASSIE & KIRSTEN
             </h1>
             <p>We are really really cool.</p>
-            <a href="/">
+            <Link to="/">
               <img
                 className="homeButton"
                 id="homeButton"
                 src="/assets/backButton.png"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
               />
-            </a>
+            </Link>
           </div>
         </div>
       </center>
