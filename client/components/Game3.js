@@ -11,9 +11,8 @@ import {
   gameStarted,
   gameFinished,
   addedBomb,
-  removedBombs,
-  killedBomb,
-  retiredBomb
+  killedRiskyItem,
+  respawnedRiskyItem
 } from '../store'
 
 const music = new Audio('/assets/CrystalIceArea.mp3')
@@ -92,9 +91,9 @@ class Game2 extends Component {
       keypoints,
       gameHasStarted,
       toggleEnd,
-      explodeBomb,
+      explodeItem,
       addBomb,
-      removeBomb
+      removeItem
     } = this.props
 
     if (keypoints.length && !this.state.died) {
@@ -164,7 +163,7 @@ class Game2 extends Component {
         if (this.props.gameItems[i].type === 'bomb') {
           let toRemove = this.props.gameItems[i]
           setTimeout(() => {
-            removeBomb(toRemove)
+            removeItem(toRemove)
           }, 5000)
         }
 
@@ -178,12 +177,12 @@ class Game2 extends Component {
           if (this.props.gameItems[i].active) {
             if (this.props.gameItems[i].type !== 'bomb') {
               //explode the item
-              explodeBomb(this.props.gameItems[i])
+              explodeItem(this.props.gameItems[i])
               squish.play()
               let toRemove = this.props.gameItems[i]
               setTimeout(() => {
                 //retire the item
-                removeBomb(toRemove)
+                removeItem(toRemove)
               }, 260)
               if (!this.state.metDeathCondition) {
                 //helps prevent score from going OVER win condition amount
@@ -417,12 +416,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  explodeItem: item => {
-    dispatch(killedGameItem(item))
-  },
-  removeGameItem: item => {
-    dispatch(removedGameItem(item))
-  },
   toggleStart: () => {
     dispatch(gameStarted())
   },
@@ -432,14 +425,11 @@ const mapDispatchToProps = dispatch => ({
   addBomb: () => {
     dispatch(addedBomb())
   },
-  removeAllBombs: () => {
-    dispatch(removedBombs())
+  explodeItem: item => {
+    dispatch(killedRiskyItem(item))
   },
-  explodeBomb: bomb => {
-    dispatch(killedBomb(bomb))
-  },
-  removeBomb: bomb => {
-    dispatch(retiredBomb(bomb))
+  removeItem: item => {
+    dispatch(respawnedRiskyItem(item))
   }
 })
 

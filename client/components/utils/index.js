@@ -1,5 +1,9 @@
 /* eslint-disable complexity */
 import * as posenet from '@tensorflow-models/posenet'
+//TODO: seperate out SECTIONS of utils
+//TODO: make a SEPERATE utils file for game items
+//TODO: bring variables for render back into camera.js
+//TODO: credit all functions that we took directly from posenet
 
 const pointRadius = 3
 
@@ -41,6 +45,7 @@ export const bodyPointLocations = {
   rightAnkle: 16
 }
 //NOTE: e.g., bodyPointLocations[leftEye] = 1
+//TODO: explain in more detail that the above is for ease of use
 
 export const gameItems = [
   {
@@ -105,8 +110,8 @@ export const gameItems = [
     activeUrl: '/assets/pineapple.gif',
     explodeUrl: '/assets/explodeYELLOW.gif',
     active: true,
-    x: 1000,
-    y: 600,
+    x: 950,
+    y: 200,
     width: 150
   },
   {

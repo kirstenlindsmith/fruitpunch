@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {findPoint} from './utils'
 import {
   killedGameItem,
-  removedGameItem,
+  respawnedGameItem,
   gameStarted,
   gameFinished
 } from '../store'
@@ -72,6 +72,7 @@ class Game1 extends Component {
     squish.volume = 1
 
     if (
+      //TODO: MAKE ALL LINKED && BOOL TESTS VARIABLES. like "gameRunning"
       !this.state.isTimerOn &&
       !this.state.metWonCondition &&
       this.props.gameHasStarted &&
@@ -269,6 +270,7 @@ class Game1 extends Component {
   }
 
   render() {
+    //TODO: EACH if/else if/else CONDITION IN RENDER SHOULD BE A SEPERATE COMPONENT!!! makes it more maintainable
     const pauseMenu = this.state.gamePaused ? (
       <div id="pauseScreen" className="center">
         <img className="pausedText" src="/assets/PAUSED.png" />
@@ -388,7 +390,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(killedGameItem(item))
   },
   removeGameItem: item => {
-    dispatch(removedGameItem(item))
+    dispatch(respawnedGameItem(item))
   },
   toggleStart: () => {
     dispatch(gameStarted())

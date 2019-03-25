@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {findPoint} from './utils'
 import {
   killedGameItem,
-  removedGameItem,
+  respawnedGameItem,
   gameStarted,
   gameFinished,
   gotScore
@@ -404,7 +404,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(killedGameItem(item))
   },
   removeGameItem: item => {
-    dispatch(removedGameItem(item))
+    dispatch(respawnedGameItem(item))
   },
   toggleStart: () => {
     dispatch(gameStarted())
