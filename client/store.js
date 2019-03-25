@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import {createStore, applyMiddleware} from 'redux'
-import axios from 'axios''
+import axios from 'axios'
 import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import {
