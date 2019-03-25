@@ -15,6 +15,7 @@ import {
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
 const buttonSound = new Audio('/assets/buttonPress.mp3')
+const hoverSound = new Audio('/assets/buttonHover.mp3')
 
 class Game2 extends Component {
   constructor(props) {
@@ -286,13 +287,18 @@ class Game2 extends Component {
           className="continueButton"
           src="/assets/continueButton.png"
           onClick={this.togglePause}
+          onMouseEnter={() => hoverSound.play()}
         />
-        <a href="/select">
+        <Link to="/select">
           <img
             className="homeButton"
             src="/assets/returnToGameSelectButton.png"
+            onMouseEnter={() => hoverSound.play()}
+            onClick={() => {
+              buttonSound.play()
+            }}
           />
-        </a>
+        </Link>
       </div>
     ) : null
 
@@ -315,6 +321,7 @@ class Game2 extends Component {
               id="pauseButton"
               src="/assets/pauseButton.png"
               onClick={this.togglePause}
+              onMouseEnter={() => hoverSound.play()}
             />
           </div>
           <div className="center">{pauseMenu}</div>
@@ -349,6 +356,7 @@ class Game2 extends Component {
               id="pauseButton"
               src="/assets/pauseButton.png"
               onClick={this.togglePause}
+              onMouseEnter={() => hoverSound.play()}
             />
           </div>
           <div className="center">
@@ -360,14 +368,20 @@ class Game2 extends Component {
             <img
               id="replayButton"
               src="/assets/replayButton.png"
-              onClick={this.restartGame}
               className="button"
+              onClick={() => {
+                buttonSound.play()
+                this.restartGame()
+              }}
+              onMouseEnter={() => hoverSound.play()}
             />
             <Link to="/">
               <img
                 id="homeButton"
                 className="button"
                 src="/assets/homeButton.png"
+                onClick={() => buttonSound.play()}
+                onMouseEnter={() => hoverSound.play()}
               />
             </Link>
           </div>

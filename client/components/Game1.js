@@ -1,6 +1,7 @@
 /* eslint-disable max-statements */
 /* eslint-disable complexity */
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {findPoint} from './utils'
@@ -13,6 +14,7 @@ import {
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
 const buttonSound = new Audio('/assets/buttonPress.mp3')
+const hoverSound = new Audio('/assets/buttonHover.mp3')
 
 class Game1 extends Component {
   constructor(props) {
@@ -275,12 +277,16 @@ class Game1 extends Component {
           src="/assets/continueButton.png"
           onClick={this.togglePause}
         />
-        <a href="/select">
+        <Link to="/select">
           <img
             className="homeButton"
             src="/assets/returnToGameSelectButton.png"
+            onMouseEnter={() => hoverSound.play()}
+            onClick={() => {
+              buttonSound.play()
+            }}
           />
-        </a>
+        </Link>
       </div>
     ) : null
     const time = this.msToTime(this.state.time)
@@ -302,6 +308,7 @@ class Game1 extends Component {
               id="pauseButton"
               src="/assets/pauseButton.png"
               onClick={this.togglePause}
+              onMouseEnter={() => hoverSound.play()}
             />
           </div>
           <div className="center">{pauseMenu}</div>
@@ -336,6 +343,7 @@ class Game1 extends Component {
               id="pauseButton"
               src="/assets/pauseButton.png"
               onClick={this.togglePause}
+              onMouseEnter={() => hoverSound.play()}
             />
           </div>
           <div className="center">
@@ -345,15 +353,21 @@ class Game1 extends Component {
               id="replayButton"
               src="/assets/replayButton.png"
               className="button"
-              onClick={this.restartGame}
+              onClick={() => {
+                buttonSound.play()
+                this.restartGame()
+              }}
+              onMouseEnter={() => hoverSound.play()}
             />
-            <a href="/">
+            <Link to="/">
               <img
                 id="homeButton"
                 className="button"
                 src="/assets/homeButton.png"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
               />
-            </a>
+            </Link>
           </div>
         </div>
       )

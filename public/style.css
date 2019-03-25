@@ -2,6 +2,18 @@ html {
   font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
+a:link {
+  color: rgb(0, 216, 180);
+}
+
+a:visited {
+  color: rgb(0, 216, 180);
+}
+
+a:hover {
+  color: rgb(212, 0, 255);
+}
+
 body {
   z-index: -10;
   width: 100vw;
@@ -77,8 +89,57 @@ body {
   line-height: 25pt;
 }
 
-#aboutText {
-  margin-top: -60px;
+#punchMan {
+  margin-left: -850px;
+  margin-top: -260px;
+}
+
+#punchMan2 {
+  margin-left: 878px;
+  margin-top: -310px;
+}
+
+#aboutTheGame img {
+  margin-bottom: -10px;
+  margin-left: 14px;
+}
+
+#githubButton {
+  padding: 10px 20px;
+  margin: 5px;
+  margin-bottom: 35px;
+}
+
+#aboutUs img {
+  margin-bottom: -40px;
+  margin-left: 10px;
+}
+
+.aboutText {
+  width: 630px;
+  border: 4px solid #a0ffe2;
+  border-radius: 25px;
+  background: #edfffb;
+  text-align: center;
+}
+
+.aboutText p {
+  width: 580px;
+  color: #34a7c1;
+  font-size: 14pt;
+  line-height: 25pt;
+  margin-left: 20px;
+}
+
+.aboutText ul {
+  font-size: 11pt;
+  list-style: none;
+  width: 580px;
+  color: #34a7c1;
+  line-height: 25pt;
+  padding: 0;
+  margin-left: 25px;
+  text-align: center;
 }
 
 #gameSelectTitle {
@@ -211,7 +272,6 @@ body {
 .gameInfo {
   display: flex;
   flex-direction: column;
-  /* align-content: flex-start; */
 }
 
 #score {
@@ -222,7 +282,6 @@ body {
   color: rgb(22, 179, 145);
   font-size: 40px;
   text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
-  /* background: -webkit-linear-gradient(rgb(66,189,48), rgb(31,134,201)); */
 }
 
 #scoreText {
@@ -335,6 +394,34 @@ body {
   margin-top: 15px;
 }
 
+#aboutHomeButton {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.sprite {
+  height: 100px;
+}
+
+#sam {
+  margin-left: -100px;
+  margin-top: -395px;
+}
+
+#cassie {
+  margin-left: 100px;
+  margin-top: 70px;
+}
+
+#kirsten {
+  margin-left: -75px;
+  margin-top: 75px;
+}
+
+#selectBackButton {
+  margin-top: 20px;
+}
+
 #gameSelectDiv {
   display: flex;
   align-content: center;
@@ -383,4 +470,9 @@ button:hover {
   top: 100;
   left: 200;
   color: 'white';
+}  
+
+#noMatch h3 {
+  color: white;
+  text-shadow: 2px 4px 8px #80b1c2;
 }

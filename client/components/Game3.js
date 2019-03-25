@@ -1,6 +1,7 @@
 /* eslint-disable max-statements */
 /* eslint-disable complexity */
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {findPoint} from './utils'
@@ -14,9 +15,13 @@ import {
   killedBomb,
   retiredBomb
 } from '../store'
-import {constant} from '@tensorflow/tfjs-layers/dist/exports_initializers'
+
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const buttonSound = new Audio('/assets/buttonPress.mp3')
+const hoverSound = new Audio('/assets/buttonHover.mp3')
+const boom = new Audio('/assets/bomb.mp3')
+const squish = new Audio('/assets/squish.mp3')
+let whichBombUserHit
 
 class Game2 extends Component {
   constructor(props) {
@@ -73,9 +78,6 @@ class Game2 extends Component {
 
   // THE GAME
   startGame() {
-    const squish = new Audio('/assets/squish.mp3')
-    squish.volume = 1
-
     if (
       !this.state.isTimerOn &&
       !this.state.metDeathCondition &&
@@ -92,7 +94,6 @@ class Game2 extends Component {
       toggleEnd,
       explodeBomb,
       addBomb,
-      removeAllBombs,
       removeBomb
     } = this.props
 
@@ -192,18 +193,14 @@ class Game2 extends Component {
               }
             } else {
               //IF YOU HIT A BOMB:
-              explodeBomb(this.props.gameItems[i])
-              squish.play() //replace with bomb sound later
-              let toRemove = this.props.gameItems[i]
-              setTimeout(() => {
-                removeBomb(toRemove)
-              }, 260)
+              whichBombUserHit = this.props.gameItems[i]
               this.setState({
                 metDeathCondition: true,
                 died: true,
                 level: 1
               })
               this.stopTimer()
+              boom.play()
               toggleEnd()
             }
           }
@@ -288,7 +285,6 @@ class Game2 extends Component {
   }
 
   render() {
-    console.log('gameItems', this.props.gameItems)
     const totalFruit = this.state.score / 10 ? this.state.score / 10 : 0
     const time = this.msToTime(this.state.time)
     const pauseMenu = this.state.gamePaused ? (
@@ -298,13 +294,18 @@ class Game2 extends Component {
           className="continueButton"
           src="/assets/continueButton.png"
           onClick={this.togglePause}
+          onMouseEnter={() => hoverSound.play()}
         />
-        <a href="/select">
+        <Link to="/select">
           <img
             className="homeButton"
             src="/assets/returnToGameSelectButton.png"
+            onMouseEnter={() => hoverSound.play()}
+            onClick={() => {
+              buttonSound.play()
+            }}
           />
-        </a>
+        </Link>
       </div>
     ) : null
 
@@ -329,6 +330,7 @@ class Game2 extends Component {
               id="bombPauseButton"
               src="/assets/pauseButton.png"
               onClick={this.togglePause}
+              onMouseEnter={() => hoverSound.play()}
             />
           </div>
           <div className="center">{pauseMenu}</div>
@@ -365,8 +367,15 @@ class Game2 extends Component {
               id="bombPauseButton"
               src="/assets/pauseButton.png"
               onClick={this.togglePause}
+              onMouseEnter={() => hoverSound.play()}
             />
           </div>
+          <GameItem
+            imageUrl={whichBombUserHit.explodeUrl}
+            x={whichBombUserHit.x}
+            y={whichBombUserHit.y}
+            width={whichBombUserHit.width}
+          />
           <div className="center">
             <img id="youDied" src="/assets/youDied.gif" />
             <div id="finalLevel">
@@ -376,16 +385,22 @@ class Game2 extends Component {
             <img
               id="replayButton"
               src="/assets/replayButton.png"
-              onClick={() => this.restartGame(0)}
               className="button"
+              onMouseEnter={() => hoverSound.play()}
+              onClick={() => {
+                buttonSound.play()
+                this.restartGame()
+              }}
             />
-            <a href="/">
+            <Link to="/">
               <img
                 id="homeButton"
                 className="button"
                 src="/assets/homeButton.png"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
               />
-            </a>
+            </Link>
           </div>
         </div>
       )

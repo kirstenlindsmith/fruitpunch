@@ -2,6 +2,8 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 const Home = () => {
+  const buttonSound = new Audio('/assets/buttonPress.mp3')
+  const hoverSound = new Audio('/assets/buttonHover.mp3')
   return (
     <div className="center homePage">
       <iframe
@@ -27,6 +29,8 @@ const Home = () => {
                 id="startButton"
                 className="button"
                 src="/assets/startButton.png"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
               />
             </Link>
             <br />
@@ -35,6 +39,8 @@ const Home = () => {
                 id="aboutButton"
                 className="button"
                 src="/assets/aboutButton.png"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
               />
             </Link>
           </div>
@@ -46,11 +52,14 @@ const Home = () => {
               <p>
                 This app tracks your motions using your built-in webcam.<br />
                 Click <b>START</b> once you are in front of an empty, well-lit
-                backdrop, and have fun punching fruit. If you are in a busy
-                space, try to make sure that you only have a max of two people
-                in the frame!
+                backdrop. If you are in a visually-busy space, try to make sure
+                that you only have a max of two people in the frame. Have fun
+                punching fruit!
               </p>
             </div>
+          </div>
+          <div id="punchMan">
+            <img id="instructionsGif" src="/assets/punch.gif" />
           </div>
           <div id="privacy">
             <img id="privacyTitle" src="/assets/privacy.png" />
@@ -64,6 +73,9 @@ const Home = () => {
                 stays on your computer. <br />Enjoy the game!
               </p>
             </div>
+          </div>
+          <div id="punchMan2">
+            <img id="privacyGif" src="/assets/punch2.gif" />
           </div>
         </div>
       </center>
