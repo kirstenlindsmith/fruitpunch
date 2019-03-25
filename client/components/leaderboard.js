@@ -3,10 +3,21 @@ import {loadLeaderboard, sendScore} from '../store'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 
+let formClassName
+let fillerClassName = 'noShow'
+
 class Leaderboard extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      name: '',
+      interactedWith: false
+    }
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.isNameValid = this.isNameValid.bind(this)
+    this.shouldNameMarkError = this.shouldNameMarkError.bind(this)
+    this.handleBlurWhenInteracting = this.handleBlurWhenInteracting.bind(this)
   }
 
   componentDidMount() {
@@ -18,9 +29,42 @@ class Leaderboard extends Component {
     const name = evt.target.name.value
     const score = this.props.score
     this.props.addUserScore(name, score)
+    formClassName = 'noShow'
+    fillerClassName = ''
+  }
+
+  handleNameChange(event) {
+    this.setState({
+      name: event.target.value
+    })
+  }
+
+  isNameValid() {
+    const {name} = this.state
+    return name.length === 3
+  }
+
+  shouldNameMarkError() {
+    const hasError = !this.isNameValid()
+    const shouldDisplayError = this.state.interactedWith
+
+    return hasError ? shouldDisplayError : false
+  }
+
+  handleBlurWhenInteracting() {
+    return () => {
+      this.setState({
+        interactedWith: true
+      })
+    }
   }
 
   render() {
+    const isButtonWorking = this.isNameValid()
+    const isNameWarningDisplayed = this.shouldNameMarkError()
+      ? 'errorWarning'
+      : 'noShow'
+    const errorDisplay = this.shouldNameMarkError() ? 'fieldError' : ''
     const leaderboard = this.props.leaderboard
     const score = this.props.score
     return (
@@ -39,12 +83,30 @@ class Leaderboard extends Component {
         </audio>
         <center>
           <div>
-            <p>{score}</p>
-            <form onSubmit={this.handleSubmit}>
-              <label>Submit 3 Letter Name:</label>
-              <input type="text" name="name" />
-              <button type="submit">Submit</button>
-            </form>
+            <div id="scoreSubmitSpaceFiller" className={fillerClassName} />
+            <div id="scoreSubmitForm" className={formClassName}>
+              <p>Your Score: {score}</p>
+              <span className={isNameWarningDisplayed}>
+                Must be exactly 3 letters
+              </span>
+              <form onSubmit={this.handleSubmit}>
+                <label>Nickname: </label>
+                <input
+                  type="text"
+                  name="name"
+                  onChange={this.handleNameChange}
+                  className={errorDisplay}
+                  onBlur={this.handleBlurWhenInteracting()}
+                />
+                <button
+                  type="submit"
+                  id="leaderBoardButton"
+                  disabled={!isButtonWorking}
+                >
+                  submit
+                </button>
+              </form>
+            </div>
             <div id="highscores">
               High Scores:{' '}
               {leaderboard.map(player => (

@@ -8,9 +8,9 @@ import {
   Game2,
   Game3,
   GameSelect,
+  Leaderboard,
   NoMatch
 } from './components'
-import Leaderboard from './components/leaderboard'
 
 /**
  * COMPONENT
@@ -21,7 +21,7 @@ class Routes extends Component {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/select" component={GameSelect} />
-        <Route path="/leaderboard" component={Leaderboard} />
+        <Route path="/Leaderboard" component={Leaderboard} />
         <Route
           exact
           path="/game1"
