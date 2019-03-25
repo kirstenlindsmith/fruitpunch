@@ -393,10 +393,6 @@ class Game2 extends Component {
               }}
             />
             <Link to="/">
-              onClick={() => this.restartGame(0)}
-              className="button"
-            />
-            <a href="/">
               <img
                 id="homeButton"
                 className="button"
