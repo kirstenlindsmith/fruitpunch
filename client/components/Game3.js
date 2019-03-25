@@ -15,6 +15,7 @@ import {
   killedBomb,
   retiredBomb
 } from '../store'
+
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const buttonSound = new Audio('/assets/buttonPress.mp3')
 const hoverSound = new Audio('/assets/buttonHover.mp3')
@@ -193,11 +194,6 @@ class Game2 extends Component {
             } else {
               //IF YOU HIT A BOMB:
               whichBombUserHit = this.props.gameItems[i]
-              // explodeBomb(this.props.gameItems[i])
-              // let toRemove = this.props.gameItems[i]
-              // setTimeout(() => {
-              //   removeBomb(toRemove)
-              // }, 750)
               this.setState({
                 metDeathCondition: true,
                 died: true,
@@ -397,6 +393,10 @@ class Game2 extends Component {
               }}
             />
             <Link to="/">
+              onClick={() => this.restartGame(0)}
+              className="button"
+            />
+            <a href="/">
               <img
                 id="homeButton"
                 className="button"
