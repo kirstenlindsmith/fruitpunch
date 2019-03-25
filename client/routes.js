@@ -21,7 +21,7 @@ class Routes extends Component {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/select" component={GameSelect} />
-        <Route path="/Leaderboard" component={Leaderboard} />
+        <Route path="/leaderboard" component={Leaderboard} />
         <Route
           exact
           path="/game1"
