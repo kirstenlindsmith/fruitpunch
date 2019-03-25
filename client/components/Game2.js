@@ -369,7 +369,7 @@ class Game2 extends Component {
                 className="button"
                 src="/assets/homeButton.png"
               />
-            </Link
+            </Link>
           </div>
         </div>
       )
