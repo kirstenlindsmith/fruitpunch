@@ -137,6 +137,8 @@ export const sendScore = (name, score) => {
     } catch (err) {
       console.error(err)
     }
+  }  
+}    
 
 export const addedBomb = () => {
   const newBomb = bomb
