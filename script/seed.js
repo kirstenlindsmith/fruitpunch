@@ -40,17 +40,17 @@ async function seed() {
   ])
 
   const bombLeaderboard = await Promise.all([
-    BombLeaderboard.create({name: 'SAM', score: 0, level: 1}),
-    BombLeaderboard.create({name: 'KRS', score: 10, level: 1}),
-    BombLeaderboard.create({name: 'CAS', score: 20, level: 1}),
-    BombLeaderboard.create({name: 'AAA', score: 30, level: 1}),
-    BombLeaderboard.create({name: 'BBB', score: 40, level: 1}),
-    BombLeaderboard.create({name: 'CCC', score: 50, level: 1}),
-    BombLeaderboard.create({name: 'DDD', score: 60, level: 1}),
-    BombLeaderboard.create({name: 'EEE', score: 70, level: 1}),
-    BombLeaderboard.create({name: 'FFF', score: 20, level: 1}),
-    BombLeaderboard.create({name: 'GGG', score: 30, level: 1}),
-    BombLeaderboard.create({name: 'HHH', score: 40, level: 1})
+    BombLeaderboard.create({name: 'SAM', score: 0}),
+    BombLeaderboard.create({name: 'KRS', score: 10}),
+    BombLeaderboard.create({name: 'CAS', score: 20}),
+    BombLeaderboard.create({name: 'AAA', score: 30}),
+    BombLeaderboard.create({name: 'BBB', score: 40}),
+    BombLeaderboard.create({name: 'CCC', score: 50}),
+    BombLeaderboard.create({name: 'DDD', score: 60}),
+    BombLeaderboard.create({name: 'EEE', score: 70}),
+    BombLeaderboard.create({name: 'FFF', score: 20}),
+    BombLeaderboard.create({name: 'GGG', score: 30}),
+    BombLeaderboard.create({name: 'HHH', score: 40})
   ])
 
   console.log(`seeded ${normalLeaderboard.length} normal game scores,

@@ -12,10 +12,6 @@ const BombLeaderboard = db.define('bombLeaderboard', {
   score: {
     type: Sequelize.INTEGER,
     allowNull: false
-  },
-  level: {
-    type: Sequelize.INTEGER,
-    allowNull: false
   }
 })
 

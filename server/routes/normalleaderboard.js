@@ -1,11 +1,11 @@
 const router = require('express').Router()
-const {TimeLeaderboard} = require('../db/models')
+const {NormalLeaderboard} = require('../db/models')
 module.exports = router
 
 router.get('/topten', async (req, res, next) => {
   try {
-    const topTen = await TimeLeaderboard.findAll({
-      order: [['score', 'DESC']],
+    const topTen = await NormalLeaderboard.findAll({
+      order: [['score', 'ASC']],
       limit: 10
     })
     res.json(topTen)
@@ -16,7 +16,7 @@ router.get('/topten', async (req, res, next) => {
 
 router.post('/addtoboard', async (req, res, next) => {
   try {
-    const newScore = await TimeLeaderboard.create({
+    const newScore = await NormalLeaderboard.create({
       name: req.body.name,
       score: req.body.score
     })

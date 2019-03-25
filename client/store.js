@@ -113,7 +113,9 @@ export const gotLeaderboard = leaderboard => {
 export const loadLeaderboard = () => {
   return async dispatch => {
     try {
-      const {data: leaderboard} = await axios.get('/api/score/topten')
+      const {data: leaderboard} = await axios.get(
+        '/api/clockleaderboard/topten'
+      )
       dispatch(gotLeaderboard(leaderboard))
     } catch (err) {
       console.log(err)
@@ -132,13 +134,13 @@ export const sendScore = (name, score) => {
   return async dispatch => {
     try {
       console.log('NAME', name, 'SCORE', score)
-      await axios.post('/api/score/addtoboard', {name, score})
+      await axios.post('/api/clockleaderboard/addtoboard', {name, score})
       dispatch(loadLeaderboard())
     } catch (err) {
       console.error(err)
     }
-  }  
-}    
+  }
+}
 
 export const addedBomb = () => {
   const newBomb = bomb
