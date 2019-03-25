@@ -16,6 +16,7 @@ const About = () => {
         <source
           src="/assets/theWonderfulStarsWalkIsWonderful.mp3"
           type="audio/mpeg"
+          volume="0.1"
         />
       </audio>
       <center>
