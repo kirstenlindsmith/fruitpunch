@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
-const db = require('./db')
+const db = require('../db')
 
-const Leaderboard = db.define('leaderboard', {
+const NormalLeaderboard = db.define('normalLeaderboard', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -10,9 +10,9 @@ const Leaderboard = db.define('leaderboard', {
     }
   },
   score: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false
   }
 })
 
-module.exports = Leaderboard
+module.exports = NormalLeaderboard

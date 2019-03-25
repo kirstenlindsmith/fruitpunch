@@ -1,27 +1,61 @@
 'use strict'
 
 const db = require('../server/db')
-const Leaderboard = require('../server/db/leaderboard')
+const {
+  NormalLeaderboard,
+  ClockLeaderboard,
+  BombLeaderboard
+} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const leaderboard = await Promise.all([
-    Leaderboard.create({name: 'SAM', score: 500}),
-    Leaderboard.create({name: 'KRS', score: 550}),
-    Leaderboard.create({name: 'CAS', score: 600}),
-    Leaderboard.create({name: 'AAA', score: 300}),
-    Leaderboard.create({name: 'BBB', score: 400}),
-    Leaderboard.create({name: 'CCC', score: 500}),
-    Leaderboard.create({name: 'DDD', score: 510}),
-    Leaderboard.create({name: 'EEE', score: 10}),
-    Leaderboard.create({name: 'FFF', score: 310}),
-    Leaderboard.create({name: 'GGG', score: 350}),
-    Leaderboard.create({name: 'HHH', score: 410})
+  const normalLeaderboard = await Promise.all([
+    NormalLeaderboard.create({name: 'SAM', score: '01:25'}),
+    NormalLeaderboard.create({name: 'KRS', score: '01:45'}),
+    NormalLeaderboard.create({name: 'CAS', score: '02:45'}),
+    NormalLeaderboard.create({name: 'AAA', score: '01:55'}),
+    NormalLeaderboard.create({name: 'BBB', score: '02:55'}),
+    NormalLeaderboard.create({name: 'CCC', score: '02:35'}),
+    NormalLeaderboard.create({name: 'DDD', score: '02:15'}),
+    NormalLeaderboard.create({name: 'EEE', score: '01:50'}),
+    NormalLeaderboard.create({name: 'FFF', score: '01:40'}),
+    NormalLeaderboard.create({name: 'GGG', score: '01:00'}),
+    NormalLeaderboard.create({name: 'HHH', score: '01:25'})
   ])
 
-  console.log(`seeded ${leaderboard.length} users`)
+  const clockLeaderboard = await Promise.all([
+    ClockLeaderboard.create({name: 'SAM', score: 500}),
+    ClockLeaderboard.create({name: 'KRS', score: 550}),
+    ClockLeaderboard.create({name: 'CAS', score: 600}),
+    ClockLeaderboard.create({name: 'AAA', score: 300}),
+    ClockLeaderboard.create({name: 'BBB', score: 400}),
+    ClockLeaderboard.create({name: 'CCC', score: 500}),
+    ClockLeaderboard.create({name: 'DDD', score: 510}),
+    ClockLeaderboard.create({name: 'EEE', score: 10}),
+    ClockLeaderboard.create({name: 'FFF', score: 310}),
+    ClockLeaderboard.create({name: 'GGG', score: 350}),
+    ClockLeaderboard.create({name: 'HHH', score: 410})
+  ])
+
+  const bombLeaderboard = await Promise.all([
+    BombLeaderboard.create({name: 'SAM', score: 0, level: 1}),
+    BombLeaderboard.create({name: 'KRS', score: 10, level: 1}),
+    BombLeaderboard.create({name: 'CAS', score: 20, level: 1}),
+    BombLeaderboard.create({name: 'AAA', score: 30, level: 1}),
+    BombLeaderboard.create({name: 'BBB', score: 40, level: 1}),
+    BombLeaderboard.create({name: 'CCC', score: 50, level: 1}),
+    BombLeaderboard.create({name: 'DDD', score: 60, level: 1}),
+    BombLeaderboard.create({name: 'EEE', score: 70, level: 1}),
+    BombLeaderboard.create({name: 'FFF', score: 20, level: 1}),
+    BombLeaderboard.create({name: 'GGG', score: 30, level: 1}),
+    BombLeaderboard.create({name: 'HHH', score: 40, level: 1})
+  ])
+
+  console.log(`seeded ${normalLeaderboard.length} normal game scores,
+   ${clockLeaderboard.length} clock game scores, and
+   ${bombLeaderboard.length} bomb game scores`)
   console.log(`seeded successfully`)
 }
 
