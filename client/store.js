@@ -1,9 +1,14 @@
 /* eslint-disable complexity */
-import {gameItems} from './components/utils'
-import axios from 'axios'
 import {createStore, applyMiddleware} from 'redux'
+import axios from 'axios''
 import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
+import {
+  gameItems,
+  generateRandomCoords,
+  bomb,
+  shuffle
+} from './components/utils'
 
 //initial state
 const initialState = {
@@ -11,6 +16,7 @@ const initialState = {
   initialBody: {},
   proportions: {},
   activeGameItems: gameItems,
+  riskyGameItems: [...gameItems, bomb],
   gameStarted: false,
   canvasContext: [],
   leaderboard: [],
@@ -28,6 +34,10 @@ const GAME_FINISHED = 'GAME_FINISHED'
 const GOT_CANVAS_CONTEXT = 'GOT_CANVAS_CONTEXT'
 const GOT_LEADERBOARD = 'GOT_LEADERBOARD'
 const GOT_SCORE = 'GOT_SCORE'
+const ADDED_BOMB = 'ADDED_BOMB'
+const REMOVED_BOMBS = 'REMOVED_BOMBS'
+const KILLED_BOMB = 'KILLED_BOMB'
+const RETIRED_BOMB = 'RETIRED_BOMB'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -64,6 +74,9 @@ export const killedGameItem = gameItem => {
 export const removedGameItem = gameItem => {
   gameItem.imageUrl = gameItem.activeUrl
   gameItem.active = true
+  const newCoords = generateRandomCoords(gameItem)
+  gameItem.x = newCoords.x
+  gameItem.y = newCoords.y
 
   return {
     type: REMOVED_ITEM,
@@ -124,6 +137,46 @@ export const sendScore = (name, score) => {
     } catch (err) {
       console.error(err)
     }
+
+export const addedBomb = () => {
+  const newBomb = bomb
+  if (newBomb.id >= 9) newBomb.id++
+  const newCoords = generateRandomCoords(newBomb)
+  newBomb.x = newCoords.x
+  newBomb.y = newCoords.y
+
+  return {
+    type: ADDED_BOMB,
+    newBomb
+  }
+}
+
+export const retiredBomb = gameItem => {
+  gameItem.imageUrl = gameItem.activeUrl
+  gameItem.active = true
+  const newCoords = generateRandomCoords(gameItem)
+  gameItem.x = newCoords.x
+  gameItem.y = newCoords.y
+
+  return {
+    type: RETIRED_BOMB,
+    gameItem
+  }
+}
+
+export const removedBombs = () => {
+  return {
+    type: REMOVED_BOMBS
+  }
+}
+
+export const killedBomb = gameItem => {
+  gameItem.imageUrl = gameItem.explodeUrl
+  gameItem.active = false
+
+  return {
+    type: KILLED_BOMB,
+    gameItem
   }
 }
 
@@ -180,6 +233,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         canvasContext: action.canvas
       }
+
     case GOT_LEADERBOARD:
       return {
         ...state,
@@ -190,6 +244,42 @@ const reducer = (state = initialState, action) => {
         ...state,
         finalScore: action.finalScore
       }
+
+    case ADDED_BOMB:
+      return {
+        ...state,
+        riskyGameItems: shuffle([...state.riskyGameItems, action.newBomb])
+      }
+    case REMOVED_BOMBS:
+      return {
+        ...state,
+        riskyGameItems: [
+          ...state.riskyGameItems.filter(item => {
+            return item.type !== 'bomb'
+          }),
+          bomb
+        ]
+      }
+    case RETIRED_BOMB:
+      return {
+        ...state,
+        riskyGameItems: [
+          ...state.riskyGameItems.filter(item => {
+            return item.id !== action.gameItem.id
+          }),
+          action.gameItem
+        ]
+      }
+    case KILLED_BOMB: {
+      return {
+        ...state,
+        riskyGameItems: state.riskyGameItems.map(item => {
+          if (item.id === action.gameItem.id) {
+            return action.gameItem
+          } else return item
+        })
+      }
+    }
     default:
       return state
   }

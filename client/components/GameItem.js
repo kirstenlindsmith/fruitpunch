@@ -1,6 +1,5 @@
 import React from 'react'
 
-// item coords in store so Game component can use
 const GameItem = props => {
   const imageUrl = props.imageUrl
   const x = props.x

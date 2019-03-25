@@ -49,7 +49,7 @@ export const gameItems = [
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
     x: 200,
-    y: 70,
+    y: 110,
     width: 150
   },
   {
@@ -130,6 +130,18 @@ export const gameItems = [
     width: 150
   }
 ]
+
+export const bomb = {
+  id: 9,
+  type: 'bomb',
+  imageUrl: '/assets/bomb.gif',
+  activeUrl: '/assets/bomb.gif',
+  explodeUrl: '/assets/explodeYELLOW.gif',
+  active: true,
+  x: 950,
+  y: 20,
+  width: 150
+}
 
 function toTuple({x, y}) {
   return [x, y]
@@ -218,17 +230,55 @@ export const variablesForCameraRender = loadingStatus => {
   }
 }
 
-// const rightWristCoords = findPoint('rightWrist', this.props.keypoints)
-// const rightElbowCoords = findPoint('rightElbow', this.props.keypoints)
+//spawn coords for game items
+import store from '../../store'
 
-// let angle = Math.atan((rightWristCoords.y-rightElbowCoords.y)/(rightWristCoords.x-rightElbowCoords.x))
-// let yDistance = Math.sin(angle)*50
-// let xDistance = Math.cos(angle)*50
-// let rightHandCoordY = yDistance + rightWristCoords.y
-// let rightHandCoordX = xDistance + rightWristCoords.x
-// let handToItemDistance = Math.sqrt(
-//   Math.pow(rightHandCoordX - itemCenterX, 2) +
-//     Math.pow(rightHandCoordY - itemCenterY, 2)
-// )
+export function generateRandomCoords(gameItem) {
+  let state = store.getState()
+  const keypoints = state.keypoints
 
-// if(itemRadius+50 > handToItemDistance)
+  const rightShoulderCoords = findPoint('rightShoulder', keypoints)
+  const leftShoulderCoords = findPoint('leftShoulder', keypoints)
+
+  let xCoordRange = Math.random() * (window.innerWidth - 150)
+  const yCoordRange = Math.random() * (window.innerHeight - 150)
+  const forbiddenXRange =
+    leftShoulderCoords.x + 50 - (rightShoulderCoords.x - 50)
+
+  // if x coordinate lands within forbidden range
+  let spawnOnRightSide = true
+  if (
+    xCoordRange > rightShoulderCoords.x - 150 &&
+    xCoordRange < leftShoulderCoords.x
+  ) {
+    if (spawnOnRightSide === true) xCoordRange += forbiddenXRange
+    else xCoordRange -= forbiddenXRange
+    spawnOnRightSide = !spawnOnRightSide
+  }
+
+  gameItem.x = xCoordRange
+  gameItem.y = yCoordRange
+
+  return {
+    x: gameItem.x,
+    y: gameItem.y
+  }
+}
+
+export function shuffle(array) {
+  const newArray = array.slice()
+  let currentIndex = newArray.length
+  let tempValue
+  let randomIndex
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex -= 1
+
+    tempValue = newArray[currentIndex]
+    newArray[currentIndex] = newArray[randomIndex]
+    newArray[randomIndex] = tempValue
+  }
+
+  return newArray
+}

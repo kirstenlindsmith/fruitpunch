@@ -1,7 +1,6 @@
 /* eslint-disable max-statements */
 /* eslint-disable complexity */
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {findPoint} from './utils'
@@ -10,10 +9,13 @@ import {
   removedGameItem,
   gameStarted,
   gameFinished,
-  gotScore
+  addedBomb,
+  removedBombs,
+  killedBomb,
+  retiredBomb
 } from '../store'
+import {constant} from '@tensorflow/tfjs-layers/dist/exports_initializers'
 const music = new Audio('/assets/CrystalIceArea.mp3')
-const winSound = new Audio('/assets/winSound.mp3')
 const buttonSound = new Audio('/assets/buttonPress.mp3')
 
 class Game2 extends Component {
@@ -21,8 +23,9 @@ class Game2 extends Component {
     super(props)
     this.state = {
       score: 0,
-      won: false,
-      metWonCondition: false,
+      level: 1,
+      died: false,
+      metDeathCondition: false,
       gamePaused: false,
       musicPlaying: false,
       isTimerOn: false,
@@ -57,8 +60,8 @@ class Game2 extends Component {
   componentDidUpdate() {
     if (
       this.props.initialBody.keypoints &&
-      !this.state.won &&
-      !this.props.gameStarted
+      !this.state.died &&
+      !this.props.gameHasStarted
     ) {
       setTimeout(() => {
         this.props.toggleStart()
@@ -75,7 +78,7 @@ class Game2 extends Component {
 
     if (
       !this.state.isTimerOn &&
-      !this.state.metWonCondition &&
+      !this.state.metDeathCondition &&
       this.props.gameHasStarted &&
       !this.state.gamePaused
     ) {
@@ -86,12 +89,14 @@ class Game2 extends Component {
       gameItems,
       keypoints,
       gameHasStarted,
-      explodeItem,
-      removeGameItem,
-      toggleEnd
+      toggleEnd,
+      explodeBomb,
+      addBomb,
+      removeAllBombs,
+      removeBomb
     } = this.props
 
-    if (keypoints.length && !this.state.won) {
+    if (keypoints.length && !this.state.died) {
       for (let i = 0; i < 2; i++) {
         const itemWidth = gameItems[i].width
         const rightWristCoords = findPoint('rightWrist', keypoints)
@@ -155,75 +160,82 @@ class Game2 extends Component {
             Math.pow(leftHandCoordY - itemCenterY, 2)
         )
 
+        if (this.props.gameItems[i].type === 'bomb') {
+          let toRemove = this.props.gameItems[i]
+          setTimeout(() => {
+            removeBomb(toRemove)
+          }, 5000)
+        }
+
         if (
-          !this.state.won &&
+          !this.state.died &&
           gameHasStarted &&
           !this.state.gamePaused &&
           (itemRadius + 50 > handToItemDistanceL ||
             itemRadius + 50 > handToItemDistanceR)
         ) {
           if (this.props.gameItems[i].active) {
-            //explode the item
-            explodeItem(this.props.gameItems[i])
-            squish.play()
-            let toRemove = this.props.gameItems[i]
-            setTimeout(() => {
-              //retire the item
-              removeGameItem(toRemove)
-            }, 260)
-            if (!this.state.metWonCondition) {
-              //helps prevent score from going OVER win condition amount
-              this.setState(state => ({
-                score: state.score + 10
-              }))
+            if (this.props.gameItems[i].type !== 'bomb') {
+              //explode the item
+              explodeBomb(this.props.gameItems[i])
+              squish.play()
+              let toRemove = this.props.gameItems[i]
+              setTimeout(() => {
+                //retire the item
+                removeBomb(toRemove)
+              }, 260)
+              if (!this.state.metDeathCondition) {
+                //helps prevent score from going OVER win condition amount
+                this.setState(state => ({
+                  score: state.score + 10
+                }))
+              }
+            } else {
+              //IF YOU HIT A BOMB:
+              explodeBomb(this.props.gameItems[i])
+              squish.play() //replace with bomb sound later
+              let toRemove = this.props.gameItems[i]
+              setTimeout(() => {
+                removeBomb(toRemove)
+              }, 260)
+              this.setState({
+                metDeathCondition: true,
+                died: true,
+                level: 1
+              })
+              this.stopTimer()
+              toggleEnd()
             }
           }
         }
       }
-      if (this.state.time <= 0 && !this.state.metWonCondition) {
-        console.log('YOU WON!!!')
+      if (this.state.time <= 0 && !this.state.metDeathCondition) {
+        console.log('YOU SURVIVED A ROUND!!!')
         music.pause()
         this.stopTimer()
         this.setState({
-          metWonCondition: true,
-          musicPlaying: false
+          musicPlaying: false,
+          level: this.state.level + 1
         })
-        winSound.play()
-        //explode all the fruits
-        for (let i = 0; i < this.props.gameItems.length; i++) {
-          this.props.explodeItem(this.props.gameItems[i])
-        }
-        squish.play()
-        squish.play()
-        setTimeout(() => {
-          toggleEnd()
-          this.setState({
-            won: true
-          })
-        }, 800)
-        console.log(this.state.score)
-        let score = this.state.score
-        this.props.getFinalScore(score)
+        addBomb()
+        this.restartGame(this.state.score)
       }
     }
   }
 
-  restartGame() {
+  restartGame(savedScore) {
     this.setState({
-      won: false,
-      metWonCondition: false,
-      score: 0,
+      died: false,
+      metDeathCondition: false,
+      score: savedScore,
       time: 60000
     })
-    for (let i = 0; i < this.props.gameItems.length; i++) {
-      this.props.removeGameItem(this.props.gameItems[i])
-    }
+    //this.props.removeAllBombs()
     this.props.toggleStart()
     music.play()
   }
 
   startTimer() {
-    console.log('START TIMER')
     this.setState({
       isTimerOn: true,
       time: this.state.time
@@ -238,7 +250,6 @@ class Game2 extends Component {
   }
 
   stopTimer() {
-    console.log('STOP TIMER')
     this.setState({isTimerOn: false})
     clearInterval(this.timer)
   }
@@ -277,7 +288,8 @@ class Game2 extends Component {
   }
 
   render() {
-    const totalFruit = this.state.score / 10
+    console.log('gameItems', this.props.gameItems)
+    const totalFruit = this.state.score / 10 ? this.state.score / 10 : 0
     const time = this.msToTime(this.state.time)
     const pauseMenu = this.state.gamePaused ? (
       <div id="pauseScreen" className="center">
@@ -298,7 +310,7 @@ class Game2 extends Component {
 
     if (
       this.props.initialBody.keypoints &&
-      !this.state.won &&
+      !this.state.died &&
       this.props.gameHasStarted
     ) {
       const item1 = this.props.gameItems[0]
@@ -307,12 +319,14 @@ class Game2 extends Component {
       return (
         <div>
           <div className="gameInfo">
+            <img id="levelText" src="/assets/level.png" />
+            <div id="level">: {this.state.level}</div>
             <img id="scoreText" src="/assets/score.png" />
             <div id="score">: {this.state.score}</div>
             <img id="timeText" src="/assets/timer.png" />
             <div id="time">: {time}</div>
             <img
-              id="pauseButton"
+              id="bombPauseButton"
               src="/assets/pauseButton.png"
               onClick={this.togglePause}
             />
@@ -337,39 +351,41 @@ class Game2 extends Component {
           </div>
         </div>
       )
-    } else if (this.state.won) {
+    } else if (this.state.died) {
       return (
         <div>
           <div className="gameInfo">
+            <img id="levelText" src="/assets/level.png" />
+            <div id="level">: {this.state.level}</div>
             <img id="scoreText" src="/assets/score.png" />
             <div id="score">: {this.state.score}</div>
             <img id="timeText" src="/assets/timer.png" />
             <div id="time">: {time}</div>
             <img
-              id="pauseButton"
+              id="bombPauseButton"
               src="/assets/pauseButton.png"
               onClick={this.togglePause}
             />
           </div>
           <div className="center">
-            <img id="youWin" src="/assets/timesUp.gif" />
-            <div id="finalTime">You got {totalFruit} fruit!</div>
-            <Link to="/leaderboard">
-              <button>Submit Score</button>
-            </Link>
+            <img id="youDied" src="/assets/youDied.gif" />
+            <div id="finalLevel">
+              You got to level {this.state.level} <br />and squished{' '}
+              {totalFruit} fruit!
+            </div>
             <img
               id="replayButton"
               src="/assets/replayButton.png"
-              onClick={this.restartGame}
+              onClick={() => this.restartGame(0)}
               className="button"
             />
-            <Link to="/">
+            <a href="/">
               <img
                 id="homeButton"
                 className="button"
                 src="/assets/homeButton.png"
               />
-            </Link
+            </a>
           </div>
         </div>
       )
@@ -379,7 +395,7 @@ class Game2 extends Component {
 
 const mapStateToProps = state => ({
   keypoints: state.keypoints,
-  gameItems: state.activeGameItems,
+  gameItems: state.riskyGameItems,
   initialBody: state.initialBody,
   gameHasStarted: state.gameStarted,
   canvasContext: state.canvasContext
@@ -398,8 +414,17 @@ const mapDispatchToProps = dispatch => ({
   toggleEnd: () => {
     dispatch(gameFinished())
   },
-  getFinalScore: score => {
-    dispatch(gotScore(score))
+  addBomb: () => {
+    dispatch(addedBomb())
+  },
+  removeAllBombs: () => {
+    dispatch(removedBombs())
+  },
+  explodeBomb: bomb => {
+    dispatch(killedBomb(bomb))
+  },
+  removeBomb: bomb => {
+    dispatch(retiredBomb(bomb))
   }
 })
 

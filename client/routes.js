@@ -1,6 +1,14 @@
 import React, {Component} from 'react'
 import {withRouter, Route, Switch} from 'react-router-dom'
-import {About, Camera, Home, Game1, Game2, GameSelect} from './components'
+import {
+  About,
+  Camera,
+  Home,
+  Game1,
+  Game2,
+  Game3,
+  GameSelect
+} from './components'
 import Leaderboard from './components/leaderboard'
 
 /**
@@ -22,6 +30,11 @@ class Routes extends Component {
           exact
           path="/game2"
           render={props => <Camera {...props} game={Game2} />}
+        />
+        <Route
+          exact
+          path="/game3"
+          render={props => <Camera {...props} game={Game3} />}
         />
         <Route path="/about" component={About} />
       </Switch>

@@ -10,9 +10,9 @@ body {
   background: rgb(109, 199, 255);
   background: linear-gradient(
     180deg,
-    rgba(109, 199, 255, 1) 0%,
-    rgba(157, 247, 255, 1) 32%,
-    rgba(222, 249, 255, 1) 100%
+    rgb(98, 195, 255) 0%,
+    rgb(145, 246, 255) 32%,
+    rgb(221, 249, 255) 100%
   );
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -33,6 +33,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-content: center;
   justify-content: center;
 }
 
@@ -51,18 +52,26 @@ body {
 
 #instructions {
   margin-top: 30px;
+  margin-bottom: 45px;
+}
+
+#privacy {
   margin-bottom: 100px;
 }
 
-#instructionsText {
-  width: 625px;
+#homeCenterOffset {
+  margin-left: -30px;
+}
+
+.homePageText {
+  width: 630px;
   border: 4px solid #a0ffe2;
   border-radius: 25px;
   background: #edfffb;
 }
 
-#instructions p {
-  width: 570px;
+.homePage p {
+  width: 580px;
   color: #34a7c1;
   font-size: 14pt;
   line-height: 25pt;
@@ -70,6 +79,10 @@ body {
 
 #aboutText {
   margin-top: -60px;
+}
+
+#gameSelectTitle {
+  margin: 50px;
 }
 
 .webcam {
@@ -118,7 +131,6 @@ body {
 
 .centered {
   display: flex;
-  /* align-content: center; */
   align-items: center;
   justify-content: center;
 }
@@ -206,28 +218,113 @@ body {
   z-index: 10;
   position: fixed;
   top: 0;
-  left: 0;
-  color: black;
+  left: 175px;
+  color: rgb(22, 179, 145);
   font-size: 40px;
+  text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+  /* background: -webkit-linear-gradient(rgb(66,189,48), rgb(31,134,201)); */
+}
+
+#scoreText {
+  height: 50px;
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 #time {
   z-index: 10;
   position: fixed;
-  top: 45px;
-  left: 0;
-  color: black;
+  top: 55px;
+  left: 175px;
+  color: rgb(22, 179, 145);
   font-size: 40px;
+  text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+}
+
+#timeText {
+  height: 50px;
+  z-index: 10;
+  position: fixed;
+  top: 55px;
+  left: 0;
+}
+
+#level {
+  z-index: 10;
+  position: fixed;
+  top: 110px;
+  left: 175px;
+  color: rgb(22, 179, 145);
+  font-size: 40px;
+  text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+}
+
+#levelText {
+  height: 50px;
+  z-index: 10;
+  position: fixed;
+  top: 110px;
+  left: 0;
+}
+
+#pauseButton {
+  height: 40px;
+  position: fixed;
+  z-index: 10;
+  left: 5px;
+  top: 115px;
+}
+
+#bombPauseButton {
+  height: 40px;
+  position: fixed;
+  z-index: 10;
+  left: 5px;
+  top: 165px;
+}
+
+#pausedText {
+  margin-left: 50px;
+}
+
+#pauseScreen {
+  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 100;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
 }
 
 #youWin {
   margin-top: -55px;
 }
 
+#youDied {
+  margin-top: -35px;
+}
+
 #finalTime {
   margin-top: -115px;
   font-size: 40px;
   color: white;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+#finalLevel {
+  margin-top: -45px;
+  font-size: 40px;
+  color: white;
+  text-align: center;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
 
 #replayButton {
@@ -235,7 +332,7 @@ body {
 }
 
 #homeButton {
-  margin-top: 4px;
+  margin-top: 15px;
 }
 
 #gameSelectDiv {
@@ -244,12 +341,12 @@ body {
   flex-direction: column;
 }
 
-#beatTheClock {
+#suddenDeath {
   margin-bottom: 25px;
 }
 
 button {
-  background-color: #c12e7f;
+  background-color: #ca247f;
   color: white;
   text-align: center;
   border-radius: 12px;
@@ -257,10 +354,29 @@ button {
   border: none;
   font-size: 12pt;
   font-family: 'Comic Sans MS', cursive, sans-serif;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
 }
 
 button:hover {
-  background-color: #b22dc1;
+  background-color: #9e2dc1;
+  box-shadow: 0 0 5px 3px rgb(255, 170, 255);
+}
+
+.button:hover {
+  box-shadow: 0 0 5px 3px rgb(29, 255, 116);
+}
+
+.homeButton:hover {
+  box-shadow: 0 0 5px 3px rgb(29, 210, 255);
+}
+
+.continueButton {
+  margin-bottom: 10px;
+  max-width: 203px;
+}
+
+.continueButton:hover {
+  box-shadow: 0 0 5px 3px rgb(144, 132, 255);
 }
 
 #highscores {
