@@ -2,6 +2,7 @@ const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const compression = require('compression')
+const db = require('./db')
 const PORT = process.env.PORT || 1337
 const app = express()
 
@@ -21,7 +22,7 @@ const createApp = () => {
   app.use(compression())
 
   // auth and api routes
-  // app.use('/api', require('./api'))
+  app.use('/api', require('./routes'))
 
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, '..', 'public')))
@@ -55,7 +56,10 @@ const startListening = () => {
   app.listen(PORT, () => console.log(`I'm listening on port ${PORT}!`))
 }
 
+const syncDb = () => db.sync()
+
 async function bootApp() {
+  await syncDb()
   await createApp()
   await startListening()
 }

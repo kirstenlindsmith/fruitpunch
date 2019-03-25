@@ -1,5 +1,8 @@
 /* eslint-disable complexity */
-import {createStore} from 'redux'
+import {createStore, applyMiddleware} from 'redux'
+import axios from 'axios'
+import thunkMiddleware from 'redux-thunk'
+import {composeWithDevTools} from 'redux-devtools-extension'
 import {
   gameItems,
   generateRandomCoords,
@@ -15,7 +18,9 @@ const initialState = {
   activeGameItems: gameItems,
   riskyGameItems: [...gameItems, bomb],
   gameStarted: false,
-  canvasContext: []
+  canvasContext: [],
+  leaderboard: [],
+  finalScore: 0
 }
 
 //action types
@@ -27,6 +32,8 @@ const REMOVED_ITEM = 'REMOVED_ITEM'
 const GAME_STARTED = 'GAME_STARTED'
 const GAME_FINISHED = 'GAME_FINISHED'
 const GOT_CANVAS_CONTEXT = 'GOT_CANVAS_CONTEXT'
+const GOT_LEADERBOARD = 'GOT_LEADERBOARD'
+const GOT_SCORE = 'GOT_SCORE'
 const ADDED_BOMB = 'ADDED_BOMB'
 const REMOVED_BOMBS = 'REMOVED_BOMBS'
 const KILLED_BOMB = 'KILLED_BOMB'
@@ -95,6 +102,43 @@ export const gotCanvasContext = canvas => {
     canvas
   }
 }
+
+export const gotLeaderboard = leaderboard => {
+  return {
+    type: GOT_LEADERBOARD,
+    leaderboard
+  }
+}
+
+export const loadLeaderboard = () => {
+  return async dispatch => {
+    try {
+      const {data: leaderboard} = await axios.get('/api/score/topten')
+      dispatch(gotLeaderboard(leaderboard))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+export const gotScore = finalScore => {
+  return {
+    type: GOT_SCORE,
+    finalScore
+  }
+}
+
+export const sendScore = (name, score) => {
+  return async dispatch => {
+    try {
+      console.log('NAME', name, 'SCORE', score)
+      await axios.post('/api/score/addtoboard', {name, score})
+      dispatch(loadLeaderboard())
+    } catch (err) {
+      console.error(err)
+    }
+  }  
+}    
 
 export const addedBomb = () => {
   const newBomb = bomb
@@ -191,6 +235,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         canvasContext: action.canvas
       }
+
+    case GOT_LEADERBOARD:
+      return {
+        ...state,
+        leaderboard: action.leaderboard
+      }
+    case GOT_SCORE:
+      return {
+        ...state,
+        finalScore: action.finalScore
+      }
+
     case ADDED_BOMB:
       return {
         ...state,
@@ -231,6 +287,7 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-const store = createStore(reducer)
+const middleware = composeWithDevTools(applyMiddleware(thunkMiddleware))
+const store = createStore(reducer, middleware)
 
 export default store
