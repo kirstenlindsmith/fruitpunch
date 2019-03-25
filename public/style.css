@@ -170,6 +170,20 @@ body {
   display: none !important;
 }
 
+.errorWarning {
+  color: rgb(192, 15, 15);
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.fieldError {
+  border: 1px solid red;
+}
+
+#scoreSubmitSpaceFiller {
+  min-height: 107px;
+}
+
 @media only screen and (max-width: 600px) {
   .footer-text,
   .dg {
@@ -470,9 +484,23 @@ button:hover {
   top: 100;
   left: 200;
   color: 'white';
-}  
+}
 
 #noMatch h3 {
   color: white;
   text-shadow: 2px 4px 8px #80b1c2;
+}
+
+#leaderBoardButton {
+  padding: 8px 15px;
+  line-height: 25px;
+  vertical-align: center;
+  margin-left: 10px;
+}
+
+button:disabled {
+  background-color: rgb(184, 184, 184);
+  color: rgb(212, 212, 212);
+  /* font-style: italic; */
+  box-shadow: none;
 }

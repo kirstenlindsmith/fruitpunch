@@ -8,9 +8,9 @@ import {
   Game2,
   Game3,
   GameSelect,
+  Leaderboard,
   NoMatch
 } from './components'
-import Leaderboard from './components/leaderboard'
 
 /**
  * COMPONENT
