@@ -20,6 +20,7 @@ const buttonSound = new Audio('/assets/buttonPress.mp3')
 const hoverSound = new Audio('/assets/buttonHover.mp3')
 const boom = new Audio('/assets/bomb.mp3')
 const squish = new Audio('/assets/squish.mp3')
+let whichBombUserHit
 
 class Game2 extends Component {
   constructor(props) {
@@ -191,9 +192,9 @@ class Game2 extends Component {
               }
             } else {
               //IF YOU HIT A BOMB:
-              explodeBomb(this.props.gameItems[i])
-              boom.play()
-              let toRemove = this.props.gameItems[i]
+              whichBombUserHit = this.props.gameItems[i]
+              // explodeBomb(this.props.gameItems[i])
+              // let toRemove = this.props.gameItems[i]
               // setTimeout(() => {
               //   removeBomb(toRemove)
               // }, 750)
@@ -203,6 +204,7 @@ class Game2 extends Component {
                 level: 1
               })
               this.stopTimer()
+              boom.play()
               toggleEnd()
             }
           }
@@ -287,7 +289,6 @@ class Game2 extends Component {
   }
 
   render() {
-    console.log('gameItems', this.props.gameItems)
     const totalFruit = this.state.score / 10 ? this.state.score / 10 : 0
     const time = this.msToTime(this.state.time)
     const pauseMenu = this.state.gamePaused ? (
@@ -373,6 +374,12 @@ class Game2 extends Component {
               onMouseEnter={() => hoverSound.play()}
             />
           </div>
+          <GameItem
+            imageUrl={whichBombUserHit.explodeUrl}
+            x={whichBombUserHit.x}
+            y={whichBombUserHit.y}
+            width={whichBombUserHit.width}
+          />
           <div className="center">
             <img id="youDied" src="/assets/youDied.gif" />
             <div id="finalLevel">

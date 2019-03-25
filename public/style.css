@@ -390,6 +390,10 @@ body {
   margin-top: 9px;
 }
 
+#homeButton {
+  margin-top: 15px;
+}
+
 #aboutHomeButton {
   margin-top: 100px;
   margin-bottom: 100px;
