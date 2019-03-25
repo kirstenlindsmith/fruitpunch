@@ -4,6 +4,8 @@ import * as posenet from '@tensorflow-models/posenet'
 const pointRadius = 3
 
 export const config = {
+  width: window.innerWidth,
+  height: window.innerHeight,
   flipHorizontal: true,
   algorithm: 'multi-pose',
   showVideo: true,
@@ -59,7 +61,7 @@ export const gameItems = [
     activeUrl: '/assets/banana.gif',
     explodeUrl: '/assets/explodeYELLOW.gif',
     active: true,
-    x: 1300,
+    x: 1000,
     y: 450,
     width: 150
   },
@@ -92,8 +94,8 @@ export const gameItems = [
     activeUrl: '/assets/cherry.gif',
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
-    x: 950,
-    y: 500,
+    x: 1000,
+    y: 600,
     width: 150
   },
   {
@@ -125,7 +127,7 @@ export const gameItems = [
     activeUrl: '/assets/watermelon.gif',
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
-    x: 800,
+    x: 1150,
     y: 500,
     width: 150
   }
@@ -136,9 +138,9 @@ export const bomb = {
   type: 'bomb',
   imageUrl: '/assets/bomb.gif',
   activeUrl: '/assets/bomb.gif',
-  explodeUrl: '/assets/explodeYELLOW.gif',
+  explodeUrl: '/assets/boom.gif',
   active: true,
-  x: 950,
+  x: 1050,
   y: 20,
   width: 150
 }

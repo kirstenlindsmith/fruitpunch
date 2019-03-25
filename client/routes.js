@@ -7,7 +7,8 @@ import {
   Game1,
   Game2,
   Game3,
-  GameSelect
+  GameSelect,
+  NoMatch
 } from './components'
 
 /**
@@ -35,6 +36,7 @@ class Routes extends Component {
           render={props => <Camera {...props} game={Game3} />}
         />
         <Route path="/about" component={About} />
+        <Route path="*" component={NoMatch} status={404} />
       </Switch>
     )
   }

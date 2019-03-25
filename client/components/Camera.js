@@ -58,16 +58,16 @@ class PoseNet extends Component {
     }
 
     const video = this.video
-    video.width = window.innerWidth
-    video.height = window.innerHeight
+    video.width = this.props.width
+    video.height = this.props.height
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
           facingMode: 'user',
-          width: window.innerWidth,
-          height: window.innerHeight
+          width: this.props.width,
+          height: this.props.height
         }
       })
       video.srcObject = stream
@@ -88,8 +88,8 @@ class PoseNet extends Component {
     const canvasContext = canvas.getContext('2d')
     this.props.getCanvasContext(canvasContext)
 
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    canvas.width = this.props.width
+    canvas.height = this.props.height
 
     this.poseDetectionFrame(canvasContext)
   }
@@ -151,18 +151,18 @@ class PoseNet extends Component {
         }
       }
 
-      canvasContext.clearRect(0, 0, window.innerWidth, window.innerHeight)
+      canvasContext.clearRect(0, 0, this.props.width, this.props.height)
 
       if (showVideo) {
         canvasContext.save()
         canvasContext.scale(-1, 1)
-        canvasContext.translate(-window.innerWidth, 0)
+        canvasContext.translate(-this.props.width, 0)
         canvasContext.drawImage(
           video,
           0,
           0,
-          window.innerWidth,
-          window.innerHeight
+          this.props.width,
+          this.props.height
         )
         canvasContext.restore()
       }
