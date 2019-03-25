@@ -1,6 +1,7 @@
 /* eslint-disable max-statements */
 /* eslint-disable complexity */
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {findPoint} from './utils'
@@ -287,17 +288,17 @@ class Game2 extends Component {
           <div className="center">
             <img id="youWin" src="/assets/timesUp.gif" />
             <div id="finalTime">You got {totalFruit} fruit!</div>
-            <a href="/leaderboard">
+            <Link to="/leaderboard">
               <button>Submit Score</button>
-            </a>
+            </Link>
             <img
               id="replayButton"
               src="/assets/replayButton.png"
               onClick={this.restartGame}
             />
-            <a href="/">
+            <Link to="/">
               <img id="homeButton" src="/assets/homeButton.png" />
-            </a>
+            </Link>
           </div>
         </div>
       )

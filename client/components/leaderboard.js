@@ -1,20 +1,28 @@
 import React, {Component} from 'react'
-import {loadLeaderboard} from '../store'
+import {loadLeaderboard, sendScore} from '../store'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 
 class Leaderboard extends Component {
   constructor(props) {
     super(props)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentDidMount() {
     this.props.getLeaderboard()
   }
 
+  handleSubmit(evt) {
+    evt.preventDefault()
+    const name = evt.target.name.value
+    const score = this.props.score
+    this.props.addUserScore(name, score)
+  }
+
   render() {
     const leaderboard = this.props.leaderboard
     const score = this.props.score
-    console.log(this.props.score)
     return (
       <div className="center aboutPage">
         <iframe
@@ -35,6 +43,7 @@ class Leaderboard extends Component {
             <form onSubmit={this.handleSubmit}>
               <label>Submit 3 Letter Name:</label>
               <input type="text" name="name" />
+              <button type="submit">Submit</button>
             </form>
             <div id="highscores">
               High Scores:{' '}
@@ -46,9 +55,9 @@ class Leaderboard extends Component {
                 </div>
               ))}
             </div>
-            <a href="/">
+            <Link to="/">
               <img id="homeButton" src="/assets/homeButton.png" />
-            </a>
+            </Link>
           </div>
         </center>
       </div>
@@ -57,7 +66,6 @@ class Leaderboard extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
   return {
     leaderboard: state.leaderboard,
     score: state.finalScore
@@ -67,6 +75,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   getLeaderboard: () => {
     dispatch(loadLeaderboard())
+  },
+  addUserScore: (name, score) => {
+    dispatch(sendScore(name, score))
   }
 })
 

@@ -109,10 +109,21 @@ export const loadLeaderboard = () => {
 }
 
 export const gotScore = finalScore => {
-  console.log('I WENT INTO GOTSCORE', finalScore)
   return {
     type: GOT_SCORE,
     finalScore
+  }
+}
+
+export const sendScore = (name, score) => {
+  return async dispatch => {
+    try {
+      console.log('NAME', name, 'SCORE', score)
+      await axios.post('/api/score/addtoboard', {name, score})
+      dispatch(loadLeaderboard())
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 

@@ -16,7 +16,10 @@ router.get('/topten', async (req, res, next) => {
 
 router.post('/addtoboard', async (req, res, next) => {
   try {
-    const newScore = await Leaderboard.create(req.body)
+    const newScore = await Leaderboard.create({
+      name: req.body.name,
+      score: req.body.score
+    })
     res.json(newScore)
   } catch (err) {
     next(err)
