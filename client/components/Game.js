@@ -2,13 +2,8 @@
 /* eslint-disable complexity */
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {RenderPlayGame, WinGame, TimesUp} from './index'
-import {
-  calculateItemLocation,
-  hitSequence,
-  finishGame,
-  increaseLevel
-} from './utils'
+import {RenderPlayGame, YouWin, TimesUp} from './index'
+import {calculateItemLocation, hitSequence, finishGame} from './utils'
 import {
   killedGameItem,
   respawnedGameItem,
@@ -141,7 +136,7 @@ class Game extends Component {
         }
       }
 
-      //GAME OVER CONDITION
+      //WIN CONDITIONS
       if (!metGameOverCondition) {
         switch (this.props.ruleset) {
           case 'normal':
@@ -166,6 +161,8 @@ class Game extends Component {
                   gameOver: true
                 })
               }, 800)
+              let normalScore = this.msToTime(this.state.time)
+              this.props.getFinalScore(normalScore)
             }
             break
           case 'clock':
@@ -190,6 +187,8 @@ class Game extends Component {
                   gameOver: true
                 })
               }, 800)
+              let clockScore = this.state.score
+              this.props.getFinalScore(clockScore)
             }
             break
           default:
@@ -330,7 +329,7 @@ class Game extends Component {
       switch (this.props.ruleset) {
         case 'normal':
           return (
-            <WinGame
+            <YouWin
               score={score}
               time={displayTime}
               togglepause={this.togglePause}

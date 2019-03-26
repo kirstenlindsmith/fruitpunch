@@ -42,6 +42,23 @@ const YouDied = props => {
         <div id="finalLevel">
           You got to level {level} <br />and squished {totalfruit} fruit!
         </div>
+        <Link
+          to={{
+            pathname: '/leaderboard',
+            state: {
+              fromBombGame: true
+            }
+          }}
+        >
+          <button
+            type="button"
+            className="submitScoreFromGame"
+            onMouseEnter={() => hoversound.play()}
+            onClick={() => buttonsound.play()}
+          >
+            Submit Score
+          </button>
+        </Link>
         <img
           id="replayButton"
           src="/assets/replayButton.png"

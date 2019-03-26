@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
-const WinGame = props => {
+const YouWin = props => {
   const {
     score,
     time,
@@ -29,6 +29,23 @@ const WinGame = props => {
       <div className="center">
         <img id="youWin" src="/assets/win.gif" />
         <div id="finalTime">Your time was: {finaltime}</div>
+        <Link
+          to={{
+            pathname: '/leaderboard',
+            state: {
+              fromNormalGame: true
+            }
+          }}
+        >
+          <button
+            type="button"
+            className="submitScoreFromGame"
+            onMouseEnter={() => hoversound.play()}
+            onClick={() => buttonsound.play()}
+          >
+            Submit Score
+          </button>
+        </Link>
         <img
           id="replayButton"
           src="/assets/replayButton.png"
@@ -53,4 +70,4 @@ const WinGame = props => {
   )
 }
 
-export default WinGame
+export default YouWin

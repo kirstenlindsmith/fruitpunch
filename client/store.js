@@ -19,7 +19,7 @@ const initialState = {
   riskyGameItems: [...gameItems, bomb],
   gameStarted: false,
   canvasContext: [],
-  leaderboard: [],
+  leaderboard: {normalGame: [], clockGame: [], bombGame: []},
   finalScore: 0
 }
 
@@ -104,18 +104,19 @@ export const gotCanvasContext = canvas => {
   }
 }
 
-export const gotLeaderboard = leaderboard => {
+export const gotLeaderboard = (leaderboard, game) => {
   return {
     type: GOT_LEADERBOARD,
-    leaderboard
+    leaderboard,
+    game
   }
 }
 
-export const loadLeaderboard = () => {
+export const loadLeaderboard = game => {
   return async dispatch => {
     try {
-      const {data: leaderboard} = await axios.get('/api/score/topten')
-      dispatch(gotLeaderboard(leaderboard))
+      const {data: leaderboard} = await axios.get(`/api/${game}/topten`)
+      dispatch(gotLeaderboard(leaderboard, game))
     } catch (err) {
       console.log(err)
     }
@@ -129,12 +130,12 @@ export const gotScore = finalScore => {
   }
 }
 
-export const sendScore = (name, score) => {
+export const sendScore = (name, score, game) => {
   return async dispatch => {
     try {
       console.log('NAME', name, 'SCORE', score)
-      await axios.post('/api/score/addtoboard', {name, score})
-      dispatch(loadLeaderboard())
+      await axios.post(`/api/${game}/addtoboard`, {name, score})
+      dispatch(loadLeaderboard(game))
     } catch (err) {
       console.error(err)
     }
@@ -236,7 +237,7 @@ const reducer = (state = initialState, action) => {
     case GOT_LEADERBOARD:
       return {
         ...state,
-        leaderboard: action.leaderboard
+        leaderboard: {...state.leaderboard, [action.game]: action.leaderboard}
       }
     case GOT_SCORE:
       return {

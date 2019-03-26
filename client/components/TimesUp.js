@@ -29,8 +29,22 @@ const TimesUp = props => {
       <div className="center">
         <img id="youWin" src="/assets/timesUp.gif" />
         <div id="finalTime">You got {totalfruit} fruit!</div>
-        <Link to="/leaderboard">
-          <button>Submit Score</button>
+        <Link
+          to={{
+            pathname: '/leaderboard',
+            state: {
+              fromClockGame: true
+            }
+          }}
+        >
+          <button
+            type="button"
+            className="submitScoreFromGame"
+            onMouseEnter={() => hoversound.play()}
+            onClick={() => buttonsound.play()}
+          >
+            Submit Score
+          </button>
         </Link>
         <img
           id="replayButton"

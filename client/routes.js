@@ -7,7 +7,7 @@ import {
   Game,
   Game3,
   GameSelect,
-  Leaderboard,
+  Leaderboards,
   NoMatch
 } from './components'
 
@@ -20,7 +20,7 @@ class Routes extends Component {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/select" component={GameSelect} />
-        <Route path="/leaderboard" component={Leaderboard} />
+        <Route path="/leaderboard" component={Leaderboards} />
         <Route
           exact
           path="/game1"

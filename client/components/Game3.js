@@ -2,7 +2,6 @@
 /* eslint-disable complexity */
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {RenderPlayBombGame, YouDied} from './index'
 import {calculateItemLocation, hitSequence} from './utils'
@@ -143,6 +142,8 @@ class Game3 extends Component {
               this.stopTimer()
               boom.play()
               toggleEnd()
+              let score = this.state.score
+              this.props.getFinalScore(score)
             }
           }
         }
@@ -288,6 +289,9 @@ const mapDispatchToProps = dispatch => ({
   },
   removeItem: item => {
     dispatch(respawnedRiskyItem(item))
+  },
+  getFinalScore: score => {
+    dispatch(gotScore(score))
   }
 })
 
