@@ -382,6 +382,16 @@ class Game2 extends Component {
               You got to level {this.state.level} <br />and squished{' '}
               {totalFruit} fruit!
             </div>
+            <Link
+              to={{
+                pathname: '/leaderboard',
+                state: {
+                  fromBombGame: true
+                }
+              }}
+            >
+              <button>Submit Score</button>
+            </Link>
             <img
               id="replayButton"
               src="/assets/replayButton.png"

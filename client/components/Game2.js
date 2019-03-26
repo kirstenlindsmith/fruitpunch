@@ -362,7 +362,14 @@ class Game2 extends Component {
           <div className="center">
             <img id="youWin" src="/assets/timesUp.gif" />
             <div id="finalTime">You got {totalFruit} fruit!</div>
-            <Link to="/leaderboard">
+            <Link
+              to={{
+                pathname: '/leaderboard',
+                state: {
+                  fromClockGame: true
+                }
+              }}
+            >
               <button>Submit Score</button>
             </Link>
             <img

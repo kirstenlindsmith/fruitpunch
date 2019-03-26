@@ -504,3 +504,8 @@ button:disabled {
   /* font-style: italic; */
   box-shadow: none;
 }
+
+.leaderboard {
+  display: flex;
+  justify-content: space-around;
+}

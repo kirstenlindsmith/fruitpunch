@@ -2,73 +2,35 @@ import React, {Component} from 'react'
 import {loadLeaderboard, sendScore} from '../store'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import Leaderboard from './Leaderboard'
 
-let formClassName
-let fillerClassName = 'noShow'
-
-class Leaderboard extends Component {
+class Leaderboards extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
-      interactedWith: false
+      activeGame: ''
     }
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleNameChange = this.handleNameChange.bind(this)
-    this.isNameValid = this.isNameValid.bind(this)
-    this.shouldNameMarkError = this.shouldNameMarkError.bind(this)
-    this.handleBlurWhenInteracting = this.handleBlurWhenInteracting.bind(this)
   }
 
   componentDidMount() {
-    this.props.getLeaderboard()
-  }
-
-  handleSubmit(evt) {
-    evt.preventDefault()
-    const name = evt.target.name.value
-    const score = this.props.score
-    this.props.addUserScore(name, score)
-    formClassName = 'noShow'
-    fillerClassName = ''
-  }
-
-  handleNameChange(event) {
-    this.setState({
-      name: event.target.value
-    })
-  }
-
-  isNameValid() {
-    const {name} = this.state
-    return name.length === 3
-  }
-
-  shouldNameMarkError() {
-    const hasError = !this.isNameValid()
-    const shouldDisplayError = this.state.interactedWith
-
-    return hasError ? shouldDisplayError : false
-  }
-
-  handleBlurWhenInteracting() {
-    return () => {
-      this.setState({
-        interactedWith: true
-      })
+    if (this.props.location.state) {
+      const location = this.props.location.state
+      if (location.fromClockGame) {
+        this.setState({activeGame: 'clockGame'})
+      }
+      if (location.fromNormalGame) {
+        this.setState({activeGame: 'normalGame'})
+      }
+      if (location.fromBombGame) {
+        this.setState({activeGame: 'bombGame'})
+      }
     }
   }
 
   render() {
-    const isButtonWorking = this.isNameValid()
-    const isNameWarningDisplayed = this.shouldNameMarkError()
-      ? 'errorWarning'
-      : 'noShow'
-    const errorDisplay = this.shouldNameMarkError() ? 'fieldError' : ''
-    const leaderboard = this.props.leaderboard
-    const score = this.props.score
+    console.log('Active Game', this.state.activeGame)
     return (
-      <div className="center aboutPage">
+      <div>
         <iframe
           src="/assets/silence.mp3"
           allow="autoplay"
@@ -81,66 +43,30 @@ class Leaderboard extends Component {
             type="audio/mpeg"
           />
         </audio>
-        <center>
-          <div>
-            <div id="scoreSubmitSpaceFiller" className={fillerClassName} />
-            <div id="scoreSubmitForm" className={formClassName}>
-              <p>Your Score: {score}</p>
-              <span className={isNameWarningDisplayed}>
-                Must be exactly 3 letters
-              </span>
-              <form onSubmit={this.handleSubmit}>
-                <label>Nickname: </label>
-                <input
-                  type="text"
-                  name="name"
-                  onChange={this.handleNameChange}
-                  className={errorDisplay}
-                  onBlur={this.handleBlurWhenInteracting()}
-                />
-                <button
-                  type="submit"
-                  id="leaderBoardButton"
-                  disabled={!isButtonWorking}
-                >
-                  submit
-                </button>
-              </form>
-            </div>
-            <div id="highscores">
-              High Scores:{' '}
-              {leaderboard.map(player => (
-                <div key={player.id}>
-                  <p>
-                    {player.name}: {player.score}
-                  </p>
-                </div>
-              ))}
-            </div>
+        <div>
+          <div className="leaderboard">
+            <h3>Normal Mode: </h3>
+            <Leaderboard game="normalGame" activeGame={this.state.activeGame} />
+            <h3>Beat the Clock: </h3>
+            <Leaderboard game="clockGame" activeGame={this.state.activeGame} />
+            <h3>Sudden Death: </h3>
+            <Leaderboard game="bombGame" activeGame={this.state.activeGame} />
+          </div>
+          <div className="center aboutPage">
             <Link to="/">
               <img id="homeButton" src="/assets/homeButton.png" />
             </Link>
           </div>
-        </center>
+        </div>
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  return {
-    leaderboard: state.leaderboard,
-    score: state.finalScore
-  }
+  return {}
 }
 
-const mapDispatchToProps = dispatch => ({
-  getLeaderboard: () => {
-    dispatch(loadLeaderboard())
-  },
-  addUserScore: (name, score) => {
-    dispatch(sendScore(name, score))
-  }
-})
+const mapDispatchToProps = dispatch => ({})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Leaderboards)

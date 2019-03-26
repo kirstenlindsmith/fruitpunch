@@ -349,6 +349,16 @@ class Game1 extends Component {
           <div className="center">
             <img id="youWin" src="/assets/win.gif" />
             <div id="finalTime">Your time was: {time}</div>
+            <Link
+              to={{
+                pathname: '/leaderboard',
+                state: {
+                  fromNormalGame: true
+                }
+              }}
+            >
+              <button>Submit Score</button>
+            </Link>
             <img
               id="replayButton"
               src="/assets/replayButton.png"
