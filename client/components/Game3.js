@@ -6,8 +6,6 @@ import GameItem from './GameItem'
 import {connect} from 'react-redux'
 import {findPoint} from './utils'
 import {
-  killedGameItem,
-  removedGameItem,
   gameStarted,
   gameFinished,
   addedBomb,
@@ -22,7 +20,7 @@ const boom = new Audio('/assets/bomb.mp3')
 const squish = new Audio('/assets/squish.mp3')
 let whichBombUserHit
 
-class Game2 extends Component {
+class Game3 extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -433,4 +431,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game2)
+export default connect(mapStateToProps, mapDispatchToProps)(Game3)
