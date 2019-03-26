@@ -72,48 +72,14 @@ class Leaderboard extends Component {
 
   render() {
     const isButtonWorking = this.isNameValid()
-    const isNameWarningDisplayed = this.shouldNameMarkError()
-      ? 'errorWarning'
-      : 'noShow'
     const errorDisplay = this.shouldNameMarkError() ? 'fieldError' : ''
     const allLeaderboards = this.props.leaderboard
     const chosenGame = this.props.game
     const leaderboard = allLeaderboards[chosenGame]
     const score = this.props.score
     return (
-      <div>
-        <div id="scoreSubmitSpaceFiller" className={fillerClassName} />
-        <div>
-          {this.state.chosenIsActive ? (
-            <div id="scoreSubmitForm" className={formClassName}>
-              <p>Your Score: {score}</p>
-              <span className={isNameWarningDisplayed}>
-                Must be exactly 3 letters
-              </span>
-              <form onSubmit={this.handleSubmit}>
-                <label>Nickname: </label>
-                <input
-                  type="text"
-                  name="name"
-                  onChange={this.handleNameChange}
-                  className={errorDisplay}
-                  onBlur={this.handleBlurWhenInteracting()}
-                />
-                <button
-                  type="submit"
-                  id="leaderBoardButton"
-                  disabled={!isButtonWorking}
-                >
-                  submit
-                </button>
-              </form>
-            </div>
-          ) : (
-            <div id="scoreSubmitSpaceFiller" className={fillerClassName} />
-          )}
-        </div>
+      <div className="scoreComp">
         <div id="highscores">
-          High Scores:{' '}
           {leaderboard.map(player => (
             <div key={player.id}>
               <p>
@@ -121,6 +87,36 @@ class Leaderboard extends Component {
               </p>
             </div>
           ))}
+        </div>
+        <div>
+          {this.state.chosenIsActive ? (
+            <div>
+              <div id="scoreSubmitForm" className={formClassName}>
+                <p>Your Score: {score}</p>
+                <span className="errorWarning">Must be exactly 3 letters</span>
+                <form onSubmit={this.handleSubmit}>
+                  <label>Nickname: </label>
+                  <input
+                    type="text"
+                    name="name"
+                    onChange={this.handleNameChange}
+                    className={errorDisplay}
+                    onBlur={this.handleBlurWhenInteracting()}
+                  />
+                  <button
+                    type="submit"
+                    id="leaderBoardButton"
+                    disabled={!isButtonWorking}
+                  >
+                    submit
+                  </button>
+                </form>
+              </div>
+              <div id="spaceChanger" className={fillerClassName} />
+            </div>
+          ) : (
+            <div id="scoreSubmitSpaceFiller" />
+          )}
         </div>
       </div>
     )

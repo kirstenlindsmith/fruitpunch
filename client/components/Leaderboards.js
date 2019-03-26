@@ -44,13 +44,35 @@ class Leaderboards extends Component {
           />
         </audio>
         <div>
+          <h1 className="center aboutPage">All-Time High Scores</h1>
           <div className="leaderboard">
-            <h3>Normal Mode: </h3>
-            <Leaderboard game="normalGame" activeGame={this.state.activeGame} />
-            <h3>Beat the Clock: </h3>
-            <Leaderboard game="clockGame" activeGame={this.state.activeGame} />
-            <h3>Sudden Death: </h3>
-            <Leaderboard game="bombGame" activeGame={this.state.activeGame} />
+            <div className="oneBoard">
+              <h3>Normal Mode: </h3>
+              <div className="boardComp">
+                <Leaderboard
+                  game="normalGame"
+                  activeGame={this.state.activeGame}
+                />
+              </div>
+            </div>
+            <div className="oneBoard">
+              <h3>Beat the Clock: </h3>
+              <div className="boardComp">
+                <Leaderboard
+                  game="clockGame"
+                  activeGame={this.state.activeGame}
+                />
+              </div>
+            </div>
+            <div className="oneBoard">
+              <h3>Sudden Death: </h3>
+              <div className="boardComp">
+                <Leaderboard
+                  game="bombGame"
+                  activeGame={this.state.activeGame}
+                />
+              </div>
+            </div>
           </div>
           <div className="center aboutPage">
             <Link to="/">
