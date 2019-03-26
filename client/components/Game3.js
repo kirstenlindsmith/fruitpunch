@@ -13,7 +13,8 @@ import {
   addedBomb,
   removedBombs,
   killedBomb,
-  retiredBomb
+  retiredBomb,
+  gotScore
 } from '../store'
 
 const music = new Audio('/assets/CrystalIceArea.mp3')
@@ -202,6 +203,8 @@ class Game2 extends Component {
               this.stopTimer()
               boom.play()
               toggleEnd()
+              let score = this.state.score
+              this.props.getFinalScore(score)
             }
           }
         }
@@ -450,6 +453,9 @@ const mapDispatchToProps = dispatch => ({
   },
   removeBomb: bomb => {
     dispatch(retiredBomb(bomb))
+  },
+  getFinalScore: score => {
+    dispatch(gotScore(score))
   }
 })
 

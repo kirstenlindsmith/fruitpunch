@@ -9,7 +9,8 @@ import {
   killedGameItem,
   removedGameItem,
   gameStarted,
-  gameFinished
+  gameFinished,
+  gotScore
 } from '../store'
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
@@ -195,6 +196,8 @@ class Game1 extends Component {
             won: true
           })
         }, 800)
+        let score = this.msToTime(this.state.time)
+        this.props.getFinalScore(score)
       }
     }
   }
@@ -405,6 +408,9 @@ const mapDispatchToProps = dispatch => ({
   },
   toggleEnd: () => {
     dispatch(gameFinished())
+  },
+  getFinalScore: score => {
+    dispatch(gotScore(score))
   }
 })
 
