@@ -28,7 +28,8 @@ class Leaderboard extends Component {
   componentDidUpdate(prevProps) {
     if (
       prevProps.activeGame !== this.props.activeGame &&
-      this.props.activeGame === this.props.game
+      this.props.activeGame === this.props.game &&
+      this.props.score !== 0
     ) {
       this.setState({chosenIsActive: true})
     }

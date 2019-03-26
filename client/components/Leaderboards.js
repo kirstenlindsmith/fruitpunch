@@ -28,7 +28,8 @@ class Leaderboards extends Component {
   }
 
   render() {
-    console.log('Active Game', this.state.activeGame)
+    const buttonSound = new Audio('/assets/buttonPress.mp3')
+    const hoverSound = new Audio('/assets/buttonHover.mp3')
     return (
       <div>
         <iframe
