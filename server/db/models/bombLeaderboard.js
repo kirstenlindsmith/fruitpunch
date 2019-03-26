@@ -15,4 +15,8 @@ const BombLeaderboard = db.define('bombLeaderboard', {
   }
 })
 
+BombLeaderboard.beforeCreate(playerScore => {
+  playerScore.name = playerScore.name.toUpperCase()
+})
+
 module.exports = BombLeaderboard

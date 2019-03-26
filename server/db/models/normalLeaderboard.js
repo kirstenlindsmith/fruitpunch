@@ -15,4 +15,8 @@ const NormalLeaderboard = db.define('normalLeaderboard', {
   }
 })
 
+NormalLeaderboard.beforeCreate(playerScore => {
+  playerScore.name = playerScore.name.toUpperCase()
+})
+
 module.exports = NormalLeaderboard

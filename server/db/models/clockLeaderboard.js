@@ -15,4 +15,8 @@ const ClockLeaderboard = db.define('clockLeaderboard', {
   }
 })
 
+ClockLeaderboard.beforeCreate(playerScore => {
+  playerScore.name = playerScore.name.toUpperCase()
+})
+
 module.exports = ClockLeaderboard
