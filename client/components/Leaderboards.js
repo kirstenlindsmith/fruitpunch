@@ -86,10 +86,4 @@ class Leaderboards extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {}
-}
-
-const mapDispatchToProps = dispatch => ({})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Leaderboards)
+export default Leaderboards
