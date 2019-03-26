@@ -226,6 +226,8 @@ class PoseNet extends Component {
           <video id="videoNoShow" playsInline ref={this.getVideo} />
           {gameInit}
           {game}
+          {/* //TODO: instead of {game} it would be */}
+          {/* //{this.props.render()} */}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>

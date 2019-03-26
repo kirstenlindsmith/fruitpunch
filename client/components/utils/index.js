@@ -1,5 +1,11 @@
+/* eslint-disable max-params */
+/* eslint-disable max-statements */
 /* eslint-disable complexity */
 import * as posenet from '@tensorflow-models/posenet'
+//TODO: seperate out SECTIONS of utils
+//TODO: make a SEPERATE utils file for game items
+//TODO: bring variables for render back into camera.js
+//TODO: credit all functions that we took directly from posenet
 
 const pointRadius = 3
 
@@ -41,6 +47,7 @@ export const bodyPointLocations = {
   rightAnkle: 16
 }
 //NOTE: e.g., bodyPointLocations[leftEye] = 1
+//TODO: explain in more detail that the above is for ease of use
 
 export const gameItems = [
   {
@@ -105,8 +112,8 @@ export const gameItems = [
     activeUrl: '/assets/pineapple.gif',
     explodeUrl: '/assets/explodeYELLOW.gif',
     active: true,
-    x: 1000,
-    y: 600,
+    x: 950,
+    y: 200,
     width: 150
   },
   {
@@ -283,4 +290,108 @@ export function shuffle(array) {
   }
 
   return newArray
+}
+
+export function calculateItemLocation(keypoints, gameItem) {
+  const itemWidth = gameItem.width
+  const rightWristCoords = findPoint('rightWrist', keypoints)
+  const leftWristCoords = findPoint('leftWrist', keypoints)
+  const rightElbowCoords = findPoint('rightElbow', keypoints)
+  const leftElbowCoords = findPoint('leftElbow', keypoints)
+
+  let itemCoords = {
+    x: gameItem.x,
+    y: gameItem.y
+  }
+
+  // item location window
+  const itemRadius = itemWidth * Math.sqrt(2) / 2
+  const itemCenterX =
+    Math.floor(Math.cos(Math.PI / 4) * itemRadius) + itemCoords.x
+  const itemCenterY =
+    Math.floor(Math.sin(Math.PI / 4) * itemRadius) + itemCoords.y
+
+  const yDiffR = rightWristCoords.y - rightElbowCoords.y
+  const xDiffR = rightWristCoords.x - rightElbowCoords.x
+
+  let angleR = Math.atan(Math.abs(yDiffR) / Math.abs(xDiffR))
+  if (yDiffR >= 0 && xDiffR <= 0) angleR = angleR + Math.PI / 2
+  if (xDiffR <= 0 && yDiffR < 0) angleR = angleR + Math.PI
+
+  let yDistanceR = Math.sin(angleR) * 50
+  let xDistanceR = Math.cos(angleR) * 50
+  let rightHandCoordY = yDistanceR + rightWristCoords.y
+  let rightHandCoordX = xDistanceR + rightWristCoords.x
+
+  let handToItemDistanceR = Math.sqrt(
+    Math.pow(rightHandCoordX - itemCenterX, 2) +
+      Math.pow(rightHandCoordY - itemCenterY, 2)
+  )
+
+  const yDiffL = leftWristCoords.y - leftElbowCoords.y
+  const xDiffL = leftWristCoords.x - leftElbowCoords.x
+
+  let angleL = Math.atan(Math.abs(yDiffL) / Math.abs(xDiffL))
+  if (yDiffL >= 0 && xDiffL <= 0) angleL = angleL + Math.PI / 2
+  if (xDiffL <= 0 && yDiffL < 0) angleL = angleL + Math.PI
+  if (xDiffL > 0 && yDiffL < 0) angleL = angleL + 3 * Math.PI / 2
+
+  let yDistanceL = Math.sin(angleL) * 50
+  let xDistanceL = Math.cos(angleL) * 50
+  let leftHandCoordY = yDistanceL + leftWristCoords.y
+  let leftHandCoordX = xDistanceL + leftWristCoords.x
+
+  let handToItemDistanceL = Math.sqrt(
+    Math.pow(leftHandCoordX - itemCenterX, 2) +
+      Math.pow(leftHandCoordY - itemCenterY, 2)
+  )
+
+  return {
+    itemRadius,
+    handToItemDistanceL,
+    handToItemDistanceR
+  }
+}
+
+export function hitSequence(gameItem, sound, explodeFunc, removeFunc) {
+  if (gameItem.type !== 'bomb') {
+    explodeFunc(gameItem)
+    sound.play()
+    let toRemove = gameItem
+    setTimeout(() => {
+      removeFunc(toRemove)
+    }, 260)
+  }
+}
+
+export function winGame(
+  music,
+  stopTimerFunc,
+  winSound,
+  gameItems,
+  explodeFunc,
+  squish,
+  score,
+  getFinalScore
+) {
+  music.pause()
+  stopTimerFunc()
+  winSound.play()
+  for (let i = 0; i < gameItems.length; i++) explodeFunc(gameItems[i])
+  squish.play()
+  squish.play()
+  getFinalScore(score)
+}
+
+export function increaseLevel(
+  music,
+  stopTimerFunc,
+  addBomb,
+  restartGame,
+  score
+) {
+  music.pause()
+  stopTimerFunc()
+  addBomb()
+  restartGame(score)
 }

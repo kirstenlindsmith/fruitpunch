@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {findPoint} from './utils'
 import {
   killedGameItem,
-  removedGameItem,
+  respawnedGameItem,
   gameStarted,
   gameFinished,
   gotScore
@@ -29,7 +29,7 @@ class Game2 extends Component {
       isTimerOn: false,
       time: 60000
     }
-    this.startGame = this.startGame.bind(this)
+    this.runGame = this.runGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
     this.startTimer = this.startTimer.bind(this)
     this.stopTimer = this.stopTimer.bind(this)
@@ -66,11 +66,11 @@ class Game2 extends Component {
       }, 5000)
     }
 
-    this.startGame()
+    this.runGame()
   }
 
   // THE GAME
-  startGame() {
+  runGame() {
     const squish = new Audio('/assets/squish.mp3')
     squish.volume = 1
 
@@ -404,7 +404,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(killedGameItem(item))
   },
   removeGameItem: item => {
-    dispatch(removedGameItem(item))
+    dispatch(respawnedGameItem(item))
   },
   toggleStart: () => {
     dispatch(gameStarted())
