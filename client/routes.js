@@ -4,8 +4,7 @@ import {
   About,
   Camera,
   Home,
-  Game1,
-  Game2,
+  Game,
   Game3,
   GameSelect,
   Leaderboard,
@@ -25,13 +24,23 @@ class Routes extends Component {
         <Route
           exact
           path="/game1"
-          render={() => <Camera game={Game1} />}
-          //{() => <Camera render={()=> <Game ruleset={'normal' || 'clock' || 'bombs'}}
-          //Game component has ruleset for all games, and switch cases inside render and runGame()
-          //camera just needs this.props.render()
+          render={() => <Camera render={() => <Game ruleset="normal" />} />}
         />
-        <Route exact path="/game2" render={() => <Camera game={Game2} />} />
-        <Route exact path="/game3" render={() => <Camera game={Game3} />} />
+        <Route
+          exact
+          path="/game2"
+          render={() => <Camera render={() => <Game ruleset="clock" />} />}
+        />
+        <Route
+          exact
+          path="/game3"
+          render={() => <Camera render={() => <Game ruleset="bombs" />} />}
+        />
+        <Route
+          exact
+          path="/game4"
+          render={() => <Camera render={() => <Game3 />} />}
+        />
         <Route path="/about" component={About} />
         <Route path="*" component={NoMatch} status={404} />
       </Switch>
@@ -40,3 +49,7 @@ class Routes extends Component {
 }
 
 export default withRouter(Routes)
+
+//{() => <Camera render={()=> <Game ruleset={'normal' || 'clock' || 'bombs'}}
+//Game component has ruleset for all games, and switch cases inside render and runGame()
+//camera just needs this.props.render()

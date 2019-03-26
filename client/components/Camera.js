@@ -215,9 +215,7 @@ class PoseNet extends Component {
     const {loading, gameInit} = variablesForCameraRender(this.state.loading)
 
     const selectedGame = this.props.game
-    const game = this.state.loading
-      ? null
-      : React.createElement(selectedGame, {})
+    const game = this.state.loading ? null : this.props.render()
 
     return (
       <div className="centered">
@@ -226,8 +224,6 @@ class PoseNet extends Component {
           <video id="videoNoShow" playsInline ref={this.getVideo} />
           {gameInit}
           {game}
-          {/* //TODO: instead of {game} it would be */}
-          {/* //{this.props.render()} */}
           <canvas className="webcam" ref={this.getCanvas} />
         </div>
       </div>

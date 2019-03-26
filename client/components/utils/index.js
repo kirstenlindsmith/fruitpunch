@@ -354,14 +354,11 @@ export function calculateItemLocation(keypoints, gameItem) {
 }
 
 export function hitSequence(gameItem, sound, explodeFunc, removeFunc) {
-  if (gameItem.type !== 'bomb') {
-    explodeFunc(gameItem)
-    sound.play()
-    let toRemove = gameItem
-    setTimeout(() => {
-      removeFunc(toRemove)
-    }, 260)
-  }
+  explodeFunc(gameItem)
+  sound.play()
+  setTimeout(() => {
+    removeFunc(gameItem)
+  }, 260)
 }
 
 export function winGame(
@@ -394,4 +391,28 @@ export function increaseLevel(
   stopTimerFunc()
   addBomb()
   restartGame(score)
+}
+
+import {Link} from 'react-router-dom'
+export const pauseMenuDiv = (gamePauseStatus, togglePause) => {
+  return gamePauseStatus ? (
+    <div id="pauseScreen" className="center">
+      <img className="pausedText" src="/assets/PAUSED.png" />
+      <img
+        className="continueButton"
+        src="/assets/continueButton.png"
+        onClick={togglePause}
+      />
+      <Link to="/select">
+        <img
+          className="homeButton"
+          src="/assets/returnToGameSelectButton.png"
+          onMouseEnter={() => hoverSound.play()}
+          onClick={() => {
+            buttonSound.play()
+          }}
+        />
+      </Link>
+    </div>
+  ) : null
 }

@@ -1,14 +1,20 @@
 /* eslint-disable max-statements */
 /* eslint-disable complexity */
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
-import GameItem from './GameItem'
 import {connect} from 'react-redux'
+import {
+  RenderPlayGame,
+  RenderPlayBombGame,
+  WinGame,
+  TimesUp,
+  YouDied
+} from './index'
 import {
   calculateItemLocation,
   hitSequence,
   winGame,
-  increaseLevel
+  increaseLevel,
+  pauseMenuDiv
 } from './utils'
 import {
   killedGameItem,
@@ -28,7 +34,7 @@ const boom = new Audio('/assets/bomb.mp3')
 const squish = new Audio('/assets/squish.mp3')
 let whichBombUserHit
 
-class Game1 extends Component {
+class Game extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -38,7 +44,8 @@ class Game1 extends Component {
       isClockOn: false,
       metGameOverCondition: false,
       gameOver: false,
-      time: 0
+      time: 0,
+      level: 1
     }
 
     this.runGame = this.runGame.bind(this)
@@ -59,6 +66,7 @@ class Game1 extends Component {
         this.setState({
           score: 0,
           musicPlaying: true,
+          gamePaused: false,
           time: 0
         })
         break
@@ -80,11 +88,7 @@ class Game1 extends Component {
         })
         break
       default:
-        this.setState({
-          score: 0,
-          musicPlaying: true,
-          time: 0
-        })
+        break
     }
   }
 
@@ -96,7 +100,7 @@ class Game1 extends Component {
       case 'bombs':
         return !!this.props.riskyGameItems.length
       default:
-        return !!this.props.gameItems.length
+        return true
     }
   }
 
@@ -138,7 +142,7 @@ class Game1 extends Component {
     } = this.props
 
     if (!isClockOn && !metGameOverCondition && gameHasStarted && !gamePaused) {
-      if (this.props.ruleset === ('clock' || 'bombs')) {
+      if (this.props.ruleset === 'clock' || this.props.ruleset === 'bombs') {
         this.startTimer()
       } else this.startStopwatch()
     }
@@ -151,6 +155,7 @@ class Game1 extends Component {
           handToItemDistanceL,
           handToItemDistanceR
         } = calculateItemLocation(keypoints, gameItems[i])
+        const {ruleset} = this.props
 
         if (
           !gameOver &&
@@ -160,44 +165,49 @@ class Game1 extends Component {
           (itemRadius + 50 > handToItemDistanceL ||
             itemRadius + 50 > handToItemDistanceR)
         ) {
-          switch (this.props.ruleset) {
-            case 'bomb':
-              if (riskyGameItems[i].active) {
+          console.log('met proximity case')
+          if (ruleset === 'bombs') {
+            console.log('array', riskyGameItems)
+            if (riskyGameItems[i].active) {
+              console.log('item is active')
+              if (riskyGameItems[i].type !== 'bomb') {
+                //if it's a fruit
                 hitSequence(
                   riskyGameItems[i],
                   squish,
                   explodeRiskyItem,
                   removeRiskyItem
                 )
-                if (riskyGameItems[i].type !== 'bomb') {
-                  this.setState(state => ({
-                    score: state.score + 10
-                  }))
-                } else {
-                  //if a bomb is hit
-                  whichBombUserHit = riskyGameItems[i]
-                  this.setState({
-                    metGameOverCondition: true,
-                    gameOver: true,
-                    level: 1
-                  })
-                  this.stopTimer()
-                  boom.play()
-                  getFinalScore(score)
-                  toggleEnd()
-                }
-              }
-              break
-
-            default:
-              //for normal mode and beat the clock
-              if (gameItems[i].active) {
-                hitSequence(gameItems[i], squish, explodeItem, removeGameItem)
+                // explodeRiskyItem(gameItems[i])
+                // squish.play()
+                // let toRemove = gameItems[i]
+                // setTimeout(() => {
+                //   removeRiskyItem(toRemove)
+                // }, 260)
                 this.setState(state => ({
                   score: state.score + 10
                 }))
+              } else {
+                //if a bomb is hit
+                whichBombUserHit = riskyGameItems[i]
+                this.setState({
+                  metGameOverCondition: true,
+                  gameOver: true
+                })
+                this.stopTimer()
+                boom.play()
+                getFinalScore(score)
+                toggleEnd()
               }
-              break
+            }
+          } else {
+            //if ruleset is normal or clock
+            if (gameItems[i].active) {
+              hitSequence(gameItems[i], squish, explodeItem, removeGameItem)
+              this.setState({
+                score: this.state.score + 10
+              })
+            }
           }
         }
       }
@@ -262,35 +272,15 @@ class Game1 extends Component {
                 this.restartGame,
                 score
               )
+
+              this.setState({
+                musicPlaying: false,
+                level: this.state.level + 1
+              })
             }
-            this.setState({
-              musicPlaying: false,
-              level: this.state.level + 1
-            })
             break
           default:
-            if (score >= 500) {
-              winGame(
-                music,
-                this.stopStopwatch,
-                winSound,
-                gameItems,
-                squish,
-                score,
-                getFinalScore
-              )
-              this.setState({
-                metGameOverCondition: true,
-                musicPlaying: false
-              })
-              setTimeout(() => {
-                toggleEnd()
-
-                this.setState({
-                  won: true
-                })
-              }, 800)
-            }
+            break
         }
       }
     }
@@ -323,6 +313,7 @@ class Game1 extends Component {
         })
         break
       default:
+        break
     }
 
     this.setState({
@@ -333,14 +324,13 @@ class Game1 extends Component {
     music.play()
   }
 
-  startTimer() {
-    console.log('TIMER STARTED')
+  startStopwatch() {
     this.setState({
-      isTimerOn: true,
+      isClockOn: true,
       time: this.state.time,
       start: Date.now() - this.state.time
     })
-    this.timer = setInterval(
+    this.stopwatch = setInterval(
       () =>
         this.setState({
           time: Date.now() - this.state.start
@@ -349,8 +339,27 @@ class Game1 extends Component {
     )
   }
 
+  stopStopwatch() {
+    this.setState({isClockOn: false})
+    clearInterval(this.stopwatch)
+  }
+
+  startTimer() {
+    this.setState({
+      isClockOn: true,
+      time: this.state.time
+    })
+    this.timer = setInterval(
+      () =>
+        this.setState({
+          time: this.state.time - 1000
+        }),
+      1000
+    )
+  }
+
   stopTimer() {
-    this.setState({isTimerOn: false})
+    this.setState({isClockOn: false})
     clearInterval(this.timer)
   }
 
@@ -374,7 +383,9 @@ class Game1 extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer)
+    if (this.props.ruleset === 'normal') {
+      clearInterval(this.stopwatch)
+    } else clearInterval(this.timer)
   }
 
   msToTime(givenTime) {
@@ -387,109 +398,92 @@ class Game1 extends Component {
   }
 
   render() {
-    //TODO: EACH if/else if/else CONDITION IN RENDER SHOULD BE A SEPERATE COMPONENT!!! makes it more maintainable
-    const pauseMenu = this.state.gamePaused ? (
-      <div id="pauseScreen" className="center">
-        <img className="pausedText" src="/assets/PAUSED.png" />
-        <img
-          className="continueButton"
-          src="/assets/continueButton.png"
-          onClick={this.togglePause}
-        />
-        <Link to="/select">
-          <img
-            className="homeButton"
-            src="/assets/returnToGameSelectButton.png"
-            onMouseEnter={() => hoverSound.play()}
-            onClick={() => {
-              buttonSound.play()
-            }}
+    const finalTime = this.msToTime(this.state.time)
+    const totalFruit = this.state.score / 10
+    const {initialBody, gameHasStarted, gameItems, riskyGameItems} = this.props
+    const {gameOver, score, time, level, gamePaused} = this.state
+    const displayTime = this.msToTime(time)
+    let item1, item2
+
+    if (initialBody.keypoints && !gameOver && gameHasStarted) {
+      if (this.props.ruleset === 'bombs') {
+        item1 = riskyGameItems[0]
+        item2 = riskyGameItems[1]
+
+        return (
+          <RenderPlayBombGame
+            level={level}
+            score={score}
+            time={displayTime}
+            togglepause={this.togglePause}
+            hoversound={hoverSound}
+            pausestatus={gamePaused}
+            item1={item1}
+            item2={item2}
           />
-        </Link>
-      </div>
-    ) : null
-    const time = this.msToTime(this.state.time)
-    const {initialBody, gameHasStarted, gameItems} = this.props
-    const {won, score} = this.state
+        )
+      } else {
+        item1 = gameItems[0]
+        item2 = gameItems[1]
 
-    if (initialBody.keypoints && !won && gameHasStarted) {
-      const item1 = gameItems[0]
-      const item2 = gameItems[1]
+        return (
+          <RenderPlayGame
+            score={score}
+            time={displayTime}
+            togglepause={this.togglePause}
+            hoversound={hoverSound}
+            pausestatus={gamePaused}
+            item1={item1}
+            item2={item2}
+          />
+        )
+      }
+    } else if (gameOver) {
+      switch (this.props.ruleset) {
+        case 'normal':
+          return (
+            <WinGame
+              score={score}
+              time={displayTime}
+              togglepause={this.togglePause}
+              hoversound={hoverSound}
+              buttonsound={buttonSound}
+              finaltime={finalTime}
+              restartgame={this.restartGame}
+            />
+          )
 
-      return (
-        <div>
-          <div className="gameInfo">
-            <img id="scoreText" src="/assets/score.png" />
-            <div id="score">: {score}</div>
-            <img id="timeText" src="/assets/timer.png" />
-            <div id="time">: {time}</div>
-            <img
-              id="pauseButton"
-              src="/assets/pauseButton.png"
-              onClick={this.togglePause}
-              onMouseEnter={() => hoverSound.play()}
+        case 'clock':
+          return (
+            <TimesUp
+              score={score}
+              time={displayTime}
+              togglepause={this.togglePause}
+              hoversound={hoverSound}
+              buttonsound={buttonSound}
+              totalfruit={totalFruit}
+              restartgame={this.restartGame}
             />
-          </div>
-          <div className="center">{pauseMenu}</div>
-          <div>
-            <GameItem
-              key={item1.id}
-              imageUrl={item1.imageUrl}
-              x={item1.x}
-              y={item1.y}
-              width={item1.width}
-            />
+          )
 
-            <GameItem
-              key={item2.id}
-              imageUrl={item2.imageUrl}
-              x={item2.x}
-              y={item2.y}
-              width={item2.width}
+        case 'bombs':
+          return (
+            <YouDied
+              level={this.state.level}
+              score={score}
+              time={displayTime}
+              togglepause={this.togglePause}
+              hoversound={hoverSound}
+              buttonsound={buttonSound}
+              whichbombuserhit={whichBombUserHit}
+              totalfruit={totalFruit}
+              restartgame={this.restartGame}
             />
-          </div>
-        </div>
-      )
-    } else if (won) {
-      return (
-        <div>
-          <div className="gameInfo">
-            <img id="scoreText" src="/assets/score.png" />
-            <div id="score">: {this.state.score}</div>
-            <img id="timeText" src="/assets/timer.png" />
-            <div id="time">: {time}</div>
-            <img
-              id="pauseButton"
-              src="/assets/pauseButton.png"
-              onClick={this.togglePause}
-              onMouseEnter={() => hoverSound.play()}
-            />
-          </div>
-          <div className="center">
-            <img id="youWin" src="/assets/win.gif" />
-            <div id="finalTime">Your time was: {time}</div>
-            <img
-              id="replayButton"
-              src="/assets/replayButton.png"
-              className="button"
-              onClick={() => {
-                buttonSound.play()
-                this.restartGame()
-              }}
-              onMouseEnter={() => hoverSound.play()}
-            />
-            <Link to="/">
-              <img
-                id="homeButton"
-                className="button"
-                src="/assets/homeButton.png"
-                onMouseEnter={() => hoverSound.play()}
-                onClick={() => buttonSound.play()}
-              />
-            </Link>
-          </div>
-        </div>
-      )
+          )
+
+        default:
+          return <div />
+      }
     } else return <div />
   }
 }
@@ -530,4 +524,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game1)
+export default connect(mapStateToProps, mapDispatchToProps)(Game)

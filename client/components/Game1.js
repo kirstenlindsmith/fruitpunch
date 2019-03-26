@@ -163,7 +163,7 @@ class Game1 extends Component {
               removeGameItem(toRemove)
             }, 260)
 
-            if (!this.state.metWonCondition) {
+            if (!this.state.metWonCondition && !this.state.won) {
               //helps prevent score from going OVER win condition amount
               this.setState(state => ({
                 score: state.score + 10

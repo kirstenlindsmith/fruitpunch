@@ -164,7 +164,7 @@ class Game3 extends Component {
             removeItem(toRemove)
           }, 5000)
         }
-
+        console.log('array', gameItems)
         if (
           !this.state.died &&
           gameHasStarted &&

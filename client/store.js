@@ -15,7 +15,7 @@ const initialState = {
   keypoints: [],
   initialBody: {},
   proportions: {},
-  activeGameItems: gameItems,
+  activeGameItems: [...gameItems],
   riskyGameItems: [...gameItems, bomb],
   gameStarted: false,
   canvasContext: [],
