@@ -181,7 +181,7 @@ body {
 }
 
 #scoreSubmitSpaceFiller {
-  min-height: 107px;
+  min-height: 110px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -492,7 +492,7 @@ button:hover {
 }
 
 #leaderBoardButton {
-  padding: 8px 15px;
+  padding: 6px 12px;
   line-height: 25px;
   vertical-align: center;
   margin-left: 10px;
@@ -503,4 +503,32 @@ button:disabled {
   color: rgb(212, 212, 212);
   /* font-style: italic; */
   box-shadow: none;
+}
+
+.leaderboard {
+  display: flex;
+  justify-content: space-around;
+}
+
+.oneBoard {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.boardComp {
+  align-self: center;
+}
+
+.scoreComp {
+  display: flex;
+  flex-direction: column;
+}
+
+#spaceChanger {
+  min-height: 110px;
+}
+
+#scoreSubmitForm {
+  align-self: center;
 }

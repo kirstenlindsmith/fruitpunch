@@ -13,7 +13,8 @@ import {
   addedBomb,
   removedBombs,
   killedBomb,
-  retiredBomb
+  retiredBomb,
+  gotScore
 } from '../store'
 
 const music = new Audio('/assets/CrystalIceArea.mp3')
@@ -202,6 +203,8 @@ class Game2 extends Component {
               this.stopTimer()
               boom.play()
               toggleEnd()
+              let score = this.state.score
+              this.props.getFinalScore(score)
             }
           }
         }
@@ -382,6 +385,16 @@ class Game2 extends Component {
               You got to level {this.state.level} <br />and squished{' '}
               {totalFruit} fruit!
             </div>
+            <Link
+              to={{
+                pathname: '/leaderboard',
+                state: {
+                  fromBombGame: true
+                }
+              }}
+            >
+              <button>Submit Score</button>
+            </Link>
             <img
               id="replayButton"
               src="/assets/replayButton.png"
@@ -440,6 +453,9 @@ const mapDispatchToProps = dispatch => ({
   },
   removeBomb: bomb => {
     dispatch(retiredBomb(bomb))
+  },
+  getFinalScore: score => {
+    dispatch(gotScore(score))
   }
 })
 
