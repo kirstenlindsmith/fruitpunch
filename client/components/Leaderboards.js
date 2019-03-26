@@ -61,9 +61,6 @@ class Leaderboard extends Component {
 
   render() {
     const isButtonWorking = this.isNameValid()
-    const isNameWarningDisplayed = this.shouldNameMarkError()
-      ? 'errorWarning'
-      : 'noShow'
     const errorDisplay = this.shouldNameMarkError() ? 'fieldError' : ''
     const leaderboard = this.props.leaderboard
     const score = this.props.score
@@ -86,14 +83,12 @@ class Leaderboard extends Component {
             <div id="scoreSubmitSpaceFiller" className={fillerClassName} />
             <div id="scoreSubmitForm" className={formClassName}>
               <p>Your Score: {score}</p>
-              <span className={isNameWarningDisplayed}>
-                Must be exactly 3 letters
-              </span>
               <form onSubmit={this.handleSubmit}>
                 <label>Nickname: </label>
                 <input
                   type="text"
                   name="name"
+                  placeholder="max 3 characters"
                   onChange={this.handleNameChange}
                   className={errorDisplay}
                   onBlur={this.handleBlurWhenInteracting()}
