@@ -34,11 +34,6 @@ class Routes extends Component {
         <Route
           exact
           path="/game3"
-          render={() => <Camera render={() => <Game ruleset="bombs" />} />}
-        />
-        <Route
-          exact
-          path="/game4"
           render={() => <Camera render={() => <Game3 />} />}
         />
         <Route path="/about" component={About} />

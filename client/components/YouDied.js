@@ -49,7 +49,7 @@ const YouDied = props => {
           onMouseEnter={() => hoversound.play()}
           onClick={() => {
             buttonsound.play()
-            restartgame()
+            restartgame(score)
           }}
         />
         <Link to="/">

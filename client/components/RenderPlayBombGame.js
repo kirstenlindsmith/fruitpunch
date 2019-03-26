@@ -9,6 +9,7 @@ const RenderPlayBombGame = props => {
     time,
     togglepause,
     hoversound,
+    buttonsound,
     pausestatus,
     item1,
     item2
@@ -30,7 +31,9 @@ const RenderPlayBombGame = props => {
           onMouseEnter={() => hoversound.play()}
         />
       </div>
-      <div className="center">{pauseMenuDiv(pausestatus, togglepause)}</div>
+      <div className="center">
+        {pauseMenuDiv(pausestatus, togglepause, hoversound, buttonsound)}
+      </div>
       <div>
         <GameItem
           key={item1.id}

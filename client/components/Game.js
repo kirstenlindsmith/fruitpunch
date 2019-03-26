@@ -2,37 +2,26 @@
 /* eslint-disable complexity */
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {
-  RenderPlayGame,
-  RenderPlayBombGame,
-  WinGame,
-  TimesUp,
-  YouDied
-} from './index'
+import {RenderPlayGame, WinGame, TimesUp} from './index'
 import {
   calculateItemLocation,
   hitSequence,
-  winGame,
-  increaseLevel,
-  pauseMenuDiv
+  finishGame,
+  increaseLevel
 } from './utils'
 import {
   killedGameItem,
   respawnedGameItem,
   gameStarted,
   gameFinished,
-  addedBomb,
-  killedRiskyItem,
-  respawnedRiskyItem,
   gotScore
 } from '../store'
+
 const music = new Audio('/assets/CrystalIceArea.mp3')
 const winSound = new Audio('/assets/winSound.mp3')
 const buttonSound = new Audio('/assets/buttonPress.mp3')
 const hoverSound = new Audio('/assets/buttonHover.mp3')
-const boom = new Audio('/assets/bomb.mp3')
 const squish = new Audio('/assets/squish.mp3')
-let whichBombUserHit
 
 class Game extends Component {
   constructor(props) {
@@ -44,8 +33,7 @@ class Game extends Component {
       isClockOn: false,
       metGameOverCondition: false,
       gameOver: false,
-      time: 0,
-      level: 1
+      time: 0
     }
 
     this.runGame = this.runGame.bind(this)
@@ -78,15 +66,6 @@ class Game extends Component {
           time: 60000
         })
         break
-      case 'bombs':
-        this.setState({
-          score: 0,
-          musicPlaying: true,
-          gamePaused: false,
-          time: 60000,
-          level: 1
-        })
-        break
       default:
         break
     }
@@ -94,14 +73,7 @@ class Game extends Component {
 
   shouldComponentUpdate() {
     // if there are still any active game items of the appropriate set
-    switch (this.props.ruleset) {
-      case 'normal' || 'clock':
-        return !!this.props.gameItems.length
-      case 'bombs':
-        return !!this.props.riskyGameItems.length
-      default:
-        return true
-    }
+    return !!this.props.gameItems.length
   }
 
   componentDidUpdate() {
@@ -129,33 +101,28 @@ class Game extends Component {
 
     const {
       gameItems,
-      riskyGameItems,
       keypoints,
       gameHasStarted,
       explodeItem,
       removeGameItem,
-      explodeRiskyItem,
-      addBomb,
-      removeRiskyItem,
       toggleEnd,
       getFinalScore
     } = this.props
 
     if (!isClockOn && !metGameOverCondition && gameHasStarted && !gamePaused) {
-      if (this.props.ruleset === 'clock' || this.props.ruleset === 'bombs') {
+      if (this.props.ruleset === 'clock') {
         this.startTimer()
       } else this.startStopwatch()
     }
 
     if (keypoints.length && !gameOver) {
       for (let i = 0; i < 2; i++) {
-        //calculate object location window
         const {
           itemRadius,
           handToItemDistanceL,
           handToItemDistanceR
         } = calculateItemLocation(keypoints, gameItems[i])
-        const {ruleset} = this.props
+        //calculate game item location window
 
         if (
           !gameOver &&
@@ -165,49 +132,11 @@ class Game extends Component {
           (itemRadius + 50 > handToItemDistanceL ||
             itemRadius + 50 > handToItemDistanceR)
         ) {
-          console.log('met proximity case')
-          if (ruleset === 'bombs') {
-            console.log('array', riskyGameItems)
-            if (riskyGameItems[i].active) {
-              console.log('item is active')
-              if (riskyGameItems[i].type !== 'bomb') {
-                //if it's a fruit
-                hitSequence(
-                  riskyGameItems[i],
-                  squish,
-                  explodeRiskyItem,
-                  removeRiskyItem
-                )
-                // explodeRiskyItem(gameItems[i])
-                // squish.play()
-                // let toRemove = gameItems[i]
-                // setTimeout(() => {
-                //   removeRiskyItem(toRemove)
-                // }, 260)
-                this.setState(state => ({
-                  score: state.score + 10
-                }))
-              } else {
-                //if a bomb is hit
-                whichBombUserHit = riskyGameItems[i]
-                this.setState({
-                  metGameOverCondition: true,
-                  gameOver: true
-                })
-                this.stopTimer()
-                boom.play()
-                getFinalScore(score)
-                toggleEnd()
-              }
-            }
-          } else {
-            //if ruleset is normal or clock
-            if (gameItems[i].active) {
-              hitSequence(gameItems[i], squish, explodeItem, removeGameItem)
-              this.setState({
-                score: this.state.score + 10
-              })
-            }
+          if (gameItems[i].active) {
+            hitSequence(gameItems[i], squish, explodeItem, removeGameItem)
+            this.setState({
+              score: this.state.score + 10
+            })
           }
         }
       }
@@ -217,7 +146,7 @@ class Game extends Component {
         switch (this.props.ruleset) {
           case 'normal':
             if (score >= 500) {
-              winGame(
+              finishGame(
                 music,
                 this.stopStopwatch,
                 winSound,
@@ -241,7 +170,7 @@ class Game extends Component {
             break
           case 'clock':
             if (time <= 0) {
-              winGame(
+              finishGame(
                 music,
                 this.stopTimer,
                 winSound,
@@ -263,22 +192,6 @@ class Game extends Component {
               }, 800)
             }
             break
-          case 'bombs':
-            if (time <= 0) {
-              increaseLevel(
-                music,
-                this.stopTimer,
-                addBomb,
-                this.restartGame,
-                score
-              )
-
-              this.setState({
-                musicPlaying: false,
-                level: this.state.level + 1
-              })
-            }
-            break
           default:
             break
         }
@@ -286,7 +199,7 @@ class Game extends Component {
     }
   }
 
-  restartGame(savedScore) {
+  restartGame() {
     const {gameItems, removeGameItem, toggleStart} = this.props
     switch (this.props.ruleset) {
       case 'normal':
@@ -306,12 +219,6 @@ class Game extends Component {
         for (let i = 0; i < gameItems.length; i++) removeGameItem(gameItems[i])
         break
 
-      case 'bombs':
-        this.setState({
-          score: savedScore,
-          time: 60000
-        })
-        break
       default:
         break
     }
@@ -400,44 +307,25 @@ class Game extends Component {
   render() {
     const finalTime = this.msToTime(this.state.time)
     const totalFruit = this.state.score / 10
-    const {initialBody, gameHasStarted, gameItems, riskyGameItems} = this.props
-    const {gameOver, score, time, level, gamePaused} = this.state
+    const {initialBody, gameHasStarted, gameItems} = this.props
+    const {gameOver, score, time, gamePaused} = this.state
     const displayTime = this.msToTime(time)
-    let item1, item2
+    const item1 = gameItems[0]
+    const item2 = gameItems[1]
 
     if (initialBody.keypoints && !gameOver && gameHasStarted) {
-      if (this.props.ruleset === 'bombs') {
-        item1 = riskyGameItems[0]
-        item2 = riskyGameItems[1]
-
-        return (
-          <RenderPlayBombGame
-            level={level}
-            score={score}
-            time={displayTime}
-            togglepause={this.togglePause}
-            hoversound={hoverSound}
-            pausestatus={gamePaused}
-            item1={item1}
-            item2={item2}
-          />
-        )
-      } else {
-        item1 = gameItems[0]
-        item2 = gameItems[1]
-
-        return (
-          <RenderPlayGame
-            score={score}
-            time={displayTime}
-            togglepause={this.togglePause}
-            hoversound={hoverSound}
-            pausestatus={gamePaused}
-            item1={item1}
-            item2={item2}
-          />
-        )
-      }
+      return (
+        <RenderPlayGame
+          score={score}
+          time={displayTime}
+          togglepause={this.togglePause}
+          hoversound={hoverSound}
+          buttonsound={buttonSound}
+          pausestatus={gamePaused}
+          item1={item1}
+          item2={item2}
+        />
+      )
     } else if (gameOver) {
       switch (this.props.ruleset) {
         case 'normal':
@@ -466,21 +354,6 @@ class Game extends Component {
             />
           )
 
-        case 'bombs':
-          return (
-            <YouDied
-              level={this.state.level}
-              score={score}
-              time={displayTime}
-              togglepause={this.togglePause}
-              hoversound={hoverSound}
-              buttonsound={buttonSound}
-              whichbombuserhit={whichBombUserHit}
-              totalfruit={totalFruit}
-              restartgame={this.restartGame}
-            />
-          )
-
         default:
           return <div />
       }
@@ -491,7 +364,6 @@ class Game extends Component {
 const mapStateToProps = state => ({
   keypoints: state.keypoints,
   gameItems: state.activeGameItems,
-  riskyGameItems: state.riskyGameItems,
   initialBody: state.initialBody,
   gameHasStarted: state.gameStarted,
   canvasContext: state.canvasContext
@@ -503,15 +375,6 @@ const mapDispatchToProps = dispatch => ({
   },
   removeGameItem: item => {
     dispatch(respawnedGameItem(item))
-  },
-  addBomb: () => {
-    dispatch(addedBomb())
-  },
-  explodeRiskyItem: item => {
-    dispatch(killedRiskyItem(item))
-  },
-  removeRiskyItem: item => {
-    dispatch(respawnedRiskyItem(item))
   },
   toggleStart: () => {
     dispatch(gameStarted())

@@ -248,9 +248,8 @@ export function generateRandomCoords(gameItem) {
 
   const rightShoulderCoords = findPoint('rightShoulder', keypoints)
   const leftShoulderCoords = findPoint('leftShoulder', keypoints)
-
-  let xCoordRange = Math.random() * (window.innerWidth - 150)
-  const yCoordRange = Math.random() * (window.innerHeight - 150)
+  let xCoordRange = Math.random() * (window.innerWidth - 250)
+  const yCoordRange = Math.random() * (window.innerHeight - 250)
   const forbiddenXRange =
     leftShoulderCoords.x + 50 - (rightShoulderCoords.x - 50)
 
@@ -361,7 +360,7 @@ export function hitSequence(gameItem, sound, explodeFunc, removeFunc) {
   }, 260)
 }
 
-export function winGame(
+export function finishGame(
   music,
   stopTimerFunc,
   winSound,
@@ -377,30 +376,23 @@ export function winGame(
   for (let i = 0; i < gameItems.length; i++) explodeFunc(gameItems[i])
   squish.play()
   squish.play()
-  getFinalScore(score)
-}
-
-export function increaseLevel(
-  music,
-  stopTimerFunc,
-  addBomb,
-  restartGame,
-  score
-) {
-  music.pause()
-  stopTimerFunc()
-  addBomb()
-  restartGame(score)
+  // getFinalScore(score)
 }
 
 import {Link} from 'react-router-dom'
-export const pauseMenuDiv = (gamePauseStatus, togglePause) => {
+export const pauseMenuDiv = (
+  gamePauseStatus,
+  togglePause,
+  hoverSound,
+  buttonSound
+) => {
   return gamePauseStatus ? (
     <div id="pauseScreen" className="center">
       <img className="pausedText" src="/assets/PAUSED.png" />
       <img
         className="continueButton"
         src="/assets/continueButton.png"
+        onMouseEnter={() => hoverSound.play()}
         onClick={togglePause}
       />
       <Link to="/select">

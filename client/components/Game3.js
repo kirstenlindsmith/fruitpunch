@@ -4,13 +4,15 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import GameItem from './GameItem'
 import {connect} from 'react-redux'
-import {findPoint} from './utils'
+import {RenderPlayBombGame, YouDied} from './index'
+import {calculateItemLocation, hitSequence} from './utils'
 import {
   gameStarted,
   gameFinished,
   addedBomb,
   killedRiskyItem,
-  respawnedRiskyItem
+  respawnedRiskyItem,
+  gotScore
 } from '../store'
 
 const music = new Audio('/assets/CrystalIceArea.mp3')
@@ -26,14 +28,14 @@ class Game3 extends Component {
     this.state = {
       score: 0,
       level: 1,
-      died: false,
-      metDeathCondition: false,
+      gameOver: false,
+      metGameOverCondition: false,
       gamePaused: false,
       musicPlaying: false,
       isTimerOn: false,
       time: 60000
     }
-    this.startGame = this.startGame.bind(this)
+    this.runGame = this.runGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
     this.startTimer = this.startTimer.bind(this)
     this.stopTimer = this.stopTimer.bind(this)
@@ -60,29 +62,26 @@ class Game3 extends Component {
   }
 
   componentDidUpdate() {
-    if (
-      this.props.initialBody.keypoints &&
-      !this.state.died &&
-      !this.props.gameHasStarted
-    ) {
+    const {initialBody, gameHasStarted, toggleStart} = this.props
+    const {gameOver} = this.state
+
+    if (initialBody.keypoints && !gameOver && !gameHasStarted) {
       setTimeout(() => {
-        this.props.toggleStart()
+        toggleStart()
       }, 5000)
     }
 
-    this.startGame()
+    this.runGame()
   }
 
-  // THE GAME
-  startGame() {
-    if (
-      !this.state.isTimerOn &&
-      !this.state.metDeathCondition &&
-      this.props.gameHasStarted &&
-      !this.state.gamePaused
-    ) {
-      this.startTimer()
-    }
+  runGame() {
+    const {
+      isTimerOn,
+      metGameOverCondition,
+      gamePaused,
+      gameOver,
+      time
+    } = this.state
 
     const {
       gameItems,
@@ -94,94 +93,39 @@ class Game3 extends Component {
       removeItem
     } = this.props
 
-    if (keypoints.length && !this.state.died) {
+    if (!isTimerOn && !metGameOverCondition && gameHasStarted && !gamePaused) {
+      this.startTimer()
+    }
+
+    if (keypoints.length && !gameOver) {
       for (let i = 0; i < 2; i++) {
-        const itemWidth = gameItems[i].width
-        const rightWristCoords = findPoint('rightWrist', keypoints)
-        const leftWristCoords = findPoint('leftWrist', keypoints)
-        const rightElbowCoords = findPoint('rightElbow', this.props.keypoints)
-        const leftElbowCoords = findPoint('leftElbow', this.props.keypoints)
-
-        let itemCoords = {
-          x: gameItems[i].x,
-          y: gameItems[i].y
-        }
-
-        const itemRadius = itemWidth * Math.sqrt(2) / 2
-        const itemCenterX =
-          Math.floor(Math.cos(Math.PI / 4) * itemRadius) + itemCoords.x
-        const itemCenterY =
-          Math.floor(Math.sin(Math.PI / 4) * itemRadius) + itemCoords.y
-
-        const yDiffR = rightWristCoords.y - rightElbowCoords.y
-        const xDiffR = rightWristCoords.x - rightElbowCoords.x
-
-        let angleR = Math.atan(Math.abs(yDiffR) / Math.abs(xDiffR))
-        if (yDiffR >= 0 && xDiffR <= 0) {
-          angleR = angleR + Math.PI / 2
-        }
-        if (xDiffR <= 0 && yDiffR < 0) {
-          angleR = angleR + Math.PI
-        }
-
-        let yDistanceR = Math.sin(angleR) * 50
-        let xDistanceR = Math.cos(angleR) * 50
-        let rightHandCoordY = yDistanceR + rightWristCoords.y
-        let rightHandCoordX = xDistanceR + rightWristCoords.x
-
-        let handToItemDistanceR = Math.sqrt(
-          Math.pow(rightHandCoordX - itemCenterX, 2) +
-            Math.pow(rightHandCoordY - itemCenterY, 2)
-        )
-
-        const yDiffL = leftWristCoords.y - leftElbowCoords.y
-        const xDiffL = leftWristCoords.x - leftElbowCoords.x
-
-        let angleL = Math.atan(Math.abs(yDiffL) / Math.abs(xDiffL))
-        if (yDiffL >= 0 && xDiffL <= 0) {
-          angleL = angleL + Math.PI / 2
-        }
-        if (xDiffL <= 0 && yDiffL < 0) {
-          angleL = angleL + Math.PI
-        }
-        if (xDiffL > 0 && yDiffL < 0) {
-          angleL = angleL + 3 * Math.PI / 2
-        }
-
-        let yDistanceL = Math.sin(angleL) * 50
-        let xDistanceL = Math.cos(angleL) * 50
-        let leftHandCoordY = yDistanceL + leftWristCoords.y
-        let leftHandCoordX = xDistanceL + leftWristCoords.x
-
-        let handToItemDistanceL = Math.sqrt(
-          Math.pow(leftHandCoordX - itemCenterX, 2) +
-            Math.pow(leftHandCoordY - itemCenterY, 2)
-        )
+        const {
+          itemRadius,
+          handToItemDistanceL,
+          handToItemDistanceR
+        } = calculateItemLocation(keypoints, gameItems[i])
+        //calculate game item location window
 
         if (this.props.gameItems[i].type === 'bomb') {
+          //despawn bombs after 5 seconds if they aren't hit
           let toRemove = this.props.gameItems[i]
           setTimeout(() => {
             removeItem(toRemove)
           }, 5000)
         }
-        console.log('array', gameItems)
+
         if (
-          !this.state.died &&
+          !gameOver &&
           gameHasStarted &&
-          !this.state.gamePaused &&
-          (itemRadius + 50 > handToItemDistanceL ||
-            itemRadius + 50 > handToItemDistanceR)
+          !gamePaused &&
+          (itemRadius + 50 > handToItemDistanceL || //within touching distance
+            itemRadius + 50 > handToItemDistanceR) //of a gameItem
         ) {
           if (this.props.gameItems[i].active) {
             if (this.props.gameItems[i].type !== 'bomb') {
-              //explode the item
-              explodeItem(this.props.gameItems[i])
-              squish.play()
-              let toRemove = this.props.gameItems[i]
-              setTimeout(() => {
-                //retire the item
-                removeItem(toRemove)
-              }, 260)
+              //if the item is a fruit:
+              hitSequence(gameItems[i], squish, explodeItem, removeItem)
+
               if (!this.state.metDeathCondition) {
                 //helps prevent score from going OVER win condition amount
                 this.setState(state => ({
@@ -189,11 +133,11 @@ class Game3 extends Component {
                 }))
               }
             } else {
-              //IF YOU HIT A BOMB:
+              //if the player hits a bomb:
               whichBombUserHit = this.props.gameItems[i]
               this.setState({
-                metDeathCondition: true,
-                died: true,
+                metGameOverCondition: true,
+                gameOver: true,
                 level: 1
               })
               this.stopTimer()
@@ -203,8 +147,8 @@ class Game3 extends Component {
           }
         }
       }
-      if (this.state.time <= 0 && !this.state.metDeathCondition) {
-        console.log('YOU SURVIVED A ROUND!!!')
+      if (time <= 0 && !metGameOverCondition) {
+        //if the player survives a full one-minute round...
         music.pause()
         this.stopTimer()
         this.setState({
@@ -219,12 +163,12 @@ class Game3 extends Component {
 
   restartGame(savedScore) {
     this.setState({
-      died: false,
-      metDeathCondition: false,
+      gameOver: false,
+      metGameOverCondition: false,
       score: savedScore,
       time: 60000
     })
-    //this.props.removeAllBombs()
+
     this.props.toggleStart()
     music.play()
   }
@@ -283,123 +227,39 @@ class Game3 extends Component {
 
   render() {
     const totalFruit = this.state.score / 10 ? this.state.score / 10 : 0
-    const time = this.msToTime(this.state.time)
-    const pauseMenu = this.state.gamePaused ? (
-      <div id="pauseScreen" className="center">
-        <img className="pausedText" src="/assets/PAUSED.png" />
-        <img
-          className="continueButton"
-          src="/assets/continueButton.png"
-          onClick={this.togglePause}
-          onMouseEnter={() => hoverSound.play()}
+    const {initialBody, gameHasStarted, gameItems} = this.props
+    const {gameOver, score, time, level, gamePaused} = this.state
+    const displayTime = this.msToTime(time)
+    const item1 = gameItems[0]
+    const item2 = gameItems[1]
+
+    if (initialBody.keypoints && !gameOver && gameHasStarted) {
+      return (
+        <RenderPlayBombGame
+          level={level}
+          score={score}
+          time={displayTime}
+          togglepause={this.togglePause}
+          hoversound={hoverSound}
+          buttonsound={buttonSound}
+          pausestatus={gamePaused}
+          item1={item1}
+          item2={item2}
         />
-        <Link to="/select">
-          <img
-            className="homeButton"
-            src="/assets/returnToGameSelectButton.png"
-            onMouseEnter={() => hoverSound.play()}
-            onClick={() => {
-              buttonSound.play()
-            }}
-          />
-        </Link>
-      </div>
-    ) : null
-
-    if (
-      this.props.initialBody.keypoints &&
-      !this.state.died &&
-      this.props.gameHasStarted
-    ) {
-      const item1 = this.props.gameItems[0]
-      const item2 = this.props.gameItems[1]
-
-      return (
-        <div>
-          <div className="gameInfo">
-            <img id="levelText" src="/assets/level.png" />
-            <div id="level">: {this.state.level}</div>
-            <img id="scoreText" src="/assets/score.png" />
-            <div id="score">: {this.state.score}</div>
-            <img id="timeText" src="/assets/timer.png" />
-            <div id="time">: {time}</div>
-            <img
-              id="bombPauseButton"
-              src="/assets/pauseButton.png"
-              onClick={this.togglePause}
-              onMouseEnter={() => hoverSound.play()}
-            />
-          </div>
-          <div className="center">{pauseMenu}</div>
-          <div>
-            <GameItem
-              key={item1.id}
-              imageUrl={item1.imageUrl}
-              x={item1.x}
-              y={item1.y}
-              width={item1.width}
-            />
-
-            <GameItem
-              key={item2.id}
-              imageUrl={item2.imageUrl}
-              x={item2.x}
-              y={item2.y}
-              width={item2.width}
-            />
-          </div>
-        </div>
       )
-    } else if (this.state.died) {
+    } else if (gameOver) {
       return (
-        <div>
-          <div className="gameInfo">
-            <img id="levelText" src="/assets/level.png" />
-            <div id="level">: {this.state.level}</div>
-            <img id="scoreText" src="/assets/score.png" />
-            <div id="score">: {this.state.score}</div>
-            <img id="timeText" src="/assets/timer.png" />
-            <div id="time">: {time}</div>
-            <img
-              id="bombPauseButton"
-              src="/assets/pauseButton.png"
-              onClick={this.togglePause}
-              onMouseEnter={() => hoverSound.play()}
-            />
-          </div>
-          <GameItem
-            imageUrl={whichBombUserHit.explodeUrl}
-            x={whichBombUserHit.x}
-            y={whichBombUserHit.y}
-            width={whichBombUserHit.width}
-          />
-          <div className="center">
-            <img id="youDied" src="/assets/youDied.gif" />
-            <div id="finalLevel">
-              You got to level {this.state.level} <br />and squished{' '}
-              {totalFruit} fruit!
-            </div>
-            <img
-              id="replayButton"
-              src="/assets/replayButton.png"
-              className="button"
-              onMouseEnter={() => hoverSound.play()}
-              onClick={() => {
-                buttonSound.play()
-                this.restartGame()
-              }}
-            />
-            <Link to="/">
-              <img
-                id="homeButton"
-                className="button"
-                src="/assets/homeButton.png"
-                onMouseEnter={() => hoverSound.play()}
-                onClick={() => buttonSound.play()}
-              />
-            </Link>
-          </div>
-        </div>
+        <YouDied
+          level={level}
+          score={score}
+          time={displayTime}
+          togglepause={this.togglePause}
+          hoversound={hoverSound}
+          buttonsound={buttonSound}
+          whichbombuserhit={whichBombUserHit}
+          totalfruit={totalFruit}
+          restartgame={this.restartGame}
+        />
       )
     } else return <div />
   }
