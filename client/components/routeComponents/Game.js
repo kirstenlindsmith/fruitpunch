@@ -41,14 +41,6 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    console.log('HELLO!?!?!?!')
-    console.log('location', this.props.location)
-    if (this.props.location.state) {
-      console.log('location state exists')
-      const refresh = this.props.location.state.refresh
-      console.log('refresh:', refresh)
-      if (refresh) window.location.reload()
-    }
 
     music.volume = 0.5
     if (!this.state.musicPlaying) music.play()
