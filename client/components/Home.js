@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import {Link as ScrollLink} from 'react-scroll'
 
 const Home = () => {
   const buttonSound = new Audio('/assets/buttonPress.mp3')
@@ -53,6 +54,18 @@ const Home = () => {
                 onClick={() => buttonSound.play()}
               />
             </Link>
+            <br />
+            <ScrollLink
+              className="scrollButton"
+              to="instructions"
+              spy={true}
+              smooth={true}
+              duration={500}
+            >
+              <button id="homeToBottomButton" className="scrollButton">
+                ⬇
+              </button>
+            </ScrollLink>
           </div>
         </div>
         <div id="homeCenterOffset">
@@ -88,6 +101,17 @@ const Home = () => {
             <img id="privacyGif" src="/assets/punch2.gif" />
           </div>
         </div>
+        <ScrollLink
+          className="scrollButton"
+          to="logo"
+          spy={true}
+          smooth={true}
+          duration={500}
+        >
+          <button id="homeToTopButton" className="scrollButton">
+            ⬆
+          </button>
+        </ScrollLink>
       </center>
     </div>
   )

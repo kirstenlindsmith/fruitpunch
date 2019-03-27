@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import {Link as ScrollLink} from 'react-scroll'
 
 const About = () => {
   const buttonSound = new Audio('/assets/buttonPress.mp3')
@@ -22,6 +23,18 @@ const About = () => {
       <center>
         <div id="aboutTheGame">
           <img src="/assets/aboutTheGame.gif" />
+          <ScrollLink
+            className="scrollButton"
+            to="aboutUs"
+            spy={true}
+            smooth={true}
+            offset={50}
+            duration={500}
+          >
+            <button id="aboutToBottomButton" className="scrollButton">
+              ⬇
+            </button>
+          </ScrollLink>
           <div className="aboutText">
             <p>
               This series of awesomely fun games was made created using PoseNet
@@ -88,15 +101,28 @@ const About = () => {
             <img className="sprite" src="/assets/kirsten.png" />
           </div>
         </div>
-        <Link to="/">
-          <img
-            className="homeButton"
-            id="aboutHomeButton"
-            src="/assets/backButton.png"
-            onMouseEnter={() => hoverSound.play()}
-            onClick={() => buttonSound.play()}
-          />
-        </Link>
+        <div id="aboutBottomButtons">
+          <Link to="/">
+            <img
+              className="homeButton"
+              id="aboutHomeButton"
+              src="/assets/homeButton.png"
+              onMouseEnter={() => hoverSound.play()}
+              onClick={() => buttonSound.play()}
+            />
+          </Link>
+          <ScrollLink
+            className="scrollButton"
+            to="aboutTheGame"
+            spy={true}
+            smooth={true}
+            duration={500}
+          >
+            <button id="aboutToTopButton" className="scrollButton">
+              ⬆
+            </button>
+          </ScrollLink>
+        </div>
       </center>
     </div>
   )

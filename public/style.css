@@ -116,6 +116,13 @@ form {
   margin-top: -310px;
 }
 
+#aboutTheGame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
 #aboutTheGame img {
   margin-bottom: -10px;
   margin-left: 14px;
@@ -428,8 +435,8 @@ form {
 }
 
 #aboutHomeButton {
-  margin-top: 100px;
-  margin-bottom: 100px;
+  margin-top: 22.25px;
+  height: 52px;
 }
 
 .sprite {
@@ -601,4 +608,56 @@ button:disabled {
 .replayHomeButtons {
   display: flex;
   flex-direction: row;
+}
+
+#aboutBottomButtons {
+  display: flex;
+  margin-bottom: 100px;
+  margin-top: 50px;
+  justify-content: center;
+}
+
+#aboutToBottomButton {
+  margin-top: -20px;
+  margin-bottom: 20px;
+  background-color: rgb(92, 212, 216);
+}
+
+#aboutToBottomButton:hover {
+  background-color: rgb(86, 198, 202);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
+}
+
+#aboutToTopButton {
+  margin-top: 20px;
+  margin-left: 10px;
+  background-color: rgb(92, 212, 216);
+}
+
+#aboutToTopButton:hover {
+  background-color: rgb(86, 198, 202);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
+}
+
+#homeToTopButton {
+  margin-top: 20px;
+  margin-right: 20px;
+  background-color: rgb(92, 212, 216);
+  margin-bottom: 100px;
+}
+
+#homeToTopButton:hover {
+  background-color: rgb(86, 198, 202);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
+}
+
+#homeToBottomButton {
+  margin-top: 20px;
+  margin-left: 10px;
+  background-color: rgb(92, 212, 216);
+}
+
+#homeToBottomButton:hover {
+  background-color: rgb(86, 198, 202);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
 }
