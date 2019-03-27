@@ -5,9 +5,9 @@
 **_Fruit Punch_** is an interactive web app game that tracks a user's motions through their built-in webcam. Punch the fruit that spawn randomly on screen! Clicking START will bring you to the Game Selection page:
 
 1.  **Normal Mode**
-    * Familarize yourself with the game! See how fast it takes you to destory 50 fruits!
+    * Familarize yourself with the game! See how fast it takes you to squish 50 fruits!
 2.  **Beat The Clock**
-    * Now you're on the clock! See how many fruits you can destory in just a minute!
+    * Now you're on the clock! See how many fruits you can destroy in just a minute!
 
 ## Getting Started
 

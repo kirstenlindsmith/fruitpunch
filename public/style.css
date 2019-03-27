@@ -1,5 +1,28 @@
 html {
   font-family: 'Comic Sans MS', cursive, sans-serif;
+  overflow-x: hidden;
+}
+
+html::-webkit-scrollbar-track {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+html::-webkit-scrollbar {
+  width: 1em;
+  background-color: #f5f5f5;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.44, rgb(29, 255, 187)),
+    color-stop(0.72, rgb(34, 211, 255)),
+    color-stop(0.86, rgb(0, 160, 209))
+  );
 }
 
 a:link {
@@ -19,7 +42,7 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  background: rgb(109, 199, 255);
+  background: rgb(145, 246, 255);
   background: linear-gradient(
     180deg,
     rgb(98, 195, 255) 0%,
@@ -131,7 +154,8 @@ form {
 #githubButton {
   padding: 10px 20px;
   margin: 5px;
-  margin-bottom: 35px;
+  margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 #aboutUs img {
@@ -152,6 +176,24 @@ form {
   color: #34a7c1;
   font-size: 14pt;
   line-height: 25pt;
+  margin-left: 20px;
+}
+
+.aboutText h1 {
+  width: 580px;
+  color: #2895ad;
+  margin-left: 20px;
+}
+
+.aboutText h2 {
+  width: 580px;
+  color: #2895ad;
+  margin-left: 20px;
+}
+
+.aboutText h3 {
+  width: 580px;
+  color: #2895ad;
   margin-left: 20px;
 }
 
@@ -528,7 +570,6 @@ button:hover {
 button:disabled {
   background-color: rgb(184, 184, 184);
   color: rgb(212, 212, 212);
-  /* font-style: italic; */
   box-shadow: none;
 }
 
@@ -640,10 +681,10 @@ button:disabled {
 }
 
 #homeToTopButton {
-  margin-top: 20px;
+  /* margin-top: 15px; */
   margin-right: 20px;
   background-color: rgb(92, 212, 216);
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
 
 #homeToTopButton:hover {
@@ -652,7 +693,7 @@ button:disabled {
 }
 
 #homeToBottomButton {
-  margin-top: 20px;
+  margin-top: 15px;
   margin-left: 10px;
   background-color: rgb(92, 212, 216);
 }

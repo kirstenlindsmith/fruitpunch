@@ -77,7 +77,11 @@ const Home = () => {
                 Click <b>START</b> once you are in front of an empty, well-lit
                 backdrop. If you are in a visually-busy space, try to make sure
                 that you only have a max of two people in the frame. Have fun
-                punching fruit!
+                punching fruit! (See the{' '}
+                <b>
+                  <a href="/about">ABOUT</a>
+                </b>{' '}
+                page for more details.)
               </p>
             </div>
           </div>
