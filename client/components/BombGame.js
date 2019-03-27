@@ -21,7 +21,7 @@ const boom = new Audio('/assets/bomb.mp3')
 const squish = new Audio('/assets/squish.mp3')
 let whichBombUserHit
 
-class Game3 extends Component {
+class BombGame extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -295,4 +295,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game3)
+export default connect(mapStateToProps, mapDispatchToProps)(BombGame)

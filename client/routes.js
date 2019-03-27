@@ -5,7 +5,7 @@ import {
   Camera,
   Home,
   Game,
-  Game3,
+  BombGame,
   GameSelect,
   Leaderboards,
   NoMatch
@@ -34,7 +34,7 @@ class Routes extends Component {
         <Route
           exact
           path="/game3"
-          render={() => <Camera render={() => <Game3 />} />}
+          render={() => <Camera render={() => <BombGame />} />}
         />
         <Route path="/about" component={About} />
         <Route path="*" component={NoMatch} status={404} />
@@ -44,7 +44,3 @@ class Routes extends Component {
 }
 
 export default withRouter(Routes)
-
-//{() => <Camera render={()=> <Game ruleset={'normal' || 'clock' || 'bombs'}}
-//Game component has ruleset for all games, and switch cases inside render and runGame()
-//camera just needs this.props.render()

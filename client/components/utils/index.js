@@ -134,7 +134,7 @@ export const gameItems = [
     activeUrl: '/assets/watermelon.gif',
     explodeUrl: '/assets/explodeRED.gif',
     active: true,
-    x: 1150,
+    x: 950,
     y: 500,
     width: 150
   }
@@ -248,8 +248,9 @@ export function generateRandomCoords(gameItem) {
 
   const rightShoulderCoords = findPoint('rightShoulder', keypoints)
   const leftShoulderCoords = findPoint('leftShoulder', keypoints)
-  let xCoordRange = Math.random() * (window.innerWidth - 250)
-  const yCoordRange = Math.random() * (window.innerHeight - 250)
+
+  let xCoordRange = Math.random() * (window.innerWidth - 150)
+  const yCoordRange = Math.random() * (window.innerHeight - 150)
   const forbiddenXRange =
     leftShoulderCoords.x + 50 - (rightShoulderCoords.x - 50)
 
