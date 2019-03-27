@@ -239,18 +239,20 @@ export const variablesForCameraRender = loadingStatus => {
   }
 }
 
-//spawn coords for game items
+// spawn coordinates for game items
 import store from '../../store'
-
 export function generateRandomCoords(gameItem) {
   let state = store.getState()
   const keypoints = state.keypoints
 
+  // find coordinates of user's shoulders
   const rightShoulderCoords = findPoint('rightShoulder', keypoints)
   const leftShoulderCoords = findPoint('leftShoulder', keypoints)
 
-  let xCoordRange = Math.random() * (window.innerWidth - 350)
-  const yCoordRange = Math.random() * (window.innerHeight - 350)
+  // set range to entire window
+  let xCoordRange = Math.random() * (window.innerWidth - 150)
+  const yCoordRange = Math.random() * (window.innerHeight - 150)
+  // do not spawn within user's body (based off of shoulder coords)
   const forbiddenXRange =
     leftShoulderCoords.x + 50 - (rightShoulderCoords.x - 50)
 
@@ -260,8 +262,16 @@ export function generateRandomCoords(gameItem) {
     xCoordRange > rightShoulderCoords.x - 150 &&
     xCoordRange < leftShoulderCoords.x
   ) {
-    if (spawnOnRightSide === true) xCoordRange += forbiddenXRange
-    else xCoordRange -= forbiddenXRange
+    if (spawnOnRightSide) {
+      xCoordRange += forbiddenXRange
+      if (xCoordRange > window.innderWidth - 150)
+        xCoordRange = window.innerWidth - 150
+    } else if (!spawnOnRightSide) {
+      xCoordRange -= forbiddenXRange
+      if (xCoordRange < 0) xCoordRange = 0
+    }
+
+    // alternate sides to spawn
     spawnOnRightSide = !spawnOnRightSide
   }
 

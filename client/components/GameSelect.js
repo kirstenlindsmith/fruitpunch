@@ -24,7 +24,14 @@ const GameSelect = () => {
             <img id="gameSelectTitle" src="/assets/selectAGame.png" />
           </div>
           <div id="gameSelectDiv">
-            <Link to="/game1">
+            <Link
+              to={{
+                pathname: '/game1',
+                state: {
+                  refresh: true
+                }
+              }}
+            >
               <button
                 type="button"
                 className="gameSelectButton"
