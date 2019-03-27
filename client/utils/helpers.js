@@ -56,8 +56,15 @@ export function generateRandomCoords(gameItem) {
     xCoordRange > rightShoulderCoords.x - 150 &&
     xCoordRange < leftShoulderCoords.x
   ) {
-    if (spawnOnRightSide === true) xCoordRange += forbiddenXRange
-    else xCoordRange -= forbiddenXRange
+    if (spawnOnRightSide) {
+      xCoordRange += forbiddenXRange
+      if (xCoordRange > window.innderWidth - 150)
+        xCoordRange = window.innerWidth - 150
+    } else if (!spawnOnRightSide) {
+      xCoordRange -= forbiddenXRange
+      if (xCoordRange < 0) xCoordRange = 0
+    }
+
     // alternate sides to spawn
     spawnOnRightSide = !spawnOnRightSide
   }
