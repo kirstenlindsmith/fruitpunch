@@ -26,7 +26,7 @@ const YouDied = props => {
         <div id="time">: {time}</div>
         <img
           id="bombPauseButton"
-          src="/assets/pauseButton.png"
+          src="/assets/buttons/pauseButton.png"
           onClick={togglepause}
           onMouseEnter={() => hoversound.play()}
         />
@@ -61,7 +61,7 @@ const YouDied = props => {
         </Link>
         <img
           id="replayButton"
-          src="/assets/replayButton.png"
+          src="/assets/buttons/replayButton.png"
           className="button"
           onMouseEnter={() => hoversound.play()}
           onClick={() => {
@@ -73,7 +73,7 @@ const YouDied = props => {
           <img
             id="homeButton"
             className="button"
-            src="/assets/homeButton.png"
+            src="/assets/buttons/homeButton.png"
             onMouseEnter={() => hoversound.play()}
             onClick={() => buttonsound.play()}
           />

@@ -21,7 +21,7 @@ const createApp = () => {
   // compression middleware
   app.use(compression())
 
-  // auth and api routes
+  // api routes
   app.use('/api', require('./routes'))
 
   // static file-serving middleware

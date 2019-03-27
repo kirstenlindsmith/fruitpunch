@@ -4,7 +4,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {RenderPlayBombGame, YouDied} from './index'
-import {calculateItemLocation, hitSequence} from './utils'
+import {calculateItemLocation, hitSequence} from '../../utils'
 import {
   gameStarted,
   gameFinished,
@@ -12,13 +12,13 @@ import {
   killedRiskyItem,
   respawnedRiskyItem,
   gotScore
-} from '../store'
+} from '../../store'
 
-const music = new Audio('/assets/CrystalIceArea.mp3')
-const buttonSound = new Audio('/assets/buttonPress.mp3')
-const hoverSound = new Audio('/assets/buttonHover.mp3')
-const boom = new Audio('/assets/bomb.mp3')
-const squish = new Audio('/assets/squish.mp3')
+const music = new Audio('/assets/audio/CrystalIceArea.mp3')
+const buttonSound = new Audio('/assets/audio/buttonPress.mp3')
+const hoverSound = new Audio('/assets/audio/buttonHover.mp3')
+const boom = new Audio('/assets/audio/bomb.mp3')
+const squish = new Audio('/assets/audio/squish.mp3')
 let whichBombUserHit
 
 class BombGame extends Component {
@@ -34,7 +34,7 @@ class BombGame extends Component {
       isTimerOn: false,
       time: 60000
     }
-    
+
     this.runGame = this.runGame.bind(this)
     this.restartGame = this.restartGame.bind(this)
     this.startTimer = this.startTimer.bind(this)
@@ -45,7 +45,7 @@ class BombGame extends Component {
   componentDidMount() {
     music.volume = 0.5
     if (!this.state.musicPlaying) music.play()
-    
+
     this.setState({
       score: 0,
       musicPlaying: true,
@@ -92,10 +92,8 @@ class BombGame extends Component {
       removeItem
     } = this.props
 
-    if (!isTimerOn
-        && !metGameOverCondition
-        && gameHasStarted
-        && !gamePaused) this.startTimer()
+    if (!isTimerOn && !metGameOverCondition && gameHasStarted && !gamePaused)
+      this.startTimer()
 
     if (keypoints.length && !gameOver) {
       for (let i = 0; i < 2; i++) {
@@ -115,11 +113,11 @@ class BombGame extends Component {
         }
 
         if (
-          !gameOver
-          && gameHasStarted
-          && !gamePaused
-          && (itemRadius + 50 > handToItemDistanceL //within touching distance
-          || itemRadius + 50 > handToItemDistanceR) //of a gameItem
+          !gameOver &&
+          gameHasStarted &&
+          !gamePaused &&
+          (itemRadius + 50 > handToItemDistanceL || //within touching distance
+            itemRadius + 50 > handToItemDistanceR) //of a gameItem
         ) {
           if (this.props.gameItems[i].active) {
             if (this.props.gameItems[i].type !== 'bomb') {
@@ -135,17 +133,17 @@ class BombGame extends Component {
             } else {
               //if the player hits a bomb:
               whichBombUserHit = this.props.gameItems[i]
-              
+
               this.setState({
                 metGameOverCondition: true,
                 gameOver: true,
                 level: 1
               })
-              
+
               this.stopTimer()
               boom.play()
               toggleEnd()
-              
+
               let score = this.state.score
               this.props.getFinalScore(score)
             }
@@ -156,12 +154,12 @@ class BombGame extends Component {
         //if the player survives a full one-minute round
         music.pause()
         this.stopTimer()
-        
+
         this.setState({
           musicPlaying: false,
           level: this.state.level + 1
         })
-        
+
         addBomb()
         this.restartGame(this.state.score)
       }
@@ -204,7 +202,7 @@ class BombGame extends Component {
       buttonSound.play()
       music.pause()
       this.stopTimer()
-      
+
       this.setState({
         musicPlaying: false,
         gamePaused: true
@@ -213,7 +211,7 @@ class BombGame extends Component {
       buttonSound.play()
       music.play()
       this.startTimer()
-      
+
       this.setState({
         musicPlaying: true,
         gamePaused: false
@@ -236,21 +234,11 @@ class BombGame extends Component {
 
   render() {
     const totalFruit = this.state.score / 10 ? this.state.score / 10 : 0
-    
-    const {
-      initialBody,
-      gameHasStarted,
-      gameItems
-    } = this.props
-    
-    const {
-      gameOver,
-      score,
-      time,
-      level,
-      gamePaused
-    } = this.state
-    
+
+    const {initialBody, gameHasStarted, gameItems} = this.props
+
+    const {gameOver, score, time, level, gamePaused} = this.state
+
     const displayTime = this.msToTime(time)
     const item1 = gameItems[0]
     const item2 = gameItems[1]

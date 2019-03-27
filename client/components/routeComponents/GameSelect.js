@@ -2,19 +2,19 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 const GameSelect = () => {
-  const buttonSound = new Audio('/assets/buttonPress.mp3')
-  const hoverSound = new Audio('/assets/buttonHover.mp3')
+  const buttonSound = new Audio('/assets//audio/buttonPress.mp3')
+  const hoverSound = new Audio('/assets/audio/buttonHover.mp3')
   return (
     <div className="center homePage">
       <iframe
-        src="/assets/silence.mp3"
+        src="/assets/audio/silence.mp3"
         allow="autoplay"
         style={{display: 'none'}}
         id="iframeAudio"
       />
       <audio loop="loop" autoPlay="autoplay">
         <source
-          src="/assets/theWonderfulStarsWalkIsWonderful.mp3"
+          src="/assets/audio/theWonderfulStarsWalkIsWonderful.mp3"
           type="audio/mpeg"
         />
       </audio>
@@ -62,7 +62,7 @@ const GameSelect = () => {
               <img
                 className="homeButton"
                 id="selectBackButton"
-                src="/assets/backButton.png"
+                src="/assets/buttons/backButton.png"
                 onMouseEnter={() => hoverSound.play()}
                 onClick={() => buttonSound.play()}
               />

@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
-import GameInit from './GameInit'
-import {drawKeyPoints, drawSkeleton, config} from './utils'
+import GameInit from '../GameInit'
+import {drawKeyPoints, drawSkeleton, config} from '../../utils'
 import {connect} from 'react-redux'
-import {gotKeypoints, gotInitialBody, gotCanvasContext} from '../store'
+import {gotKeypoints, gotInitialBody, gotCanvasContext} from '../../store'
 
 class PoseNet extends Component {
   static defaultProps = config

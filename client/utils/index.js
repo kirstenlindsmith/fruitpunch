@@ -7,11 +7,12 @@ import {
   hitSequence,
   winGame,
   increaseLevel,
-  shuffle
+  shuffle,
+  pauseMenuDiv
 } from './helpers'
 import {config, drawKeyPoints, drawSkeleton} from './posenet'
 
-export default {
+export {
   gameItems,
   bomb,
   bodyPointLocations,
@@ -22,6 +23,7 @@ export default {
   winGame,
   increaseLevel,
   shuffle,
+  pauseMenuDiv,
   config,
   drawKeyPoints,
   drawSkeleton

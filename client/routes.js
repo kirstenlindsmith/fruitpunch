@@ -9,7 +9,7 @@ import {
   GameSelect,
   Leaderboards,
   NoMatch
-} from './components'
+} from './components/routeComponents'
 
 /**
  * COMPONENT

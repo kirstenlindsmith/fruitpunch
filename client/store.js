@@ -3,12 +3,7 @@ import {createStore, applyMiddleware} from 'redux'
 import axios from 'axios'
 import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
-import {
-  gameItems,
-  generateRandomCoords,
-  bomb,
-  shuffle
-} from './components/utils'
+import {gameItems, generateRandomCoords, bomb, shuffle} from './utils'
 
 //initial state
 const initialState = {

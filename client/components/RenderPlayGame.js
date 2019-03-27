@@ -1,6 +1,6 @@
 import React from 'react'
 import GameItem from './GameItem'
-import {pauseMenuDiv} from './utils'
+import {pauseMenuDiv} from '../utils'
 
 const RenderPlayGame = props => {
   const {
@@ -23,7 +23,7 @@ const RenderPlayGame = props => {
         <div id="time">: {time}</div>
         <img
           id="pauseButton"
-          src="/assets/pauseButton.png"
+          src="/assets/buttons/pauseButton.png"
           onClick={togglepause}
           onMouseEnter={() => hoversound.play()}
         />

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import Leaderboard from './Leaderboard'
+import Leaderboard from '../Leaderboard'
 
 class Leaderboards extends Component {
   constructor(props) {
@@ -26,19 +26,19 @@ class Leaderboards extends Component {
   }
 
   render() {
-    const buttonSound = new Audio('/assets/buttonPress.mp3')
-    const hoverSound = new Audio('/assets/buttonHover.mp3')
+    const buttonSound = new Audio('/assets/audio/buttonPress.mp3')
+    const hoverSound = new Audio('/assets/audio/buttonHover.mp3')
     return (
       <div>
         <iframe
-          src="/assets/silence.mp3"
+          src="/assets/audio/silence.mp3"
           allow="autoplay"
           style={{display: 'none'}}
           id="iframeAudio"
         />
         <audio loop="loop" autoPlay="autoplay">
           <source
-            src="/assets/theWonderfulStarsWalkIsWonderful.mp3"
+            src="/assets/audio/theWonderfulStarsWalkIsWonderful.mp3"
             type="audio/mpeg"
           />
         </audio>
@@ -75,7 +75,7 @@ class Leaderboards extends Component {
           </div>
           <div className="center aboutPage">
             <Link to="/">
-              <img id="homeButton" src="/assets/homeButton.png" />
+              <img id="homeButton" src="/assets/buttons/homeButton.png" />
             </Link>
           </div>
         </div>

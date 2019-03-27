@@ -34,7 +34,7 @@ export function findPoint(bodyPart, keypoints) {
 }
 
 // spawn coordinates for game items
-import store from '../../store'
+import store from '../store'
 export function generateRandomCoords(gameItem) {
   let state = store.getState()
   const keypoints = state.keypoints
@@ -195,4 +195,35 @@ export function shuffle(array) {
   }
 
   return newArray
+}
+
+import React from 'react'
+import {Link} from 'react-router-dom'
+export const pauseMenuDiv = (
+  gamePauseStatus,
+  togglePause,
+  hoverSound,
+  buttonSound
+) => {
+  return gamePauseStatus ? (
+    <div id="pauseScreen" className="center">
+      <img className="pausedText" src="/assets/PAUSED.png" />
+      <img
+        className="continueButton"
+        src="/assets/continueButton.png"
+        onMouseEnter={() => hoverSound.play()}
+        onClick={togglePause}
+      />
+      <Link to="/select">
+        <img
+          className="homeButton"
+          src="/assets/returnToGameSelectButton.png"
+          onMouseEnter={() => hoverSound.play()}
+          onClick={() => {
+            buttonSound.play()
+          }}
+        />
+      </Link>
+    </div>
+  ) : null
 }

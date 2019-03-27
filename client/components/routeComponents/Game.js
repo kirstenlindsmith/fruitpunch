@@ -3,20 +3,20 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {RenderPlayGame, YouWin, TimesUp} from './index'
-import {calculateItemLocation, hitSequence, finishGame} from './utils'
+import {calculateItemLocation, hitSequence, finishGame} from '../../utils'
 import {
   killedGameItem,
   respawnedGameItem,
   gameStarted,
   gameFinished,
   gotScore
-} from '../store'
+} from '../../store'
 
-const music = new Audio('/assets/CrystalIceArea.mp3')
-const winSound = new Audio('/assets/winSound.mp3')
-const buttonSound = new Audio('/assets/buttonPress.mp3')
-const hoverSound = new Audio('/assets/buttonHover.mp3')
-const squish = new Audio('/assets/squish.mp3')
+const music = new Audio('/assets/audio/CrystalIceArea.mp3')
+const winSound = new Audio('/assets/audio/winSound.mp3')
+const buttonSound = new Audio('/assets/audio/buttonPress.mp3')
+const hoverSound = new Audio('/assets/audio/buttonHover.mp3')
+const squish = new Audio('/assets/audio/squish.mp3')
 
 class Game extends Component {
   constructor(props) {
@@ -53,7 +53,7 @@ class Game extends Component {
           time: 0
         })
         break
-        
+
       case 'clock':
         this.setState({
           score: 0,
@@ -74,15 +74,9 @@ class Game extends Component {
 
   componentDidUpdate() {
     const {gameOver} = this.state
-    const {
-      initialBody,
-      gameHasStarted,
-      toggleStart
-    } = this.props
+    const {initialBody, gameHasStarted, toggleStart} = this.props
 
-    if (initialBody.keypoints
-        && !gameOver
-        && !gameHasStarted) {
+    if (initialBody.keypoints && !gameOver && !gameHasStarted) {
       setTimeout(() => {
         toggleStart()
       }, 5000)
@@ -111,10 +105,7 @@ class Game extends Component {
       getFinalScore
     } = this.props
 
-    if (!isClockOn
-        && !metGameOverCondition
-        && gameHasStarted
-        && !gamePaused) {
+    if (!isClockOn && !metGameOverCondition && gameHasStarted && !gamePaused) {
       if (this.props.ruleset === 'clock') this.startTimer()
       else this.startStopwatch()
     }
@@ -128,16 +119,17 @@ class Game extends Component {
         } = calculateItemLocation(keypoints, gameItems[i])
         //calculate game item location window
 
-        if (!gameOver
-            && !gamePaused
-            && gameHasStarted
-            && !metGameOverCondition
-            && (itemRadius + 50 > handToItemDistanceL
-            || itemRadius + 50 > handToItemDistanceR)
+        if (
+          !gameOver &&
+          !gamePaused &&
+          gameHasStarted &&
+          !metGameOverCondition &&
+          (itemRadius + 50 > handToItemDistanceL ||
+            itemRadius + 50 > handToItemDistanceR)
         ) {
           if (gameItems[i].active) {
             hitSequence(gameItems[i], squish, explodeItem, removeGameItem)
-            
+
             this.setState({
               score: this.state.score + 10
             })
@@ -159,7 +151,7 @@ class Game extends Component {
                 squish,
                 getFinalScore
               )
-              
+
               this.setState({
                 metGameOverCondition: true,
                 musicPlaying: false
@@ -170,12 +162,12 @@ class Game extends Component {
                   gameOver: true
                 })
               }, 800)
-              
+
               let normalScore = this.msToTime(this.state.time)
               this.props.getFinalScore(normalScore)
             }
             break
-            
+
           case 'clock':
             if (time <= 0) {
               finishGame(
@@ -188,7 +180,7 @@ class Game extends Component {
                 score,
                 getFinalScore
               )
-              
+
               this.setState({
                 metGameOverCondition: true,
                 musicPlaying: false
@@ -199,7 +191,7 @@ class Game extends Component {
                   gameOver: true
                 })
               }, 800)
-              
+
               let clockScore = this.state.score
               this.props.getFinalScore(clockScore)
             }
@@ -212,12 +204,8 @@ class Game extends Component {
   }
 
   restartGame() {
-    const {
-      gameItems,
-      removeGameItem,
-      toggleStart
-    } = this.props
-    
+    const {gameItems, removeGameItem, toggleStart} = this.props
+
     switch (this.props.ruleset) {
       case 'normal':
         this.setState({
@@ -243,7 +231,7 @@ class Game extends Component {
       gameOver: false,
       metGameOverCondition: false
     })
-    
+
     toggleStart()
     music.play()
   }
@@ -254,7 +242,7 @@ class Game extends Component {
       time: this.state.time,
       start: Date.now() - this.state.time
     })
-    
+
     this.stopwatch = setInterval(
       () =>
         this.setState({
@@ -274,7 +262,7 @@ class Game extends Component {
       isClockOn: true,
       time: this.state.time
     })
-    
+
     this.timer = setInterval(
       () =>
         this.setState({
@@ -294,7 +282,7 @@ class Game extends Component {
     if (!this.state.gamePaused) {
       music.pause()
       this.stopTimer()
-      
+
       this.setState({
         musicPlaying: false,
         gamePaused: true
@@ -302,7 +290,7 @@ class Game extends Component {
     } else {
       music.play()
       this.startTimer()
-      
+
       this.setState({
         musicPlaying: true,
         gamePaused: false
@@ -327,27 +315,16 @@ class Game extends Component {
   render() {
     const finalTime = this.msToTime(this.state.time)
     const totalFruit = this.state.score / 10
-    
-    const {
-      initialBody,
-      gameHasStarted,
-      gameItems
-    } = this.props
-    
-    const {
-      gameOver,
-      score,
-      time,
-      gamePaused
-    } = this.state
-    
+
+    const {initialBody, gameHasStarted, gameItems} = this.props
+
+    const {gameOver, score, time, gamePaused} = this.state
+
     const displayTime = this.msToTime(time)
     const item1 = gameItems[0]
     const item2 = gameItems[1]
 
-    if (initialBody.keypoints
-        && !gameOver
-        && gameHasStarted) {
+    if (initialBody.keypoints && !gameOver && gameHasStarted) {
       return (
         <RenderPlayGame
           score={score}
