@@ -139,9 +139,9 @@ class BombGame extends Component {
                 gameOver: true,
                 level: 1
               })
+              music.pause()
               this.stopTimer()
               boom.play()
-              music.pause()
               toggleEnd()
               let score = this.state.score
               this.props.getFinalScore(score)
