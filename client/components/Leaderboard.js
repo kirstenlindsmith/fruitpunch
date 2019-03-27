@@ -82,7 +82,7 @@ class Leaderboard extends Component {
       <div className="scoreComp">
         <div id="highscores">
           {leaderboard.map(player => (
-            <div key={player.id}>
+            <div className="playerScore" key={player.id}>
               <p>
                 {player.name}: {player.score}
               </p>
@@ -91,7 +91,7 @@ class Leaderboard extends Component {
         </div>
         <div>
           {this.state.chosenIsActive ? (
-            <div>
+            <div id="formContainer" className="center">
               <div id="scoreSubmitForm" className={formClassName}>
                 <p>Your Score: {score}</p>
                 <form onSubmit={this.handleSubmit}>

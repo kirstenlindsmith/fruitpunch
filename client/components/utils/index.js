@@ -249,8 +249,8 @@ export function generateRandomCoords(gameItem) {
   const rightShoulderCoords = findPoint('rightShoulder', keypoints)
   const leftShoulderCoords = findPoint('leftShoulder', keypoints)
 
-  let xCoordRange = Math.random() * (window.innerWidth - 150)
-  const yCoordRange = Math.random() * (window.innerHeight - 150)
+  let xCoordRange = Math.random() * (window.innerWidth - 350)
+  const yCoordRange = Math.random() * (window.innerHeight - 350)
   const forbiddenXRange =
     leftShoulderCoords.x + 50 - (rightShoulderCoords.x - 50)
 
@@ -365,19 +365,16 @@ export function finishGame(
   music,
   stopTimerFunc,
   winSound,
-  gameItems,
+  gameItemsArray,
   explodeFunc,
-  squish,
-  score,
-  getFinalScore
+  squish
 ) {
   music.pause()
   stopTimerFunc()
   winSound.play()
-  for (let i = 0; i < gameItems.length; i++) explodeFunc(gameItems[i])
+  for (let i = 0; i < gameItemsArray.length; i++) explodeFunc(gameItemsArray[i])
   squish.play()
   squish.play()
-  // getFinalScore(score)
 }
 
 import {Link} from 'react-router-dom'

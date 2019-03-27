@@ -43,10 +43,24 @@ class Leaderboards extends Component {
           />
         </audio>
         <div>
-          <h1 className="center aboutPage">All-Time High Scores</h1>
+          <img
+            id="hallOfFame"
+            className="center"
+            src="/assets/hallOfFame.png"
+          />
           <div className="leaderboard">
             <div className="oneBoard">
-              <h3>Normal Mode: </h3>
+              <Link to="/game1">
+                <button
+                  type="button"
+                  className="leaderboardGameButton"
+                  id="normalModeLeaderboard"
+                  onMouseEnter={() => hoverSound.play()}
+                  onClick={() => buttonSound.play()}
+                >
+                  Normal Mode
+                </button>
+              </Link>
               <div className="boardComp">
                 <Leaderboard
                   game="normalGame"
@@ -55,7 +69,17 @@ class Leaderboards extends Component {
               </div>
             </div>
             <div className="oneBoard">
-              <h3>Beat the Clock: </h3>
+              <Link to="/game2">
+                <button
+                  type="button"
+                  id="beatTheClockLeaderboard"
+                  className="leaderboardGameButton"
+                  onMouseEnter={() => hoverSound.play()}
+                  onClick={() => buttonSound.play()}
+                >
+                  Beat The Clock
+                </button>
+              </Link>
               <div className="boardComp">
                 <Leaderboard
                   game="clockGame"
@@ -64,7 +88,17 @@ class Leaderboards extends Component {
               </div>
             </div>
             <div className="oneBoard">
-              <h3>Sudden Death: </h3>
+              <Link to="/game3">
+                <button
+                  type="button"
+                  id="suddenDeathLeaderboard"
+                  className="leaderboardGameButton"
+                  onMouseEnter={() => hoverSound.play()}
+                  onClick={() => buttonSound.play()}
+                >
+                  Sudden Death
+                </button>
+              </Link>
               <div className="boardComp">
                 <Leaderboard
                   game="bombGame"
@@ -73,11 +107,15 @@ class Leaderboards extends Component {
               </div>
             </div>
           </div>
-          <div className="center aboutPage">
-            <Link to="/">
-              <img id="homeButton" src="/assets/homeButton.png" />
-            </Link>
-          </div>
+          <Link to="/">
+            <img
+              id="leaderboardHomeButton"
+              className="homeButton"
+              src="/assets/homeButton.png"
+              onMouseEnter={() => hoverSound.play()}
+              onClick={() => buttonSound.play()}
+            />
+          </Link>
         </div>
       </div>
     )
