@@ -4,9 +4,8 @@ import {
   About,
   Camera,
   Home,
-  Game1,
-  Game2,
-  Game3,
+  Game,
+  BombGame,
   GameSelect,
   Leaderboards,
   NoMatch
@@ -25,17 +24,17 @@ class Routes extends Component {
         <Route
           exact
           path="/game1"
-          render={props => <Camera {...props} game={Game1} />}
+          render={() => <Camera render={() => <Game ruleset="normal" />} />}
         />
         <Route
           exact
           path="/game2"
-          render={props => <Camera {...props} game={Game2} />}
+          render={() => <Camera render={() => <Game ruleset="clock" />} />}
         />
         <Route
           exact
           path="/game3"
-          render={props => <Camera {...props} game={Game3} />}
+          render={() => <Camera render={() => <BombGame />} />}
         />
         <Route path="/about" component={About} />
         <Route path="*" component={NoMatch} status={404} />

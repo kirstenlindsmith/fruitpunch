@@ -15,7 +15,7 @@ const initialState = {
   keypoints: [],
   initialBody: {},
   proportions: {},
-  activeGameItems: gameItems,
+  activeGameItems: [...gameItems],
   riskyGameItems: [...gameItems, bomb],
   gameStarted: false,
   canvasContext: [],
@@ -28,16 +28,15 @@ const GOT_KEYPOINTS = 'GOT_KEYPOINTS'
 const GOT_INITIALBODY = 'GOT_INITIALBODY'
 const GOT_PROPORTIONS = 'GOT_PROPORTIONS'
 const KILLED_ITEM = 'KILLED_ITEM'
-const REMOVED_ITEM = 'REMOVED_ITEM'
+const RESPAWNED_ITEM = 'RESPAWNED_ITEM'
 const GAME_STARTED = 'GAME_STARTED'
 const GAME_FINISHED = 'GAME_FINISHED'
 const GOT_CANVAS_CONTEXT = 'GOT_CANVAS_CONTEXT'
 const GOT_LEADERBOARD = 'GOT_LEADERBOARD'
 const GOT_SCORE = 'GOT_SCORE'
 const ADDED_BOMB = 'ADDED_BOMB'
-const REMOVED_BOMBS = 'REMOVED_BOMBS'
-const KILLED_BOMB = 'KILLED_BOMB'
-const RETIRED_BOMB = 'RETIRED_BOMB'
+const KILLED_RISKY_ITEM = 'KILLED_RISKY_ITEM'
+const RESPAWNED_RISKY_ITEM = 'RESPAWNED_RISKY_ITEM'
 
 //action creators
 export const gotKeypoints = keypoints => {
@@ -71,16 +70,18 @@ export const killedGameItem = gameItem => {
   }
 }
 
-export const removedGameItem = gameItem => {
-  gameItem.imageUrl = gameItem.activeUrl
-  gameItem.active = true
+export const respawnedGameItem = gameItem => {
   const newCoords = generateRandomCoords(gameItem)
-  gameItem.x = newCoords.x
-  gameItem.y = newCoords.y
+  const newGameItem = Object.assign({}, gameItem, {
+    imageUrl: gameItem.activeUrl,
+    active: true,
+    x: newCoords.x,
+    y: newCoords.y
+  })
 
   return {
-    type: REMOVED_ITEM,
-    gameItem
+    type: RESPAWNED_ITEM,
+    newGameItem
   }
 }
 
@@ -154,31 +155,27 @@ export const addedBomb = () => {
   }
 }
 
-export const retiredBomb = gameItem => {
-  gameItem.imageUrl = gameItem.activeUrl
-  gameItem.active = true
+export const respawnedRiskyItem = gameItem => {
   const newCoords = generateRandomCoords(gameItem)
-  gameItem.x = newCoords.x
-  gameItem.y = newCoords.y
+  const newGameItem = Object.assign({}, gameItem, {
+    imageUrl: gameItem.activeUrl,
+    active: true,
+    x: newCoords.x,
+    y: newCoords.y
+  })
 
   return {
-    type: RETIRED_BOMB,
-    gameItem
+    type: RESPAWNED_RISKY_ITEM,
+    newGameItem
   }
 }
 
-export const removedBombs = () => {
-  return {
-    type: REMOVED_BOMBS
-  }
-}
-
-export const killedBomb = gameItem => {
+export const killedRiskyItem = gameItem => {
   gameItem.imageUrl = gameItem.explodeUrl
   gameItem.active = false
 
   return {
-    type: KILLED_BOMB,
+    type: KILLED_RISKY_ITEM,
     gameItem
   }
 }
@@ -211,14 +208,14 @@ const reducer = (state = initialState, action) => {
         })
       }
     }
-    case REMOVED_ITEM:
+    case RESPAWNED_ITEM: //moves the item to the back of the queue
       return {
         ...state,
         activeGameItems: [
           ...state.activeGameItems.filter(item => {
-            return item.id !== action.gameItem.id
+            return item.id !== action.newGameItem.id
           }),
-          action.gameItem
+          action.newGameItem
         ]
       }
     case GAME_STARTED:
@@ -253,27 +250,17 @@ const reducer = (state = initialState, action) => {
         ...state,
         riskyGameItems: shuffle([...state.riskyGameItems, action.newBomb])
       }
-    case REMOVED_BOMBS:
+    case RESPAWNED_RISKY_ITEM: //moves the item to the back of the queue
       return {
         ...state,
         riskyGameItems: [
           ...state.riskyGameItems.filter(item => {
-            return item.type !== 'bomb'
+            return item.id !== action.newGameItem.id
           }),
-          bomb
+          action.newGameItem
         ]
       }
-    case RETIRED_BOMB:
-      return {
-        ...state,
-        riskyGameItems: [
-          ...state.riskyGameItems.filter(item => {
-            return item.id !== action.gameItem.id
-          }),
-          action.gameItem
-        ]
-      }
-    case KILLED_BOMB: {
+    case KILLED_RISKY_ITEM: {
       return {
         ...state,
         riskyGameItems: state.riskyGameItems.map(item => {

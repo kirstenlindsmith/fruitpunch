@@ -1,6 +1,4 @@
 import React, {Component} from 'react'
-import {loadLeaderboard, sendScore} from '../store'
-import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import Leaderboard from './Leaderboard'
 

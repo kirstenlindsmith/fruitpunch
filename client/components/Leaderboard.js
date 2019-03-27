@@ -94,12 +94,12 @@ class Leaderboard extends Component {
             <div>
               <div id="scoreSubmitForm" className={formClassName}>
                 <p>Your Score: {score}</p>
-                <span className="errorWarning">Must be exactly 3 letters</span>
                 <form onSubmit={this.handleSubmit}>
                   <label>Nickname: </label>
                   <input
                     type="text"
                     name="name"
+                    placeholder="must be 3 characters"
                     onChange={this.handleNameChange}
                     className={errorDisplay}
                     onBlur={this.handleBlurWhenInteracting()}
