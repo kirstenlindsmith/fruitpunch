@@ -50,7 +50,7 @@ class Leaderboards extends Component {
           />
           <div className="leaderboard">
             <div className="oneBoard">
-              <Link to="/game1">
+              <a href="/game1">
                 <button
                   type="button"
                   className="leaderboardGameButton"
@@ -60,7 +60,7 @@ class Leaderboards extends Component {
                 >
                   Normal Mode
                 </button>
-              </Link>
+              </a>
               <div className="boardComp">
                 <Leaderboard
                   game="normalGame"
@@ -69,7 +69,7 @@ class Leaderboards extends Component {
               </div>
             </div>
             <div className="oneBoard">
-              <Link to="/game2">
+              <a href="/game2">
                 <button
                   type="button"
                   id="beatTheClockLeaderboard"
@@ -79,7 +79,7 @@ class Leaderboards extends Component {
                 >
                   Beat The Clock
                 </button>
-              </Link>
+              </a>
               <div className="boardComp">
                 <Leaderboard
                   game="clockGame"
@@ -88,7 +88,7 @@ class Leaderboards extends Component {
               </div>
             </div>
             <div className="oneBoard">
-              <Link to="/game3">
+              <a href="/game3">
                 <button
                   type="button"
                   id="suddenDeathLeaderboard"
@@ -98,7 +98,7 @@ class Leaderboards extends Component {
                 >
                   Sudden Death
                 </button>
-              </Link>
+              </a>
               <div className="boardComp">
                 <Leaderboard
                   game="bombGame"

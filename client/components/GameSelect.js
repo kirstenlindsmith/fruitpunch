@@ -24,7 +24,7 @@ const GameSelect = () => {
             <img id="gameSelectTitle" src="/assets/selectAGame.png" />
           </div>
           <div id="gameSelectDiv">
-            <Link to="/game1">
+            <a href="game1">
               <button
                 type="button"
                 className="gameSelectButton"
@@ -33,9 +33,9 @@ const GameSelect = () => {
               >
                 Normal Mode
               </button>
-            </Link>
+            </a>
             <br />
-            <Link to="/game2">
+            <a href="/game2">
               <button
                 type="button"
                 id="beatTheClock"
@@ -45,9 +45,9 @@ const GameSelect = () => {
               >
                 Beat The Clock
               </button>
-            </Link>
+            </a>
             <br />
-            <Link to="/game3">
+            <a href="/game3">
               <button
                 type="button"
                 id="suddenDeath"
@@ -57,8 +57,8 @@ const GameSelect = () => {
               >
                 Sudden Death
               </button>
-            </Link>
-            <a href="/">
+            </a>
+            <Link to="/">
               <img
                 className="homeButton"
                 id="selectBackButton"
@@ -66,7 +66,7 @@ const GameSelect = () => {
                 onMouseEnter={() => hoverSound.play()}
                 onClick={() => buttonSound.play()}
               />
-            </a>
+            </Link>
           </div>
         </div>
       </center>

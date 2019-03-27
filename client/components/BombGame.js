@@ -141,7 +141,7 @@ class BombGame extends Component {
                 gameOver: true,
                 level: 1
               })
-              
+              music.pause()
               this.stopTimer()
               boom.play()
               toggleEnd()
