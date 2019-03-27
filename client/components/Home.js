@@ -34,6 +34,16 @@ const Home = () => {
               />
             </Link>
             <br />
+            <Link to="/leaderboard">
+              <img
+                id="leaderboardButton"
+                className="button"
+                src="/assets/leaderboardButton.png"
+                onMouseEnter={() => hoverSound.play()}
+                onClick={() => buttonSound.play()}
+              />
+            </Link>
+            <br />
             <Link to="/about">
               <img
                 id="aboutButton"
