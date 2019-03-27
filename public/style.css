@@ -1,5 +1,28 @@
 html {
   font-family: 'Comic Sans MS', cursive, sans-serif;
+  overflow-x: hidden;
+}
+
+html::-webkit-scrollbar-track {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+html::-webkit-scrollbar {
+  width: 1em;
+  background-color: #f5f5f5;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.44, rgb(29, 255, 187)),
+    color-stop(0.72, rgb(34, 211, 255)),
+    color-stop(0.86, rgb(0, 160, 209))
+  );
 }
 
 a:link {
@@ -19,7 +42,7 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  background: rgb(109, 199, 255);
+  background: rgb(145, 246, 255);
   background: linear-gradient(
     180deg,
     rgb(98, 195, 255) 0%,
@@ -62,6 +85,23 @@ body {
   margin-bottom: 10px;
 }
 
+#leaderboardButton {
+  margin-bottom: 10px;
+}
+
+form {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+#formContainer {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 180px;
+}
+
 #instructions {
   margin-top: 30px;
   margin-bottom: 45px;
@@ -99,6 +139,13 @@ body {
   margin-top: -310px;
 }
 
+#aboutTheGame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
 #aboutTheGame img {
   margin-bottom: -10px;
   margin-left: 14px;
@@ -107,7 +154,8 @@ body {
 #githubButton {
   padding: 10px 20px;
   margin: 5px;
-  margin-bottom: 35px;
+  margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 #aboutUs img {
@@ -128,6 +176,24 @@ body {
   color: #34a7c1;
   font-size: 14pt;
   line-height: 25pt;
+  margin-left: 20px;
+}
+
+.aboutText h1 {
+  width: 580px;
+  color: #2895ad;
+  margin-left: 20px;
+}
+
+.aboutText h2 {
+  width: 580px;
+  color: #2895ad;
+  margin-left: 20px;
+}
+
+.aboutText h3 {
+  width: 580px;
+  color: #2895ad;
   margin-left: 20px;
 }
 
@@ -181,7 +247,7 @@ body {
 }
 
 #scoreSubmitSpaceFiller {
-  min-height: 110px;
+  min-height: 180px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -401,7 +467,9 @@ body {
 }
 
 #replayButton {
-  margin-top: 9px;
+  margin-top: 15px;
+  height: 67px;
+  margin-right: 10px;
 }
 
 #homeButton {
@@ -409,8 +477,8 @@ body {
 }
 
 #aboutHomeButton {
-  margin-top: 100px;
-  margin-bottom: 100px;
+  margin-top: 22.25px;
+  height: 52px;
 }
 
 .sprite {
@@ -447,7 +515,7 @@ body {
 }
 
 button {
-  background-color: #ca247f;
+  background-color: #a442b8;
   color: white;
   text-align: center;
   border-radius: 12px;
@@ -459,7 +527,7 @@ button {
 }
 
 button:hover {
-  background-color: #9e2dc1;
+  background-color: #8017d6;
   box-shadow: 0 0 5px 3px rgb(255, 170, 255);
 }
 
@@ -496,18 +564,20 @@ button:hover {
   line-height: 25px;
   vertical-align: center;
   margin-left: 10px;
+  margin-top: 8px;
 }
 
 button:disabled {
   background-color: rgb(184, 184, 184);
   color: rgb(212, 212, 212);
-  /* font-style: italic; */
   box-shadow: none;
 }
 
 .leaderboard {
   display: flex;
   justify-content: space-around;
+  margin-left: 150px;
+  margin-right: 150px;
 }
 
 .oneBoard {
@@ -518,6 +588,7 @@ button:disabled {
 
 .boardComp {
   align-self: center;
+  width: 170px;
 }
 
 .scoreComp {
@@ -531,4 +602,103 @@ button:disabled {
 
 #scoreSubmitForm {
   align-self: center;
+  text-align: center;
+}
+
+#hallOfFame {
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.leaderboardGameButton {
+  margin-bottom: 15px;
+}
+
+#leaderboardHomeButton {
+  height: 50px;
+  position: absolute;
+  top: 10px;
+  left: 15px;
+}
+
+#highscores {
+  /* width: 630px; */
+  border: 4px solid #a0ffe2;
+  border-radius: 25px;
+  background: linear-gradient(
+    180deg,
+    rgb(255, 255, 255) 0%,
+    rgb(145, 246, 255) 32%,
+    rgb(92, 208, 235) 100%
+  );
+}
+
+.playerScore p {
+  /* width: 580px; */
+  color: #34a7c1;
+  font-size: 14pt;
+  line-height: 25pt;
+  text-align: center;
+}
+
+.submitScoreFromGame {
+  padding: 9px 15px;
+  margin-top: 10px;
+}
+
+.replayHomeButtons {
+  display: flex;
+  flex-direction: row;
+}
+
+#aboutBottomButtons {
+  display: flex;
+  margin-bottom: 100px;
+  margin-top: 50px;
+  justify-content: center;
+}
+
+#aboutToBottomButton {
+  margin-top: -20px;
+  margin-bottom: 20px;
+  background-color: rgb(92, 212, 216);
+}
+
+#aboutToBottomButton:hover {
+  background-color: rgb(86, 198, 202);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
+}
+
+#aboutToTopButton {
+  margin-top: 20px;
+  margin-left: 10px;
+  background-color: rgb(92, 212, 216);
+}
+
+#aboutToTopButton:hover {
+  background-color: rgb(86, 198, 202);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
+}
+
+#homeToTopButton {
+  /* margin-top: 15px; */
+  margin-right: 20px;
+  background-color: rgb(92, 212, 216);
+  margin-bottom: 50px;
+}
+
+#homeToTopButton:hover {
+  background-color: rgb(86, 198, 202);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
+}
+
+#homeToBottomButton {
+  margin-top: 15px;
+  margin-left: 10px;
+  background-color: rgb(92, 212, 216);
+}
+
+#homeToBottomButton:hover {
+  background-color: rgb(86, 198, 202);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 6px 0 rgba(0, 0, 0, 0.19);
 }

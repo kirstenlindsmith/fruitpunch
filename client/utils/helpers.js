@@ -33,6 +33,23 @@ export function findPoint(bodyPart, keypoints) {
   return {x: bodyPartPosition.x, y: bodyPartPosition.y}
 }
 
+//FUNCTION TO PRODUCE VARIABLES FOR THE CAMERA.JS RENDER
+import React from 'react'
+import GameInit from '../components/GameInit'
+
+export const variablesForCameraRender = loadingStatus => {
+  const loading = loadingStatus ? (
+    <img className="loading" src="/assets/loading.gif" />
+  ) : null
+
+  const gameInit = loadingStatus ? null : <GameInit loading={loadingStatus} />
+
+  return {
+    loading,
+    gameInit
+  }
+}
+
 // spawn coordinates for game items
 import store from '../store'
 export function generateRandomCoords(gameItem) {
@@ -152,59 +169,22 @@ export function hitSequence(gameItem, sound, explodeFunc, removeFunc) {
 }
 
 // Game 1 & 2
-export function winGame(
+export function finishGame(
   music,
   stopTimerFunc,
   winSound,
-  gameItems,
+  gameItemsArray,
   explodeFunc,
-  squish,
-  score,
-  getFinalScore
+  squish
 ) {
   music.pause()
   stopTimerFunc()
   winSound.play()
-  for (let i = 0; i < gameItems.length; i++) explodeFunc(gameItems[i])
+  for (let i = 0; i < gameItemsArray.length; i++) explodeFunc(gameItemsArray[i])
   squish.play()
   squish.play()
-  getFinalScore(score)
 }
 
-// Game 3
-export function increaseLevel(
-  music,
-  stopTimerFunc,
-  addBomb,
-  restartGame,
-  score
-) {
-  music.pause()
-  stopTimerFunc()
-  addBomb()
-  restartGame(score)
-}
-
-// shuffle riskeyGameItems so bombs aren't added right after each other on level increase
-export function shuffle(array) {
-  const newArray = array.slice()
-  let currentIndex = newArray.length
-  let tempValue
-  let randomIndex
-
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex -= 1
-
-    tempValue = newArray[currentIndex]
-    newArray[currentIndex] = newArray[randomIndex]
-    newArray[randomIndex] = tempValue
-  }
-
-  return newArray
-}
-
-import React from 'react'
 import {Link} from 'react-router-dom'
 export const pauseMenuDiv = (
   gamePauseStatus,
@@ -217,14 +197,14 @@ export const pauseMenuDiv = (
       <img className="pausedText" src="/assets/PAUSED.png" />
       <img
         className="continueButton"
-        src="/assets/continueButton.png"
+        src="/assets/buttons/continueButton.png"
         onMouseEnter={() => hoverSound.play()}
         onClick={togglePause}
       />
       <Link to="/select">
         <img
           className="homeButton"
-          src="/assets/returnToGameSelectButton.png"
+          src="/assets/buttons/returnToGameSelectButton.png"
           onMouseEnter={() => hoverSound.play()}
           onClick={() => {
             buttonSound.play()

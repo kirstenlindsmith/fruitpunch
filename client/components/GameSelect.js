@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 const GameSelect = () => {
-  const buttonSound = new Audio('/assets//audio/buttonPress.mp3')
+  const buttonSound = new Audio('/assets/audio/buttonPress.mp3')
   const hoverSound = new Audio('/assets/audio/buttonHover.mp3')
   return (
     <div className="center homePage">
@@ -62,7 +62,7 @@ const GameSelect = () => {
               <img
                 className="homeButton"
                 id="selectBackButton"
-                src="/assets/buttons/backButton.png"
+                src="/assets/button/backButton.png"
                 onMouseEnter={() => hoverSound.play()}
                 onClick={() => buttonSound.play()}
               />

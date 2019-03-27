@@ -5,7 +5,7 @@ import {
   generateRandomCoords,
   calculateItemLocation,
   hitSequence,
-  winGame,
+  finishGame,
   increaseLevel,
   shuffle,
   pauseMenuDiv
@@ -20,7 +20,7 @@ export {
   generateRandomCoords,
   calculateItemLocation,
   hitSequence,
-  winGame,
+  finishGame,
   increaseLevel,
   shuffle,
   pauseMenuDiv,

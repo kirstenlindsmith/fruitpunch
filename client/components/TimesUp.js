@@ -46,25 +46,27 @@ const TimesUp = props => {
             Submit Score
           </button>
         </Link>
-        <img
-          id="replayButton"
-          src="/assets/buttons/replayButton.png"
-          className="button"
-          onClick={() => {
-            buttonsound.play()
-            restartgame()
-          }}
-          onMouseEnter={() => hoversound.play()}
-        />
-        <Link to="/">
+        <div className="replayHomeButtons">
           <img
-            id="homeButton"
+            id="replayButton"
+            src="/assets/buttons/replayButton.png"
             className="button"
-            src="/assets/buttons/homeButton.png"
-            onClick={() => buttonsound.play()}
-            onMouseEnter={() => hoverSound.play()}
+            onClick={() => {
+              buttonsound.play()
+              restartgame()
+            }}
+            onMouseEnter={() => hoversound.play()}
           />
-        </Link>
+          <Link to="/">
+            <img
+              id="homeButton"
+              className="button"
+              src="/assets/buttons/homeButton.png"
+              onMouseEnter={() => hoversound.play()}
+              onClick={() => buttonsound.play()}
+            />
+          </Link>
+        </div>
       </div>
     </div>
   )
