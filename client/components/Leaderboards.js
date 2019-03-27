@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Link from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Leaderboard from './Leaderboard'
 
 class Leaderboards extends Component {
