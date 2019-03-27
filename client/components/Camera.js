@@ -1,12 +1,8 @@
 /* eslint-disable complexity */
 import React, {Component} from 'react'
 import * as posenet from '@tensorflow-models/posenet'
-import {
-  drawKeyPoints,
-  drawSkeleton,
-  config,
-  variablesForCameraRender
-} from './utils'
+import GameInit from './GameInit'
+import {drawKeyPoints, drawSkeleton, config} from './utils'
 import {connect} from 'react-redux'
 import {gotKeypoints, gotInitialBody, gotCanvasContext} from '../store'
 
@@ -212,9 +208,14 @@ class PoseNet extends Component {
   }
 
   render() {
-    const {loading, gameInit} = variablesForCameraRender(this.state.loading)
+    const loading = this.state.loading ? (
+      <img className="loading" src="/assets/loading.gif" />
+    ) : null
 
-    const selectedGame = this.props.game
+    const gameInit = this.state.loading ? null : (
+      <GameInit loading={this.state.loading} />
+    )
+
     const game = this.state.loading ? null : this.props.render()
 
     return (
