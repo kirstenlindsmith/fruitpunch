@@ -118,8 +118,11 @@ export function calculateItemLocation(keypoints, gameItem) {
   const xDiffR = rightWristCoords.x - rightElbowCoords.x
 
   let angleR = Math.atan(Math.abs(yDiffR) / Math.abs(xDiffR))
-  if (yDiffR >= 0 && xDiffR <= 0) angleR = angleR + Math.PI / 2
-  if (xDiffR <= 0 && yDiffR < 0) angleR = angleR + Math.PI
+  if (yDiffR >= 0 && xDiffR <= 0) angleR = Math.PI - angleR
+  //correct angle for arm up and to your left
+  if (yDiffR < 0 && xDiffR <= 0) angleR = angleR + Math.PI
+  //correct angle for arm up and to your right
+  if (yDiffR < 0 && xDiffR > 0) angleR = 2 * Math.PI - angleR
 
   let yDistanceR = Math.sin(angleR) * 50
   let xDistanceR = Math.cos(angleR) * 50
@@ -135,9 +138,11 @@ export function calculateItemLocation(keypoints, gameItem) {
   const xDiffL = leftWristCoords.x - leftElbowCoords.x
 
   let angleL = Math.atan(Math.abs(yDiffL) / Math.abs(xDiffL))
-  if (yDiffL >= 0 && xDiffL <= 0) angleL = angleL + Math.PI / 2
-  if (xDiffL <= 0 && yDiffL < 0) angleL = angleL + Math.PI
-  if (xDiffL > 0 && yDiffL < 0) angleL = angleL + 3 * Math.PI / 2
+  if (yDiffL >= 0 && xDiffL <= 0) angleL = Math.PI - angleL
+  //correct angle for arm up and to your left
+  if (yDiffL < 0 && xDiffL <= 0) angleL = angleL + Math.PI
+  //correct angle for arm up and to your right
+  if (yDiffL < 0 && xDiffL > 0) angleL = 2 * Math.PI - angleL
 
   let yDistanceL = Math.sin(angleL) * 50
   let xDistanceL = Math.cos(angleL) * 50

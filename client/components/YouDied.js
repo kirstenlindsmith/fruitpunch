@@ -59,25 +59,27 @@ const YouDied = props => {
             Submit Score
           </button>
         </Link>
-        <img
-          id="replayButton"
-          src="/assets/buttons/replayButton.png"
-          className="button"
-          onMouseEnter={() => hoversound.play()}
-          onClick={() => {
-            buttonsound.play()
-            restartgame(score)
-          }}
-        />
-        <Link to="/">
+        <div className="replayHomeButtons">
           <img
-            id="homeButton"
+            id="replayButton"
+            src="/assets/buttons/replayButton.png"
             className="button"
-            src="/assets/buttons/homeButton.png"
             onMouseEnter={() => hoversound.play()}
-            onClick={() => buttonsound.play()}
+            onClick={() => {
+              buttonsound.play()
+              restartgame(score)
+            }}
           />
-        </Link>
+          <Link to="/">
+            <img
+              id="homeButton"
+              className="button"
+              src="/assets/buttons/homeButton.png"
+              onMouseEnter={() => hoversound.play()}
+              onClick={() => buttonsound.play()}
+            />
+          </Link>
+        </div>
       </div>
     </div>
   )
